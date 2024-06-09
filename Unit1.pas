@@ -60,7 +60,6 @@ type
     Action3: TAction;
     Button1: TButton;
     BindSourceDB3: TBindSourceDB;
-    LinkControlToField3: TLinkControlToField;
     LinkControlToField4: TLinkControlToField;
     LinkControlToField2: TLinkControlToField;
     SpeedButton1: TSpeedButton;
@@ -144,7 +143,9 @@ begin
           dst.TopLeft := Point(10, max + 10);
         dst.Right := dst.Left + src.Width;
         dst.Bottom := dst.Top + src.Height;
+        ScrollBox1.Canvas.BeginScene;
         ScrollBox1.Canvas.DrawBitmap(bmp, src, dst, 1.0);
+        ScrollBox1.Canvas.EndScene;
         if max < dst.Bottom then
           max := dst.Bottom;
         Next;
@@ -213,7 +214,10 @@ begin
     Form3.Hide;
   with DataModule4 do
     if TabControl1.TabIndex = 2 then
-      FDTable3.Edit
+    begin
+      RadioButton2.IsChecked := FDTable3.FieldByName('reverse').AsBoolean;
+      FDTable3.Edit;
+    end
     else if FDTable3.State = dsEdit then
     begin
       FDTable3.FieldByName('reverse').AsBoolean := RadioButton2.IsChecked;

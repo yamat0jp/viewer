@@ -11,7 +11,6 @@ object DataModule4: TDataModule4
       'Database=C:\Users\yamat\Documents\GitHub\form\TEMPLATE.IB'
       'CharacterSet=UTF8'
       'DriverID=IBLite')
-    Connected = True
     LoginPrompt = False
     Left = 152
     Top = 128
@@ -102,7 +101,6 @@ object DataModule4: TDataModule4
     end
   end
   object FDTable4: TFDTable
-    Active = True
     Connection = FDConnection1
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     TableName = 'INFO'
@@ -121,5 +119,10 @@ object DataModule4: TDataModule4
     Connection = FDConnection2
     Left = 64
     Top = 304
+  end
+  object FDQuery1: TFDQuery
+    Connection = FDConnection1
+    Left = 64
+    Top = 224
   end
 end

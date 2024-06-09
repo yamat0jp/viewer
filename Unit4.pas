@@ -32,6 +32,7 @@ type
     FDQuery2: TFDQuery;
     FDTable3INTERVAL: TFloatField;
     FDTable3REVERSE: TBooleanField;
+    FDQuery1: TFDQuery;
     procedure FDTable1AfterScroll(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
@@ -102,10 +103,11 @@ begin
   FDConnection1.Close;
   FDConnection1.Params.Database := fn;
   FDConnection1.Open;
-  FDQuery2.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB	BOOLEAN);');
-  FDQuery2.ExecSQL
+  FDQuery1.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB BOOLEAN);');
+  FDQuery1.ExecSQL
     ('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER);');
   FDTable1.Open;
+  FDTable4.Open;
   id := 1;
   jpg := TBitmap.Create;
   bmp := TBitmap.Create;

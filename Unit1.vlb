@@ -189,3 +189,6 @@ ExplicitSubNodes=IsChecked
 Coordinates=460,540,81,33
 ExplicitSubNodes=
 
+[DataModule4.FDQuery1]
+Coordinates=305,191,130,51
+
