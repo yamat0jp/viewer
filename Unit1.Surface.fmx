@@ -1,0 +1,66 @@
+inherited Form1_Surface: TForm1_Surface
+  ClientHeight = 1920
+  ClientWidth = 1080
+  DesignerMasterStyle = 0
+  inherited TabControl1: TTabControl
+    Locked = True
+    Size.Width = 1080.000000000000000000
+    Size.Height = 1920.000000000000000000
+    Sizes = (
+      1080s
+      1894s
+      1080s
+      1894s
+      1080s
+      1894s)
+    inherited TabItem1: TTabItem
+      ExplicitSize.cx = 66.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      inherited ListBox1: TListBox
+        Size.Height = 1894.000000000000000000
+        Viewport.Width = 253.000000000000000000
+        Viewport.Height = 667.000000000000000000
+      end
+      inherited ScrollBox1: TScrollBox
+        Size.Width = 823.000000000000000000
+        Size.Height = 1894.000000000000000000
+        Viewport.Width = 764.000000000000000000
+        Viewport.Height = 671.000000000000000000
+      end
+    end
+    inherited TabItem2: TTabItem
+      ExplicitSize.cx = 68.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      inherited TrackBar1: TTrackBar
+        Position.Y = 1875.000000000000000000
+        Size.Width = 1080.000000000000000000
+      end
+      inherited ToolBar1: TToolBar
+        Size.Width = 1080.000000000000000000
+      end
+      inherited Panel1: TPanel
+        Size.Width = 1080.000000000000000000
+        Size.Height = 1795.000000000000000000
+      end
+      inherited ToolBar2: TToolBar
+        Position.Y = 1835.000000000000000000
+        Size.Width = 1080.000000000000000000
+      end
+    end
+    inherited TabItem4: TTabItem
+      ExplicitSize.cx = 79.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      inherited Memo1: TMemo
+        Locked = True
+        Position.X = 619.000000000000000000
+        Size.Height = 1894.000000000000000000
+        Viewport.Width = 461.000000000000000000
+        Viewport.Height = 1894.000000000000000000
+      end
+      inherited Memo2: TMemo
+        Viewport.Width = 297.000000000000000000
+        Viewport.Height = 291.000000000000000000
+      end
+    end
+  end
+end

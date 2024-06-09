@@ -1,0 +1,42 @@
+inherited Form1_Windows: TForm1_Windows
+  DesignerMasterStyle = 0
+  inherited TabControl1: TTabControl
+    Sizes = (
+      1021s
+      671s
+      1021s
+      671s
+      1021s
+      671s)
+    inherited TabItem1: TTabItem
+      ExplicitSize.cx = 66.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      inherited ListBox1: TListBox
+        Viewport.Width = 253.000000000000000000
+        Viewport.Height = 667.000000000000000000
+      end
+      inherited ScrollBox1: TScrollBox
+        Viewport.Width = 764.000000000000000000
+        Viewport.Height = 671.000000000000000000
+      end
+    end
+    inherited TabItem2: TTabItem
+      ExplicitSize.cx = 68.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+    end
+    inherited TabItem4: TTabItem
+      ExplicitSize.cx = 79.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      inherited Memo1: TMemo
+        ReadOnly = True
+        CanFocus = False
+        Viewport.Width = 461.000000000000000000
+        Viewport.Height = 671.000000000000000000
+      end
+      inherited Memo2: TMemo
+        Viewport.Width = 297.000000000000000000
+        Viewport.Height = 291.000000000000000000
+      end
+    end
+  end
+end

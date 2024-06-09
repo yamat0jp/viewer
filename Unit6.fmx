@@ -1,0 +1,33 @@
+object Form6: TForm6
+  Left = 0
+  Top = 0
+  BorderStyle = ToolWindow
+  Caption = 'Form6'
+  ClientHeight = 79
+  ClientWidth = 282
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Edit1: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 0
+    Password = True
+    Position.X = 88.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 161.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    OnChangeTracking = Edit1ChangeTracking
+    object Label1: TLabel
+      Position.X = -64.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 120.000000000000000000
+      Size.Height = 16.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Password'
+      TabOrder = 0
+    end
+  end
+end

@@ -1,0 +1,61 @@
+object Form5: TForm5
+  Left = 0
+  Top = 0
+  BorderStyle = ToolWindow
+  Caption = 'Form5'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object Button1: TButton
+    Enabled = False
+    ModalResult = 1
+    Position.X = 528.000000000000000000
+    Position.Y = 80.000000000000000000
+    TabOrder = 0
+    Text = 'Button1'
+  end
+  object Button2: TButton
+    Cancel = True
+    ModalResult = 2
+    Position.X = 528.000000000000000000
+    Position.Y = 136.000000000000000000
+    TabOrder = 1
+    Text = 'Button2'
+  end
+  object Image1: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Position.X = 88.000000000000000000
+    Position.Y = 56.000000000000000000
+    Size.Width = 265.000000000000000000
+    Size.Height = 361.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Edit1: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 3
+    Position.X = 376.000000000000000000
+    Position.Y = 192.000000000000000000
+  end
+  object SpeedButton1: TSpeedButton
+    Position.X = 411.000000000000000000
+    Position.Y = 240.000000000000000000
+    Size.Width = 65.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'SpeedButton1'
+    OnClick = SpeedButton1Click
+  end
+  object OpenDialog1: TOpenDialog
+    Options = [ofReadOnly, ofHideReadOnly, ofAllowMultiSelect, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Left = 376
+    Top = 288
+  end
+end
