@@ -80,7 +80,7 @@ begin
     zs := TZDeCompressionStream.Create(st);
     try
       image.LoadFromStream(zs);
-      image.CreateThumbnail(size, size);
+//      image.CreateThumbnail(size, size);
     finally
       st.Free;
       zs.Free;

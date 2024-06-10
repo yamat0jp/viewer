@@ -13,6 +13,7 @@ Coordinates=756,534,68,33
 
 [TrackBar1]
 Coordinates=347,10,64,51
+Visible=True
 
 [TabItem4]
 Coordinates=10,593,59,33
@@ -44,9 +45,6 @@ Coordinates=94,305,79,33
 [MenuItem2]
 Coordinates=288,593,68,33
 
-[MenuItem13]
-Coordinates=178,534,73,33
-
 [MenuItem4]
 Coordinates=277,534,68,33
 
@@ -70,7 +68,7 @@ Coordinates=415,380,64,51
 Coordinates=580,380,46,51
 
 [Panel1]
-Coordinates=437,55,47,51
+Coordinates=480,100,47,51
 ExplicitSubNodes=Visible
 
 [DataModule4.FDTable1]
@@ -124,12 +122,13 @@ Coordinates=505,380,49,51
 
 [Image3]
 Coordinates=355,121,49,51
+Visible=True
 
 [Memo2]
 Coordinates=265,380,49,51
 
 []
-Coordinates=316,199,84,51
+Coordinates=145,172,68,33
 ExplicitSubNodes=IsChecked
 Visible=True
 
@@ -145,7 +144,7 @@ Coordinates=646,1,127,33
 Visible=False
 
 [BindSourceDB2]
-Coordinates=564,10,115,123
+Coordinates=564,10,115,105
 Visible=True
 
 [Action3]
@@ -158,7 +157,7 @@ Coordinates=76,380,53,51
 Coordinates=652,380,130,51
 
 [BindSourceDB3]
-Coordinates=152,29,115,123
+Coordinates=160,30,115,123
 
 [SpeedButton1]
 Coordinates=155,380,84,51
@@ -167,14 +166,14 @@ Coordinates=155,380,84,51
 Coordinates=637,258,49,51
 
 [BindSourceDB4]
-Coordinates=442,213,115,141
+Coordinates=480,180,115,141
 Visible=True
 
 [DataModule4.]
 Coordinates=151,460,130,51
 
 [SpeedButton2]
-Coordinates=759,46,84,69
+Coordinates=750,100,84,69
 Visible=True
 ExplicitSubNodes=IsPressed
 
@@ -191,4 +190,16 @@ ExplicitSubNodes=
 
 [DataModule4.FDQuery1]
 Coordinates=305,191,130,51
+
+[Label1]
+Coordinates=96,206,46,51
+
+[Label3]
+Coordinates=313,328,46,51
+
+[Action4]
+Coordinates=37,206,52,33
+
+[Action5]
+Coordinates=313,80,52,33
 

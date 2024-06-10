@@ -23,6 +23,9 @@ inherited Form1_Windows: TForm1_Windows
     inherited TabItem2: TTabItem
       ExplicitSize.cx = 68.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
+      inherited TrackBar1: TTrackBar
+        Max = 10.000000000000000000
+      end
     end
     inherited TabItem4: TTabItem
       ExplicitSize.cx = 79.000000000000000000
