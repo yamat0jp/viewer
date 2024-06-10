@@ -46,7 +46,7 @@ object Form1: TForm1
         Size.Height = 671.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
-        OnDblClick = ListBox1DblClick
+        OnDblClick = Action4Execute
         DisableFocusEffect = True
         DefaultItemStyles.ItemStyle = ''
         DefaultItemStyles.GroupHeaderStyle = ''
@@ -4353,6 +4353,7 @@ object Form1: TForm1
         Value = 1.000000000000000000
         OnChange = TrackBar1Change
         OnKeyUp = TrackBar1KeyUp
+        OnMouseWheel = TrackBar1MouseWheel
       end
       object ToolBar1: TToolBar
         Size.Width = 1021.000000000000000000
@@ -4625,11 +4626,17 @@ object Form1: TForm1
     object Action4: TAction
       Category = 'book'
       Text = 'Open'
+      OnExecute = Action4Execute
     end
     object Action5: TAction
       Category = 'book'
       Text = 'Close'
       OnExecute = Action5Execute
+    end
+    object Action6: TAction
+      Category = 'paint'
+      Text = 'double'
+      OnExecute = Action6Execute
     end
   end
   object BindSourceDB1: TBindSourceDB
