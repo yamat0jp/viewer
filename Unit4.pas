@@ -60,7 +60,7 @@ procedure TDataModule4.DataModuleCreate(Sender: TObject);
 begin
   image := TBitmap.Create;
   if Assigned(Form1) then
-    Form1.Action3Execute(Sender)
+    Form1.ScrollBox1.Repaint;
 end;
 
 procedure TDataModule4.DataModuleDestroy(Sender: TObject);
@@ -69,8 +69,6 @@ begin
 end;
 
 procedure TDataModule4.FDTable1AfterScroll(DataSet: TDataSet);
-const
-  size = 100;
 var
   st, zs: TStream;
 begin
@@ -80,7 +78,6 @@ begin
     zs := TZDeCompressionStream.Create(st);
     try
       image.LoadFromStream(zs);
-//      image.CreateThumbnail(size, size);
     finally
       st.Free;
       zs.Free;
@@ -95,7 +92,7 @@ var
   sub: Boolean;
   fn, nm: string;
   st, zs: TStream;
-  rect: TRectF;
+  rect: TRect;
 begin
   repeat
     fn := randomName;
@@ -104,24 +101,23 @@ begin
   FDConnection1.Params.Database := fn;
   FDConnection1.Open;
   FDQuery1.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB BOOLEAN);');
-  FDQuery1.ExecSQL
-    ('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER);');
+  FDQuery1.ExecSQL('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER);');
   FDTable1.Open;
   FDTable4.Open;
   id := 1;
-  jpg := TBitmap.Create;
   bmp := TBitmap.Create;
+  jpg := TBitmap.Create;
   try
     for var s in Form5.FileList do
     begin
       jpg.LoadFromFile(s);
-      rect := RectF(0, 0, jpg.Width, jpg.Height);
+      sub := jpg.Width < jpg.Height;
+      rect := jpg.Bounds;
       bmp.Width := jpg.Width;
       bmp.Height := jpg.Height;
       bmp.Canvas.BeginScene;
       bmp.Canvas.DrawBitmap(jpg, rect, rect, 1.0);
       bmp.Canvas.EndScene;
-      sub := bmp.Width < bmp.Height;
       FDTable1.Append;
       st := FDTable1.CreateBlobStream(FDTable1.Fields[1], bmWrite);
       zs := TZCompressionStream.Create(clMax, st);
@@ -139,8 +135,10 @@ begin
     result := Form5.FileList.Count > 0;
     if result then
     begin
+      jpg.LoadThumbnailFromFile(Form5.FileList[0], 100, 100, false);
+      nm := Form5.Edit1.Text;
       FDTable1.First;
-      FDTable2.AppendRecord([id, nm, fn, image]);
+      FDTable2.AppendRecord([id, nm, fn, jpg]);
     end;
   finally
     bmp.Free;

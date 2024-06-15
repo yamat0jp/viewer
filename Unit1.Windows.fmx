@@ -26,6 +26,9 @@ inherited Form1_Windows: TForm1_Windows
       inherited TrackBar1: TTrackBar
         Max = 10.000000000000000000
       end
+      inherited Panel1: TPanel
+        Anchors = [akLeft, akTop, akBottom]
+      end
     end
     inherited TabItem4: TTabItem
       ExplicitSize.cx = 79.000000000000000000

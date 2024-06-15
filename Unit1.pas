@@ -13,7 +13,8 @@ uses
   FMX.ActnList,
   System.Rtti, System.Bindings.Outputs, FMX.Bind.Editors,
   Data.Bind.EngExt,
-  FMX.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope, Data.DB;
+  FMX.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope, Data.DB,
+  System.ImageList, FMX.ImgList;
 
 type
   TForm1 = class(TForm)
@@ -60,7 +61,6 @@ type
     Button1: TButton;
     BindSourceDB3: TBindSourceDB;
     LinkControlToField2: TLinkControlToField;
-    SpeedButton1: TSpeedButton;
     Image4: TImage;
     BindSourceDB4: TBindSourceDB;
     LinkControlToField5: TLinkControlToField;
@@ -74,12 +74,13 @@ type
     Action4: TAction;
     Action5: TAction;
     Action6: TAction;
+    ImageList1: TImageList;
+    SpeedButton1: TSpeedButton;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
     procedure Action1Execute(Sender: TObject);
     procedure Action2Execute(Sender: TObject);
-    procedure Action3Execute(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -92,8 +93,21 @@ type
     procedure TrackBar1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; var Handled: Boolean);
     procedure Action6Execute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure TabControl1Resze(Sender: TObject);
+    procedure ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Single);
+    procedure ScrollBox1Paint(Sender: TObject; Canvas: TCanvas;
+      const ARect: TRectF);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure Action3Execute(Sender: TObject);
+    procedure ScrollBox1Resize(Sender: TObject);
+    procedure ScrollBox1Click(Sender: TObject);
+    procedure ListBox1DblClick(Sender: TObject);
   private
     { private êÈåæ }
+    rects: TArray<TRectF>;
+    rectIndex: Integer;
   public
     { public êÈåæ }
   end;
@@ -112,7 +126,7 @@ uses Unit3, Unit4, Unit5;
 procedure TForm1.Action1Execute(Sender: TObject);
 begin
   if (Form5.ShowModal = mrOK) and (DataModule4.LoadAllFile) then
-    ListBox1.Items.Add(Form5.Edit1.Text);
+    Action3Execute(Sender);
 end;
 
 procedure TForm1.Action2Execute(Sender: TObject);
@@ -129,47 +143,65 @@ end;
 
 procedure TForm1.Action3Execute(Sender: TObject);
 var
-  src, dst: TRect;
-  max: Integer;
+  cnt: Integer;
+  s: string;
+  max: Single;
+  src, dst: TRectF;
+  item: TCustomSourceItem;
+  layer: TLayer;
 begin
+  max := 0.0;
   ListBox1.Items.Clear;
-  dst := Rect(0, 0, 0, 0);
-  max := 0;
+  ImageList1.Source.Clear;
+  ImageList1.Destination.Clear;
+  cnt := 0;
+  dst := RectF(0, 50, 0, 0);
   with DataModule4.FDTable2 do
   begin
+    SetLength(rects, RecordCount);
     First;
     while not Eof do
     begin
-      ListBox1.Items.Add(FieldByName('name').AsString);
-      src := Rect(0, 0, Image4.Bitmap.Width, Image4.Bitmap.Height);
-      dst.Left := dst.Left + 10;
-      if dst.Left + 10 > ScrollBox1.Width then
-        dst.TopLeft := Point(10, max + 10);
+      s := FieldByName('name').AsString;
+      ListBox1.Items.Add(s);
+      item := ImageList1.Source.Add;
+      item.Name := s;
+      item.MultiResBitmap.Assign(Image4.MultiResBitmap);
+      layer := ImageList1.Destination.Add.Layers.Add;
+      layer.Name := s;
+      layer.SourceRect.Rect := RectF(0, 0, 100, 100);
+      src := RectF(0, 0, 100, 100);
+      dst.Left := dst.Right + 50;
       dst.Right := dst.Left + src.Width;
       dst.Bottom := dst.Top + src.Height;
-      ScrollBox1.Canvas.BeginScene;
-      ScrollBox1.Canvas.DrawBitmap(Image4.Bitmap, src, dst, 1.0);
-      ScrollBox1.Canvas.EndScene;
       if max < dst.Bottom then
         max := dst.Bottom;
+      if dst.Right + 50 > ScrollBox1.Width then
+      begin
+        dst.TopLeft := PointF(50, max + 50);
+        dst.Width := 100;
+        dst.Height := 100;
+      end;
+      rects[cnt] := dst;
       Next;
+      inc(cnt);
     end;
   end;
+  ScrollBox1.Repaint;
 end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
 begin
   with DataModule4 do
-  // if FDTable2.Locate('name', ListBox1.Items[ListBox1.ItemIndex]) then
   begin
     FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
     FDConnection1.Open;
     FDTable1.Open;
     FDTable4.Open;
-    FDTable1AfterScroll(FDTable1);
     TabControl1.TabIndex := 1;
     TrackBar1.max := FDTable1.RecordCount;
     TrackBar1.Value := FDTable4.FieldByName('page').AsInteger;
+    TrackBar1Change(nil);
     Label3.Text := TrackBar1.max.ToString;
   end;
 end;
@@ -177,11 +209,12 @@ end;
 procedure TForm1.Action5Execute(Sender: TObject);
 begin
   with DataModule4 do
-  begin
-    FDTable4.Edit;
-    FDTable4.FieldByName('page').AsInteger := Trunc(TrackBar1.Value);
-    FDTable4.Post;
-  end;
+    if FDTable4.Active then
+    begin
+      FDTable4.Edit;
+      FDTable4.FieldByName('page').AsInteger := Trunc(TrackBar1.Value);
+      FDTable4.Post;
+    end;
 end;
 
 procedure TForm1.Action6Execute(Sender: TObject);
@@ -192,12 +225,14 @@ begin
       Image2.Bitmap.Assign(image);
       FDTable1.Next;
       Image1.Bitmap.Assign(image);
+      FDTable1.Next;
     end
     else
     begin
       Image1.Bitmap.Assign(image);
       FDTable1.Next;
       Image2.Bitmap.Assign(image);
+      FDTable1.Next;
     end;
 end;
 
@@ -219,7 +254,20 @@ end;
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   TabControl1.TabIndex := 0;
-  Action5Execute(Sender);
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  Image2.Position.X := Panel1.Width / 2;
+  Image1.Align := TAlignLayout.Client;
+  rectIndex := -1;
+end;
+
+procedure TForm1.ListBox1DblClick(Sender: TObject);
+begin
+  if DataModule4.FDTable2.Locate('name', ListBox1.Items[ListBox1.ItemIndex])
+  then
+    Action4Execute(nil);
 end;
 
 procedure TForm1.MenuItem12Click(Sender: TObject);
@@ -232,7 +280,55 @@ begin
   Close;
 end;
 
+procedure TForm1.ScrollBox1Click(Sender: TObject);
+var
+  s: string;
+begin
+  if rectIndex > -1 then
+  begin
+    s := ImageList1.Source.Items[rectIndex].Name;
+    DataModule4.FDTable2.Locate('name', s);
+    Action4Execute(nil);
+  end;
+end;
+
+procedure TForm1.ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Single);
+begin
+  rectIndex := -1;
+  for var i := 0 to Length(rects) - 1 do
+    if (rects[i].Left < X) and (rects[i].Right > X) and (rects[i].Top < Y) and
+      (rects[i].Bottom > Y) then
+    begin
+      rectIndex := i;
+      ScrollBox1.Repaint;
+      break;
+    end;
+end;
+
+procedure TForm1.ScrollBox1Paint(Sender: TObject; Canvas: TCanvas;
+  const ARect: TRectF);
+begin
+  for var i := 0 to ImageList1.Count - 1 do
+    ImageList1.Draw(Canvas, rects[i], i);
+  if rectIndex > -1 then
+    Canvas.DrawRect(rects[rectIndex], 0.5);
+end;
+
+procedure TForm1.ScrollBox1Resize(Sender: TObject);
+begin
+  if Assigned(DataModule4.FDTable2) then
+    Action3Execute(nil);
+end;
+
+procedure TForm1.SpeedButton1Click(Sender: TObject);
+begin
+  ScrollBox1.Repaint;
+end;
+
 procedure TForm1.SpeedButton2Click(Sender: TObject);
+var
+  cnt: Integer;
 begin
   with DataModule4.FDTable4 do
   begin
@@ -242,6 +338,17 @@ begin
   end;
   Panel1.Visible := SpeedButton2.IsPressed;
   Image3.Visible := not Panel1.Visible;
+  if SpeedButton2.IsPressed then
+  begin
+    cnt := DataModule4.FDTable1.RecordCount;
+    TrackBar1.Value := TrackBar1.Value / 2;
+    TrackBar1.max := (cnt div 2) + cnt mod 2;
+  end
+  else
+  begin
+    TrackBar1.Value := 2 * TrackBar1.Value;
+    TrackBar1.max := DataModule4.FDTable1.RecordCount;
+  end;
 end;
 
 procedure TForm1.TabControl1Change(Sender: TObject);
@@ -252,6 +359,7 @@ begin
       Form3.Show;
     DataModule4.FDTable1.Prepare;
     Form3.Hide;
+    TrackBar1.SetFocus;
     if CheckBox1.IsChecked then
     begin
       Timer1.Interval := 1000 * Trunc(SpinBox1.Value);
@@ -259,7 +367,10 @@ begin
     end;
   end
   else
+  begin
     Form3.Hide;
+    Action5Execute(Sender);
+  end;
   with DataModule4 do
     if TabControl1.TabIndex = 2 then
     begin
@@ -271,6 +382,13 @@ begin
       FDTable3.FieldByName('reverse').AsBoolean := RadioButton2.IsChecked;
       FDTable3.Post;
     end;
+end;
+
+procedure TForm1.TabControl1Resze(Sender: TObject);
+begin
+  Image1.BoundsRect := RectF(0, 0, Panel1.Width / 2, Panel1.Height);
+  Image2.BoundsRect := RectF(Panel1.Width / 2, 0, Panel1.Width, Panel1.Height);
+  Panel1.InvalidateRect(Panel1.BoundsRect);
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);

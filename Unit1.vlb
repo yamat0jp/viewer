@@ -128,7 +128,7 @@ Visible=True
 Coordinates=265,380,49,51
 
 []
-Coordinates=145,172,68,33
+Coordinates=155,380,84,51
 ExplicitSubNodes=IsChecked
 Visible=True
 
@@ -159,11 +159,9 @@ Coordinates=652,380,130,51
 [BindSourceDB3]
 Coordinates=160,30,115,123
 
-[SpeedButton1]
-Coordinates=155,380,84,51
-
 [Image4]
 Coordinates=637,258,49,51
+Visible=True
 
 [BindSourceDB4]
 Coordinates=480,180,115,141
@@ -202,4 +200,13 @@ Coordinates=37,206,52,33
 
 [Action5]
 Coordinates=313,80,52,33
+
+[Action6]
+Coordinates=218,553,52,33
+
+[ImageList1]
+Coordinates=740,56,68,33
+
+[SpeedButton1]
+Coordinates=740,199,84,51
 
