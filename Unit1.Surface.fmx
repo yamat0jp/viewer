@@ -22,7 +22,7 @@ inherited Form1_Surface: TForm1_Surface
         Viewport.Height = 667.000000000000000000
       end
       inherited ScrollBox1: TScrollBox
-        Size.Width = 823.000000000000000000
+        Size.Width = 1080.000000000000000000
         Size.Height = 1894.000000000000000000
         Viewport.Width = 764.000000000000000000
         Viewport.Height = 671.000000000000000000

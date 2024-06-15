@@ -104,10 +104,19 @@ type
     procedure ScrollBox1Resize(Sender: TObject);
     procedure ScrollBox1Click(Sender: TObject);
     procedure ListBox1DblClick(Sender: TObject);
+    procedure Image3MouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Single);
+    procedure Image3MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Image3MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Image3DblClick(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
     rectIndex: Integer;
+    grab: Boolean;
+    posCur: TPointF;
   public
     { public êÈåæ }
   end;
@@ -263,6 +272,52 @@ begin
   rectIndex := -1;
 end;
 
+procedure TForm1.Image3DblClick(Sender: TObject);
+begin
+  case WindowState of
+    TWindowState.wsMaximized:
+      WindowState := TWindowState.wsNormal;
+    TWindowState.wsNormal:
+      if Image3.Cursor = crDefault then
+        WindowState := TWindowState.wsMaximized;
+  end;
+  grab:=false;
+end;
+
+procedure TForm1.Image3MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+  if X < Image3.Width / 3 then
+    TrackBar1.Value := TrackBar1.Value - 1
+  else if X > 2 * Image3.Width / 3 then
+    TrackBar1.Value := TrackBar1.Value + 1
+  else
+  begin
+    grab := true;
+    posCur := PointF(X, Y);
+  end;
+end;
+
+procedure TForm1.Image3MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Single);
+begin
+  if grab and (WindowState <> TWindowState.wsMaximized) then
+  begin
+    Left := Left + Round(X - posCur.X);
+    Top := Top + Round(Y - posCur.Y);
+  end
+  else if (X < Image3.Width / 3) or (X > 2 * Image3.Width / 3) then
+    Image3.Cursor := crUpArrow
+  else
+    Image3.Cursor := crDefault;
+end;
+
+procedure TForm1.Image3MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+  grab := false;
+end;
+
 procedure TForm1.ListBox1DblClick(Sender: TObject);
 begin
   if DataModule4.FDTable2.Locate('name', ListBox1.Items[ListBox1.ItemIndex])
@@ -295,15 +350,21 @@ end;
 procedure TForm1.ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Single);
 begin
-  rectIndex := -1;
   for var i := 0 to Length(rects) - 1 do
     if (rects[i].Left < X) and (rects[i].Right > X) and (rects[i].Top < Y) and
       (rects[i].Bottom > Y) then
     begin
       rectIndex := i;
+      ScrollBox1.Hint := ImageList1.Source.Items[i].Name;
       ScrollBox1.Repaint;
-      break;
+      Exit;
     end;
+  if rectIndex > -1 then
+  begin
+    rectIndex := -1;
+    ScrollBox1.Hint := '';
+    ScrollBox1.Repaint;
+  end;
 end;
 
 procedure TForm1.ScrollBox1Paint(Sender: TObject; Canvas: TCanvas;

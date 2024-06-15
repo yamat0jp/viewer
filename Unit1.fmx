@@ -49,6 +49,7 @@ object Form1: TForm1
         Size.Height = 671.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
+        Visible = False
         OnDblClick = ListBox1DblClick
         DisableFocusEffect = True
         DefaultItemStyles.ItemStyle = ''
@@ -59,15 +60,17 @@ object Form1: TForm1
       end
       object ScrollBox1: TScrollBox
         Align = Client
-        Size.Width = 764.000000000000000000
+        Size.Width = 1021.000000000000000000
         Size.Height = 671.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
+        ParentShowHint = False
+        ShowHint = True
         OnPaint = ScrollBox1Paint
         OnResize = ScrollBox1Resize
         OnClick = ScrollBox1Click
         OnMouseMove = ScrollBox1MouseMove
-        Viewport.Width = 764.000000000000000000
+        Viewport.Width = 1021.000000000000000000
         Viewport.Height = 671.000000000000000000
         object Image4: TImage
           MultiResBitmap = <
@@ -183,7 +186,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 660.000000000000000000
+          Position.X = 3573.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -255,6 +258,10 @@ object Form1: TForm1
         Size.Width = 1021.000000000000000000
         Size.Height = 572.000000000000000000
         Size.PlatformDefault = False
+        OnDblClick = Image3DblClick
+        OnMouseDown = Image3MouseDown
+        OnMouseMove = Image3MouseMove
+        OnMouseUp = Image3MouseUp
       end
       object ToolBar2: TToolBar
         Align = Bottom
@@ -371,7 +378,7 @@ object Form1: TForm1
         Cursor = crIBeam
         Min = 10.000000000000000000
         Max = 60.000000000000000000
-        Value = 14.000000000000000000
+        Value = 10.000000000000000000
         Position.X = 356.000000000000000000
         Position.Y = 80.000000000000000000
         Enabled = False
