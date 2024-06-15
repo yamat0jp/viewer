@@ -1,74 +1,74 @@
 ﻿[MenuItem12]
-Coordinates=424,457,73,33
+Coordinates=229,442,73,33
 
 [ToolBar1]
-Coordinates=371,534,58,33
+Coordinates=714,442,58,33
 
 [TabControl1]
-Coordinates=656,534,74,33
+Coordinates=328,442,74,33
 Visible=True
 
 [MenuItem5]
-Coordinates=756,534,68,33
+Coordinates=292,519,68,33
 
 [TrackBar1]
-Coordinates=347,10,64,51
+Coordinates=397,365,64,51
 Visible=True
 
 [TabItem4]
-Coordinates=10,593,59,33
+Coordinates=629,442,59,33
 Visible=True
 
 [TabItem1]
-Coordinates=607,457,59,33
+Coordinates=663,519,59,33
 
 [Memo1]
-Coordinates=76,457,49,51
+Coordinates=82,442,49,51
 Visible=True
 
 [MenuItem3]
-Coordinates=84,534,68,33
+Coordinates=386,519,68,33
 
 [TabItem2]
-Coordinates=245,457,59,33
+Coordinates=104,578,59,33
 
 [MenuItem9]
-Coordinates=330,457,68,33
+Coordinates=10,578,68,33
 
 [ListBox1]
-Coordinates=10,10,116,177
+Coordinates=429,10,116,177
 Visible=True
 
 [PopupMenu1]
 Coordinates=94,305,79,33
 
 [MenuItem2]
-Coordinates=288,593,68,33
+Coordinates=10,519,68,33
 
 [MenuItem4]
-Coordinates=277,534,68,33
+Coordinates=748,519,68,33
 
 [ScrollBox1]
-Coordinates=95,593,68,33
+Coordinates=104,519,68,33
 Visible=True
 
 [MenuItem6]
-Coordinates=562,534,68,33
+Coordinates=198,519,68,33
 
 [MenuItem1]
-Coordinates=151,457,68,33
+Coordinates=535,442,68,33
 
 [MainMenu1]
 Coordinates=380,379,70,33
 
 [PassWord]
-Coordinates=415,380,64,51
+Coordinates=10,365,64,51
 
 [Label2]
-Coordinates=580,380,46,51
+Coordinates=616,216,46,51
 
 [Panel1]
-Coordinates=480,100,47,51
+Coordinates=477,216,47,51
 ExplicitSubNodes=Visible
 
 [DataModule4.FDTable1]
@@ -76,7 +76,7 @@ Coordinates=800,160,127,33
 Visible=False
 
 [MenuItem15]
-Coordinates=189,593,73,33
+Coordinates=480,519,73,33
 
 [ActionList1]
 Coordinates=588,155,70,33
@@ -93,39 +93,40 @@ Visible=False
 Coordinates=282,427,52,33
 
 [CheckBox1]
-Coordinates=346,258,70,51
+Coordinates=333,10,70,51
 Visible=True
 
 [Timer1]
-Coordinates=10,534,48,33
+Coordinates=10,74,48,51
 Visible=True
+ExplicitSubNodes=Enabled
 
 [Action1]
 Coordinates=588,265,52,33
 
 [Edit1]
-Coordinates=10,380,40,51
+Coordinates=331,365,40,51
 
 [Edit2]
-Coordinates=10,457,40,51
+Coordinates=550,216,40,51
 
 [SpinBox1]
-Coordinates=10,249,61,69
+Coordinates=338,121,61,69
 Visible=True
 ExplicitSubNodes=Enabled
 
 [Image1]
-Coordinates=340,380,49,51
+Coordinates=688,216,49,51
 
 [Image2]
-Coordinates=505,380,49,51
+Coordinates=100,365,49,51
 
 [Image3]
-Coordinates=355,121,49,51
+Coordinates=487,365,49,51
 Visible=True
 
 [Memo2]
-Coordinates=265,380,49,51
+Coordinates=402,216,49,51
 
 []
 Coordinates=155,380,84,51
@@ -133,7 +134,7 @@ ExplicitSubNodes=IsChecked
 Visible=True
 
 [BindSourceDB1]
-Coordinates=151,213,115,159
+Coordinates=138,11,115,177
 Visible=True
 
 [BindingsList1]
@@ -144,56 +145,56 @@ Coordinates=646,1,127,33
 Visible=False
 
 [BindSourceDB2]
-Coordinates=564,10,115,105
+Coordinates=151,216,115,105
 Visible=True
 
 [Action3]
 Coordinates=145,171,52,33
 
 [Button1]
-Coordinates=76,380,53,51
+Coordinates=562,365,53,51
 
 [DataModule4.FDQuery2]
-Coordinates=652,380,130,51
+Coordinates=751,365,130,51
 
 [BindSourceDB3]
-Coordinates=160,30,115,123
+Coordinates=10,216,115,123
 
 [Image4]
-Coordinates=637,258,49,51
+Coordinates=766,55,49,51
 Visible=True
 
 [BindSourceDB4]
-Coordinates=480,180,115,141
+Coordinates=571,10,115,141
 Visible=True
 
 [DataModule4.]
 Coordinates=151,460,130,51
 
 [SpeedButton2]
-Coordinates=750,100,84,69
+Coordinates=292,216,84,69
 Visible=True
 ExplicitSubNodes=IsPressed
 
 [ToolBar2]
-Coordinates=523,457,58,33
+Coordinates=579,519,58,33
 
 [RadioButton2]
-Coordinates=692,457,81,51
+Coordinates=763,216,81,51
 ExplicitSubNodes=IsChecked
 
 [RadioButton1]
-Coordinates=460,540,81,33
+Coordinates=428,442,81,33
 ExplicitSubNodes=
 
 [DataModule4.FDQuery1]
-Coordinates=305,191,130,51
+Coordinates=175,365,130,51
 
 [Label1]
-Coordinates=96,206,46,51
+Coordinates=157,442,46,51
 
 [Label3]
-Coordinates=313,328,46,51
+Coordinates=10,442,46,51
 
 [Action4]
 Coordinates=37,206,52,33
@@ -208,5 +209,5 @@ Coordinates=218,553,52,33
 Coordinates=740,56,68,33
 
 [SpeedButton1]
-Coordinates=740,199,84,51
+Coordinates=641,365,84,51
 

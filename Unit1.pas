@@ -55,7 +55,6 @@ type
     Action2: TAction;
     BindSourceDB1: TBindSourceDB;
     BindingsList1: TBindingsList;
-    LinkControlToField1: TLinkControlToField;
     BindSourceDB2: TBindSourceDB;
     Action3: TAction;
     Button1: TButton;
@@ -76,6 +75,8 @@ type
     Action6: TAction;
     ImageList1: TImageList;
     SpeedButton1: TSpeedButton;
+    LinkControlToField1: TLinkControlToField;
+    LinkPropertyToFieldEnabled2: TLinkPropertyToField;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -139,15 +140,30 @@ begin
 end;
 
 procedure TForm1.Action2Execute(Sender: TObject);
+var
+  s: string;
+  id: Integer;
+  tmp: TArray<TRectF>;
 begin
   with DataModule4 do
   begin
     FDConnection1.Close;
-    DeleteFile(FDTable2.Lookup('name',
-      ListBox1.Items[ListBox1.ItemIndex], 'file'));
-    FDTable2.Delete;
+    s := ListBox1.Items[ListBox1.ItemIndex];
+    id := ImageList1.Source.IndexOf(s);
     ListBox1.Items.Delete(ListBox1.ItemIndex);
+    ImageList1.Source.Delete(id);
+    ImageList1.Destination.Delete(id);
+    DeleteFile(FDTable2.Lookup('name', s, 'file'));
+    FDTable2.Delete;
   end;
+  tmp := [];
+  for var rect in rects do
+    if rect <> rects[id] then
+      tmp := tmp + [rect];
+  Finalize(rects);
+  SetLength(rects, Length(tmp));
+  rects := tmp;
+  ScrollBox1.Repaint;
 end;
 
 procedure TForm1.Action3Execute(Sender: TObject);
@@ -178,7 +194,7 @@ begin
       item.MultiResBitmap.Assign(Image4.MultiResBitmap);
       layer := ImageList1.Destination.Add.Layers.Add;
       layer.Name := s;
-      layer.SourceRect.Rect := RectF(0, 0, 100, 100);
+      layer.SourceRect.rect := RectF(0, 0, 100, 100);
       src := RectF(0, 0, 100, 100);
       dst.Left := dst.Right + 50;
       dst.Right := dst.Left + src.Width;
@@ -281,7 +297,7 @@ begin
       if Image3.Cursor = crDefault then
         WindowState := TWindowState.wsMaximized;
   end;
-  grab:=false;
+  grab := false;
 end;
 
 procedure TForm1.Image3MouseDown(Sender: TObject; Button: TMouseButton;
@@ -349,19 +365,24 @@ end;
 
 procedure TForm1.ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Single);
+var
+  s: string;
 begin
   for var i := 0 to Length(rects) - 1 do
     if (rects[i].Left < X) and (rects[i].Right > X) and (rects[i].Top < Y) and
       (rects[i].Bottom > Y) then
     begin
+      s := ImageList1.Source.Items[i].Name;
       rectIndex := i;
-      ScrollBox1.Hint := ImageList1.Source.Items[i].Name;
+      ListBox1.ItemIndex := ListBox1.Items.IndexOf(s);
+      ScrollBox1.Hint := s;
       ScrollBox1.Repaint;
       Exit;
     end;
   if rectIndex > -1 then
   begin
     rectIndex := -1;
+    ListBox1.ItemIndex := -1;
     ScrollBox1.Hint := '';
     ScrollBox1.Repaint;
   end;
@@ -372,8 +393,6 @@ procedure TForm1.ScrollBox1Paint(Sender: TObject; Canvas: TCanvas;
 begin
   for var i := 0 to ImageList1.Count - 1 do
     ImageList1.Draw(Canvas, rects[i], i);
-  if rectIndex > -1 then
-    Canvas.DrawRect(rects[rectIndex], 0.5);
 end;
 
 procedure TForm1.ScrollBox1Resize(Sender: TObject);
@@ -416,6 +435,11 @@ procedure TForm1.TabControl1Change(Sender: TObject);
 begin
   if TabControl1.TabIndex = 1 then
   begin
+    if not DataModule4.FDTable1.Active then
+    begin
+      TabControl1.TabIndex := 0;
+      Exit;
+    end;
     if not DataModule4.FDTable1.Prepared then
       Form3.Show;
     DataModule4.FDTable1.Prepare;
@@ -430,6 +454,7 @@ begin
   else
   begin
     Form3.Hide;
+    Timer1.Enabled := false;
     Action5Execute(Sender);
   end;
   with DataModule4 do
@@ -477,7 +502,10 @@ end;
 procedure TForm1.TrackBar1KeyUp(Sender: TObject; var Key: Word;
   var KeyChar: Char; Shift: TShiftState);
 begin
-  TrackBar1Change(nil);
+  if Key = vkEscape then
+    TabControl1.TabIndex := 0
+  else
+    TrackBar1Change(nil);
 end;
 
 procedure TForm1.TrackBar1MouseWheel(Sender: TObject; Shift: TShiftState;

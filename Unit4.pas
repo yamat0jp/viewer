@@ -108,7 +108,7 @@ begin
   bmp := TBitmap.Create;
   jpg := TBitmap.Create;
   try
-    for var s in Form5.FileList do
+    for var s in Form5.ListBox1.Items do
     begin
       jpg.LoadFromFile(s);
       sub := jpg.Width < jpg.Height;
@@ -132,10 +132,10 @@ begin
       end;
       inc(id);
     end;
-    result := Form5.FileList.Count > 0;
+    result := Form5.ListBox1.Items.Count > 0;
     if result then
     begin
-      jpg.LoadThumbnailFromFile(Form5.FileList[0], 100, 100, false);
+      jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
       nm := Form5.Edit1.Text;
       FDTable1.First;
       FDTable2.AppendRecord([id, nm, fn, jpg]);
@@ -143,7 +143,6 @@ begin
   finally
     bmp.Free;
     jpg.Free;
-    Form5.FileList.Clear;
   end;
 end;
 

@@ -8,8 +8,6 @@ object Form5: TForm5
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
-  OnCreate = FormCreate
-  OnDestroy = FormDestroy
   OnShow = FormShow
   DesignerMasterStyle = 0
   object Button1: TButton
@@ -28,21 +26,12 @@ object Form5: TForm5
     TabOrder = 1
     Text = 'Button2'
   end
-  object Image1: TImage
-    MultiResBitmap = <
-      item
-      end>
-    Position.X = 88.000000000000000000
-    Position.Y = 56.000000000000000000
-    Size.Width = 265.000000000000000000
-    Size.Height = 361.000000000000000000
-    Size.PlatformDefault = False
-  end
   object Edit1: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 3
+    TabOrder = 2
     Position.X = 376.000000000000000000
     Position.Y = 192.000000000000000000
+    OnChangeTracking = Edit1ChangeTracking
   end
   object SpeedButton1: TSpeedButton
     Position.X = 411.000000000000000000
@@ -57,5 +46,27 @@ object Form5: TForm5
     Options = [ofReadOnly, ofHideReadOnly, ofAllowMultiSelect, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 376
     Top = 288
+  end
+  object ListBox1: TListBox
+    DragMode = dmAutomatic
+    Position.X = 56.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 273.000000000000000000
+    Size.Height = 417.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    Viewport.Width = 269.000000000000000000
+    Viewport.Height = 413.000000000000000000
+  end
+  object Label1: TLabel
+    Position.X = 376.000000000000000000
+    Position.Y = 160.000000000000000000
+    Text = #21517#31216#12364#37325#35079#12375#12390#12356#12414#12377
+    Visible = False
+    TabOrder = 6
   end
 end

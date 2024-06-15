@@ -49,7 +49,6 @@ object Form1: TForm1
         Size.Height = 671.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
-        Visible = False
         OnDblClick = ListBox1DblClick
         DisableFocusEffect = True
         DefaultItemStyles.ItemStyle = ''
@@ -60,7 +59,8 @@ object Form1: TForm1
       end
       object ScrollBox1: TScrollBox
         Align = Client
-        Size.Width = 1021.000000000000000000
+        PopupMenu = PopupMenu1
+        Size.Width = 764.000000000000000000
         Size.Height = 671.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
@@ -70,7 +70,7 @@ object Form1: TForm1
         OnResize = ScrollBox1Resize
         OnClick = ScrollBox1Click
         OnMouseMove = ScrollBox1MouseMove
-        Viewport.Width = 1021.000000000000000000
+        Viewport.Width = 764.000000000000000000
         Viewport.Height = 671.000000000000000000
         object Image4: TImage
           MultiResBitmap = <
@@ -186,7 +186,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 3573.000000000000000000
+          Position.X = 3316.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -318,10 +318,6 @@ object Form1: TForm1
           ''
           ''
           #35613#36766
-          ''
-          'GhostScript'
-          'GhostScript-API-Wrapper'
-          'Skia4Delphi'
           ''
           'Vector'
           'GitHub')
@@ -520,13 +516,6 @@ object Form1: TForm1
     OutputConverters = <>
     Left = 20
     Top = 5
-    object LinkControlToField1: TLinkControlToField
-      Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
-      DataSource = BindSourceDB1
-      FieldName = 'STAY'
-      Control = CheckBox1
-      Track = True
-    end
     object LinkControlToField2: TLinkControlToField
       Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
       DataSource = BindSourceDB1
@@ -546,6 +535,20 @@ object Form1: TForm1
       DataSource = BindSourceDB1
       FieldName = 'STAY'
       Component = SpinBox1
+      ComponentProperty = 'Enabled'
+    end
+    object LinkControlToField1: TLinkControlToField
+      Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
+      DataSource = BindSourceDB1
+      FieldName = 'STAY'
+      Control = CheckBox1
+      Track = True
+    end
+    object LinkPropertyToFieldEnabled2: TLinkPropertyToField
+      Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
+      DataSource = BindSourceDB1
+      FieldName = 'STAY'
+      Component = Timer1
       ComponentProperty = 'Enabled'
     end
   end
