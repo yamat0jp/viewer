@@ -17,7 +17,7 @@ object Form1: TForm1
     Size.Width = 1021.000000000000000000
     Size.Height = 697.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 3
     TabPosition = PlatformDefault
     OnChange = TabControl1Change
@@ -33,7 +33,7 @@ object Form1: TForm1
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 66.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -306,7 +306,7 @@ object Form1: TForm1
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 79.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -412,7 +412,7 @@ object Form1: TForm1
         GroupName = 'selection'
         IsChecked = True
         Position.X = 336.000000000000000000
-        Position.Y = 174.000000000000000000
+        Position.Y = 176.000000000000000000
         TabOrder = 9
         Text = #24038#12363#12425#12402#12425#12367
         OnClick = RadioButton2Click
@@ -420,7 +420,7 @@ object Form1: TForm1
       object RadioButton2: TRadioButton
         GroupName = 'selection'
         Position.X = 336.000000000000000000
-        Position.Y = 216.000000000000000000
+        Position.Y = 224.000000000000000000
         TabOrder = 10
         Text = #21491#12363#12425#12402#12425#12367
         OnClick = RadioButton2Click

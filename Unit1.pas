@@ -66,8 +66,6 @@ type
     LinkPropertyToFieldEnabled: TLinkPropertyToField;
     ToolBar2: TToolBar;
     SpeedButton2: TSpeedButton;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
     Label1: TLabel;
     Label3: TLabel;
     Action4: TAction;
@@ -80,6 +78,8 @@ type
     Label4: TLabel;
     Action7: TAction;
     Action8: TAction;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -122,7 +122,6 @@ type
     { private êÈåæ }
     rects: TArray<TRectF>;
     rectIndex: Integer;
-    imageIndex: Single;
     grab: Boolean;
     posCur: TPointF;
     process: Boolean;
@@ -225,7 +224,7 @@ end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
 var
-  id, cnt: Single;
+  cnt: Single;
 begin
   with DataModule4 do
   begin
@@ -234,8 +233,6 @@ begin
     FDTable1.Open;
     FDTable4.Open;
     cnt := FDTable1.RecordCount;
-    id := FDTable4.FieldByName('page').AsInteger;
-    imageIndex := id;
     TrackBar1.max := cnt;
     TrackBar1Change(nil);
     Label4.Text := '/ ' + cnt.ToString;
@@ -243,18 +240,14 @@ begin
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
-var
-  id: Single;
 begin
-  with DataModule4.FDTable4 do
-    if Active then
+  with DataModule4 do
+    if FDTable1.Active then
     begin
-      id := TrackBar1.Value;
-      if RadioButton2.IsChecked then
-        id := TrackBar1.max - id + 1;
-      Edit;
-      FieldByName('page').AsInteger := Round(id);
-      Post;
+      FDTable4.Edit;
+      FDTable4.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
+        .AsInteger;
+      FDTable4.Post;
     end;
 end;
 
@@ -397,11 +390,13 @@ begin
     FieldByName('reverse').AsBoolean := Sender = RadioButton2;
     Post;
   end;
-  with DataModule4.FDTable1 do
-    if Active then
+  with DataModule4 do
+    if FDTable1.Active then
     begin
-      imageIndex := FieldByName('page').AsInteger;
-      TrackBar1Change(nil);
+      FDTable4.Edit;
+      FDTable4.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
+        .AsInteger;
+      FDTable4.Post;
     end;
 end;
 
@@ -507,13 +502,6 @@ begin
     Timer1.Enabled := false;
     Action5Execute(nil);
   end;
-  if TabControl1.TabIndex = 2 then
-  begin
-    if DataModule4.FDTable3.FieldByName('reverse').AsBoolean then
-      RadioButton2.IsChecked := true
-    else
-      RadioButton1.IsChecked := true;
-  end;
 end;
 
 procedure TForm1.TabControl1Resize(Sender: TObject);
@@ -538,7 +526,7 @@ begin
   if Sender = TrackBar1 then
     num := Round(TrackBar1.Value)
   else
-    num := Round(imageIndex);
+    num := DataModule4.FDTable4.FieldByName('page').AsInteger;
   Label3.Text := num.ToString;
   if DataModule4.FDTable1.Locate('page', num) then
   begin

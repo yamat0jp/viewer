@@ -130,7 +130,7 @@ Visible=True
 Coordinates=402,216,57,58
 
 []
-Coordinates=155,380,84,51
+Coordinates=763,216,92,58
 ExplicitSubNodes=IsChecked
 Visible=True
 
@@ -179,14 +179,6 @@ ExplicitSubNodes=IsPressed
 
 [ToolBar2]
 Coordinates=579,519,67,36
-
-[RadioButton2]
-Coordinates=763,216,92,58
-ExplicitSubNodes=IsChecked
-
-[RadioButton1]
-Coordinates=428,442,92,36
-ExplicitSubNodes=
 
 [DataModule4.FDQuery1]
 Coordinates=175,365,153,58
