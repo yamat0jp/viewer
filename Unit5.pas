@@ -18,9 +18,15 @@ type
     OpenDialog1: TOpenDialog;
     ListBox1: TListBox;
     Label1: TLabel;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Edit1ChangeTracking(Sender: TObject);
+    procedure ListBox1DragOver(Sender: TObject; const Data: TDragObject;
+      const Point: TPointF; var Operation: TDragOperation);
+    procedure SpeedButton2Click(Sender: TObject);
   private
     { private éŒ¾ }
   public
@@ -60,6 +66,12 @@ begin
   Button1.Enabled := false;
 end;
 
+procedure TForm5.ListBox1DragOver(Sender: TObject; const Data: TDragObject;
+  const Point: TPointF; var Operation: TDragOperation);
+begin
+  Operation := TDragOperation.Move;
+end;
+
 procedure TForm5.SpeedButton1Click(Sender: TObject);
 var
   s: string;
@@ -69,11 +81,33 @@ begin
     for var name in OpenDialog1.Files do
     begin
       s := LowerCase(ExtractFileExt(name));
-      if (s = '.jpg') or (s = '.jpeg') then
+      if (s = '.jpg') or (s = '.jpeg') or (s = '.webp') then
         ListBox1.Items.Add(name);
     end;
     Edit1.Text := ChangeFileExt(ExtractFileName(ListBox1.Items[0]), '');
     Edit1ChangeTracking(nil);
+  end;
+end;
+
+procedure TForm5.SpeedButton2Click(Sender: TObject);
+var
+  id: integer;
+begin
+  if ListBox1.ItemIndex > -1 then
+  begin
+    id := ListBox1.ItemIndex;
+    if (Sender = SpeedButton2) and (id > 0) then
+    begin
+      ListBox1.Items.Move(id, id - 1);
+      ListBox1.ItemIndex := id - 1;
+    end
+    else if (Sender = SpeedButton3) and (id + 1 < ListBox1.Count) then
+    begin
+      ListBox1.Items.Move(id, id + 1);
+      ListBox1.ItemIndex := id + 1;
+    end
+    else if Sender = SpeedButton4 then
+      ListBox1.Items.Delete(id);
   end;
 end;
 

@@ -1,4 +1,4 @@
-program Project1;
+program Viewer;
 
 uses
   System.StartUpCopy,

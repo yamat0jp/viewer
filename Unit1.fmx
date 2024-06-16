@@ -17,11 +17,11 @@ object Form1: TForm1
     Size.Width = 1021.000000000000000000
     Size.Height = 697.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 3
     TabPosition = PlatformDefault
     OnChange = TabControl1Change
-    OnResize = TabControl1Resze
+    OnResize = TabControl1Resize
     Sizes = (
       1021s
       671s
@@ -33,7 +33,7 @@ object Form1: TForm1
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 66.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -186,7 +186,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 3316.000000000000000000
+          Position.X = 9028.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -294,13 +294,19 @@ object Form1: TForm1
           Text = 'Label3'
           TabOrder = 1
         end
+        object Label4: TLabel
+          Position.X = 120.000000000000000000
+          Position.Y = 8.000000000000000000
+          Text = 'Label4'
+          TabOrder = 2
+        end
       end
     end
     object TabItem4: TTabItem
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 79.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -409,6 +415,7 @@ object Form1: TForm1
         Position.Y = 174.000000000000000000
         TabOrder = 9
         Text = #24038#12363#12425#12402#12425#12367
+        OnClick = RadioButton2Click
       end
       object RadioButton2: TRadioButton
         GroupName = 'selection'
@@ -416,6 +423,7 @@ object Form1: TForm1
         Position.Y = 216.000000000000000000
         TabOrder = 10
         Text = #21491#12363#12425#12402#12425#12367
+        OnClick = RadioButton2Click
       end
     end
   end
@@ -503,6 +511,16 @@ object Form1: TForm1
       Category = 'paint'
       Text = 'double'
       OnExecute = Action6Execute
+    end
+    object Action7: TAction
+      Category = 'navi'
+      Text = 'next'
+      OnExecute = Action7Execute
+    end
+    object Action8: TAction
+      Category = 'navi'
+      Text = 'pred'
+      OnExecute = Action8Execute
     end
   end
   object BindSourceDB1: TBindSourceDB

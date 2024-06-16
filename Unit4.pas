@@ -38,7 +38,6 @@ type
     procedure DataModuleDestroy(Sender: TObject);
   private
     function randomName: string;
-    function resizeImg(img: TBitmap): TPoint;
     { Private éŒ¾ }
   public
     { Public éŒ¾ }
@@ -60,12 +59,25 @@ procedure TDataModule4.DataModuleCreate(Sender: TObject);
 begin
   image := TBitmap.Create;
   if Assigned(Form1) then
+  begin
     Form1.ScrollBox1.Repaint;
+    Form1.CheckBox1.IsChecked := FDTable3.FieldByName('stay').AsBoolean;
+    Form1.Timer1.Interval := FDTable3.FieldByName('interval').AsInteger;
+    Form1.SpinBox1.Value := Form1.SpinBox1.Value;
+    Form1.RadioButton2.IsChecked := FDTable3.FieldByName('reverse').AsBoolean;
+  end;
 end;
 
 procedure TDataModule4.DataModuleDestroy(Sender: TObject);
 begin
   image.Free;
+  if Assigned(Form1) then
+  begin
+    FDTable3.Edit;
+    FDTable3.FieldByName('stay').AsBoolean := Form1.CheckBox1.IsChecked;
+    FDTable3.FieldByName('reverse').AsBoolean := Form1.RadioButton2.IsChecked;
+    FDTable3.Post;
+  end;
 end;
 
 procedure TDataModule4.FDTable1AfterScroll(DataSet: TDataSet);
@@ -153,46 +165,6 @@ begin
   for var i := 1 to 5 do
     result := result + Random(10).ToString;
   result := ExtractFilePath(ParamStr(0)) + result + '.ib';
-end;
-
-function TDataModule4.resizeImg(img: TBitmap): TPoint;
-var
-  wid, hei, a, b, r: integer;
-  sub: Boolean;
-begin
-  wid := img.Width;
-  hei := img.Height;
-  result := Point(0, 0);
-  if not Assigned(img) then
-    Exit;
-  if wid > hei then
-  begin
-    a := wid;
-    b := hei;
-    sub := false;
-  end
-  else
-  begin
-    a := hei;
-    b := wid;
-    sub := true;
-  end;
-  while a div b > 1 do
-  begin
-    r := a mod b;
-    a := b;
-    b := r;
-  end;
-  if sub then
-  begin
-    result.X := b;
-    result.Y := a;
-  end
-  else
-  begin
-    result.X := a;
-    result.Y := b;
-  end;
 end;
 
 end.

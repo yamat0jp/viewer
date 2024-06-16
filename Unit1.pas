@@ -77,6 +77,9 @@ type
     SpeedButton1: TSpeedButton;
     LinkControlToField1: TLinkControlToField;
     LinkPropertyToFieldEnabled2: TLinkPropertyToField;
+    Label4: TLabel;
+    Action7: TAction;
+    Action8: TAction;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -95,7 +98,7 @@ type
       WheelDelta: Integer; var Handled: Boolean);
     procedure Action6Execute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure TabControl1Resze(Sender: TObject);
+    procedure TabControl1Resize(Sender: TObject);
     procedure ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState;
       X, Y: Single);
     procedure ScrollBox1Paint(Sender: TObject; Canvas: TCanvas;
@@ -112,12 +115,17 @@ type
     procedure Image3MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
     procedure Image3DblClick(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure Action7Execute(Sender: TObject);
+    procedure Action8Execute(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
     rectIndex: Integer;
+    imageIndex: Single;
     grab: Boolean;
     posCur: TPointF;
+    process: Boolean;
   public
     { public êÈåæ }
   end;
@@ -216,6 +224,8 @@ begin
 end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
+var
+  id, cnt: Single;
 begin
   with DataModule4 do
   begin
@@ -223,22 +233,28 @@ begin
     FDConnection1.Open;
     FDTable1.Open;
     FDTable4.Open;
-    TabControl1.TabIndex := 1;
-    TrackBar1.max := FDTable1.RecordCount;
-    TrackBar1.Value := FDTable4.FieldByName('page').AsInteger;
+    cnt := FDTable1.RecordCount;
+    id := FDTable4.FieldByName('page').AsInteger;
+    imageIndex := id;
+    TrackBar1.max := cnt;
     TrackBar1Change(nil);
-    Label3.Text := TrackBar1.max.ToString;
+    Label4.Text := '/ ' + cnt.ToString;
   end;
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
+var
+  id: Single;
 begin
-  with DataModule4 do
-    if FDTable4.Active then
+  with DataModule4.FDTable4 do
+    if Active then
     begin
-      FDTable4.Edit;
-      FDTable4.FieldByName('page').AsInteger := Trunc(TrackBar1.Value);
-      FDTable4.Post;
+      id := TrackBar1.Value;
+      if RadioButton2.IsChecked then
+        id := TrackBar1.max - id + 1;
+      Edit;
+      FieldByName('page').AsInteger := Round(id);
+      Post;
     end;
 end;
 
@@ -259,6 +275,22 @@ begin
       Image2.Bitmap.Assign(image);
       FDTable1.Next;
     end;
+end;
+
+procedure TForm1.Action7Execute(Sender: TObject);
+begin
+  if RadioButton1.IsChecked then
+    TrackBar1.Value := TrackBar1.Value + 1
+  else
+    TrackBar1.Value := TrackBar1.Value - 1;
+end;
+
+procedure TForm1.Action8Execute(Sender: TObject);
+begin
+  if RadioButton1.IsChecked then
+    TrackBar1.Value := TrackBar1.Value - 1
+  else
+    TrackBar1.Value := TrackBar1.Value + 1;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -286,6 +318,7 @@ begin
   Image2.Position.X := Panel1.Width / 2;
   Image1.Align := TAlignLayout.Client;
   rectIndex := -1;
+  process := false;
 end;
 
 procedure TForm1.Image3DblClick(Sender: TObject);
@@ -303,10 +336,12 @@ end;
 procedure TForm1.Image3MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
 begin
+  Timer1.Enabled := false;
+  Timer1.Enabled := CheckBox1.IsChecked;
   if X < Image3.Width / 3 then
-    TrackBar1.Value := TrackBar1.Value - 1
+    Action8Execute(nil)
   else if X > 2 * Image3.Width / 3 then
-    TrackBar1.Value := TrackBar1.Value + 1
+    Action7Execute(nil)
   else
   begin
     grab := true;
@@ -338,7 +373,10 @@ procedure TForm1.ListBox1DblClick(Sender: TObject);
 begin
   if DataModule4.FDTable2.Locate('name', ListBox1.Items[ListBox1.ItemIndex])
   then
+  begin
     Action4Execute(nil);
+    TabControl1.TabIndex := 1;
+  end;
 end;
 
 procedure TForm1.MenuItem12Click(Sender: TObject);
@@ -351,6 +389,22 @@ begin
   Close;
 end;
 
+procedure TForm1.RadioButton2Click(Sender: TObject);
+begin
+  with DataModule4.FDTable3 do
+  begin
+    Edit;
+    FieldByName('reverse').AsBoolean := Sender = RadioButton2;
+    Post;
+  end;
+  with DataModule4.FDTable1 do
+    if Active then
+    begin
+      imageIndex := FieldByName('page').AsInteger;
+      TrackBar1Change(nil);
+    end;
+end;
+
 procedure TForm1.ScrollBox1Click(Sender: TObject);
 var
   s: string;
@@ -360,6 +414,7 @@ begin
     s := ImageList1.Source.Items[rectIndex].Name;
     DataModule4.FDTable2.Locate('name', s);
     Action4Execute(nil);
+    TabControl1.TabIndex := 1;
   end;
 end;
 
@@ -445,32 +500,23 @@ begin
     DataModule4.FDTable1.Prepare;
     Form3.Hide;
     TrackBar1.SetFocus;
-    if CheckBox1.IsChecked then
-    begin
-      Timer1.Interval := 1000 * Trunc(SpinBox1.Value);
-      Timer1.Enabled := true;
-    end;
   end
   else
   begin
     Form3.Hide;
     Timer1.Enabled := false;
-    Action5Execute(Sender);
+    Action5Execute(nil);
   end;
-  with DataModule4 do
-    if TabControl1.TabIndex = 2 then
-    begin
-      RadioButton2.IsChecked := FDTable3.FieldByName('reverse').AsBoolean;
-      FDTable3.Edit;
-    end
-    else if FDTable3.State = dsEdit then
-    begin
-      FDTable3.FieldByName('reverse').AsBoolean := RadioButton2.IsChecked;
-      FDTable3.Post;
-    end;
+  if TabControl1.TabIndex = 2 then
+  begin
+    if DataModule4.FDTable3.FieldByName('reverse').AsBoolean then
+      RadioButton2.IsChecked := true
+    else
+      RadioButton1.IsChecked := true;
+  end;
 end;
 
-procedure TForm1.TabControl1Resze(Sender: TObject);
+procedure TForm1.TabControl1Resize(Sender: TObject);
 begin
   Image1.BoundsRect := RectF(0, 0, Panel1.Width / 2, Panel1.Height);
   Image2.BoundsRect := RectF(Panel1.Width / 2, 0, Panel1.Width, Panel1.Height);
@@ -480,32 +526,47 @@ end;
 procedure TForm1.Timer1Timer(Sender: TObject);
 begin
   if TabControl1.TabIndex = 1 then
-    TrackBar1.Value := TrackBar1.Value + 1;
+    Action7Execute(nil);
 end;
 
 procedure TForm1.TrackBar1Change(Sender: TObject);
 var
   num: Integer;
 begin
-  num := Round(TrackBar1.Value);
-  with DataModule4 do
-    if FDTable1.Locate('page', num) then
-    begin
-      TrackBar1.Value := num;
-      if not Panel1.Visible then
-        Image3.Bitmap.Assign(image)
-      else
-        Action6Execute(Sender);
-    end;
+  if process then
+    Exit;
+  if Sender = TrackBar1 then
+    num := Round(TrackBar1.Value)
+  else
+    num := Round(imageIndex);
+  Label3.Text := num.ToString;
+  if DataModule4.FDTable1.Locate('page', num) then
+  begin
+    if not Panel1.Visible then
+      Image3.Bitmap.Assign(DataModule4.image)
+    else
+      Action6Execute(Sender);
+  end;
+  process := true;
+  try
+    if Sender = TrackBar1 then
+      TrackBar1.Value := num
+    else if RadioButton1.IsChecked then
+      TrackBar1.Value := num
+    else
+      TrackBar1.Value := TrackBar1.max - num + 1;
+  finally
+    process := false;
+  end;
+  Timer1.Enabled := false;
+  Timer1.Enabled := CheckBox1.IsChecked;
 end;
 
 procedure TForm1.TrackBar1KeyUp(Sender: TObject; var Key: Word;
   var KeyChar: Char; Shift: TShiftState);
 begin
   if Key = vkEscape then
-    TabControl1.TabIndex := 0
-  else
-    TrackBar1Change(nil);
+    TabControl1.TabIndex := 0;
 end;
 
 procedure TForm1.TrackBar1MouseWheel(Sender: TObject; Shift: TShiftState;
@@ -516,9 +577,9 @@ begin
   bool := ((WheelDelta < 0) and RadioButton1.IsChecked) or
     ((WheelDelta > 0) and RadioButton2.IsChecked);
   if not bool then
-    TrackBar1.Value := TrackBar1.Value - 1
+    Action7Execute(nil)
   else
-    TrackBar1.Value := TrackBar1.Value + 1;
+    Action8Execute(nil);
 end;
 
 end.

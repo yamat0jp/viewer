@@ -16,7 +16,7 @@ inherited Form1_Windows: TForm1_Windows
         Viewport.Height = 667.000000000000000000
       end
       inherited ScrollBox1: TScrollBox
-        Viewport.Width = 1021.000000000000000000
+        Viewport.Width = 764.000000000000000000
         Viewport.Height = 671.000000000000000000
       end
     end
@@ -42,6 +42,12 @@ inherited Form1_Windows: TForm1_Windows
       inherited Memo2: TMemo
         Viewport.Width = 297.000000000000000000
         Viewport.Height = 291.000000000000000000
+      end
+      inherited RadioButton1: TRadioButton
+        Enabled = False
+      end
+      inherited RadioButton2: TRadioButton
+        Enabled = False
       end
     end
   end

@@ -39,7 +39,7 @@ object Form5: TForm5
     Size.Width = 65.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
-    Text = 'SpeedButton1'
+    Text = 'Add'
     OnClick = SpeedButton1Click
   end
   object OpenDialog1: TOpenDialog
@@ -48,13 +48,14 @@ object Form5: TForm5
     Top = 288
   end
   object ListBox1: TListBox
-    DragMode = dmAutomatic
     Position.X = 56.000000000000000000
     Position.Y = 32.000000000000000000
     Size.Width = 273.000000000000000000
     Size.Height = 417.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 5
+    OnDragOver = ListBox1DragOver
+    AllowDrag = True
     DisableFocusEffect = True
     DefaultItemStyles.ItemStyle = ''
     DefaultItemStyles.GroupHeaderStyle = ''
@@ -68,5 +69,23 @@ object Form5: TForm5
     Text = #21517#31216#12364#37325#35079#12375#12390#12356#12414#12377
     Visible = False
     TabOrder = 6
+  end
+  object SpeedButton2: TSpeedButton
+    Position.X = 352.000000000000000000
+    Position.Y = 336.000000000000000000
+    Text = 'Up'
+    OnClick = SpeedButton2Click
+  end
+  object SpeedButton3: TSpeedButton
+    Position.X = 352.000000000000000000
+    Position.Y = 366.000000000000000000
+    Text = 'Down'
+    OnClick = SpeedButton2Click
+  end
+  object SpeedButton4: TSpeedButton
+    Position.X = 352.000000000000000000
+    Position.Y = 396.000000000000000000
+    Text = 'Delete'
+    OnClick = SpeedButton2Click
   end
 end

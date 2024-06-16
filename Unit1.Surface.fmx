@@ -70,6 +70,12 @@ inherited Form1_Surface: TForm1_Surface
         Viewport.Width = 297.000000000000000000
         Viewport.Height = 291.000000000000000000
       end
+      inherited RadioButton1: TRadioButton
+        Enabled = False
+      end
+      inherited RadioButton2: TRadioButton
+        Enabled = False
+      end
     end
   end
 end
