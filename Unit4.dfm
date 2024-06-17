@@ -102,7 +102,6 @@ object DataModule4: TDataModule4
     end
   end
   object FDTable4: TFDTable
-    Active = True
     Connection = FDConnection1
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     TableName = 'INFO'
@@ -115,6 +114,10 @@ object DataModule4: TDataModule4
     object FDTable4PAGE: TIntegerField
       FieldName = 'PAGE'
       Origin = '"PAGE"'
+    end
+    object FDTable4TOPPAGE: TBooleanField
+      FieldName = 'TOPPAGE'
+      Origin = 'TOPPAGE'
     end
   end
   object FDQuery2: TFDQuery

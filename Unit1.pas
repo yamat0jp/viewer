@@ -55,10 +55,8 @@ type
     Action2: TAction;
     BindSourceDB1: TBindSourceDB;
     BindingsList1: TBindingsList;
-    BindSourceDB2: TBindSourceDB;
     Action3: TAction;
     Button1: TButton;
-    BindSourceDB3: TBindSourceDB;
     LinkControlToField2: TLinkControlToField;
     Image4: TImage;
     BindSourceDB4: TBindSourceDB;
@@ -80,6 +78,7 @@ type
     Action8: TAction;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
+    CheckBox2: TCheckBox;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -98,7 +97,6 @@ type
       WheelDelta: Integer; var Handled: Boolean);
     procedure Action6Execute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure TabControl1Resize(Sender: TObject);
     procedure ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState;
       X, Y: Single);
     procedure ScrollBox1Paint(Sender: TObject; Canvas: TCanvas;
@@ -118,6 +116,7 @@ type
     procedure RadioButton2Click(Sender: TObject);
     procedure Action7Execute(Sender: TObject);
     procedure Action8Execute(Sender: TObject);
+    procedure TabItem2Resize(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -236,37 +235,40 @@ begin
     TrackBar1.max := cnt;
     TrackBar1Change(nil);
     Label4.Text := '/ ' + cnt.ToString;
+    SpeedButton2.IsPressed := FDTable4.FieldByName('double').AsBoolean;
+    CheckBox2.IsChecked := FDTable4.FieldByName('toppage').AsBoolean;
+    SpeedButton2Click(nil);
   end;
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
 begin
-  with DataModule4 do
-    if FDTable1.Active then
+  with DataModule4.FDTable4 do
+    if DataModule4.FDTable1.Active then
     begin
-      FDTable4.Edit;
-      FDTable4.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
+      Edit;
+      FieldByName('page').AsInteger := DataModule4.FDTable1.FieldByName('page')
         .AsInteger;
-      FDTable4.Post;
+      FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
+      FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
+      Post;
     end;
 end;
 
 procedure TForm1.Action6Execute(Sender: TObject);
 begin
   with DataModule4 do
-    if RadioButton1.IsChecked then
+    if RadioButton2.IsChecked then
     begin
       Image2.Bitmap.Assign(image);
       FDTable1.Next;
       Image1.Bitmap.Assign(image);
-      FDTable1.Next;
     end
     else
     begin
       Image1.Bitmap.Assign(image);
       FDTable1.Next;
       Image2.Bitmap.Assign(image);
-      FDTable1.Next;
     end;
 end;
 
@@ -308,8 +310,8 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  Image1.Width := Panel1.Width / 2;
   Image2.Position.X := Panel1.Width / 2;
-  Image1.Align := TAlignLayout.Client;
   rectIndex := -1;
   process := false;
 end;
@@ -344,16 +346,19 @@ end;
 
 procedure TForm1.Image3MouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Single);
+var
+  obj: TControl;
 begin
+  obj := Sender as TControl;
   if grab and (WindowState <> TWindowState.wsMaximized) then
   begin
     Left := Left + Round(X - posCur.X);
     Top := Top + Round(Y - posCur.Y);
   end
-  else if (X < Image3.Width / 3) or (X > 2 * Image3.Width / 3) then
-    Image3.Cursor := crUpArrow
+  else if (X < obj.Width / 3) or (X > 2 * obj.Width / 3) then
+    obj.Cursor := crUpArrow
   else
-    Image3.Cursor := crDefault;
+    obj.Cursor := crDefault;
 end;
 
 procedure TForm1.Image3MouseUp(Sender: TObject; Button: TMouseButton;
@@ -471,13 +476,13 @@ begin
   if SpeedButton2.IsPressed then
   begin
     cnt := DataModule4.FDTable1.RecordCount;
-    TrackBar1.Value := TrackBar1.Value / 2;
     TrackBar1.max := (cnt div 2) + cnt mod 2;
+    TrackBar1.Value := TrackBar1.Value / 2;
   end
   else
   begin
-    TrackBar1.Value := 2 * TrackBar1.Value;
     TrackBar1.max := DataModule4.FDTable1.RecordCount;
+    TrackBar1.Value := 2 * TrackBar1.Value;
   end;
 end;
 
@@ -504,11 +509,10 @@ begin
   end;
 end;
 
-procedure TForm1.TabControl1Resize(Sender: TObject);
+procedure TForm1.TabItem2Resize(Sender: TObject);
 begin
-  Image1.BoundsRect := RectF(0, 0, Panel1.Width / 2, Panel1.Height);
-  Image2.BoundsRect := RectF(Panel1.Width / 2, 0, Panel1.Width, Panel1.Height);
-  Panel1.InvalidateRect(Panel1.BoundsRect);
+  Image1.Position.X := Panel1.Width / 2 - Image1.Width;
+  Image2.Position.X := Panel1.Width / 2;
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
@@ -527,13 +531,18 @@ begin
     num := Round(TrackBar1.Value)
   else
     num := DataModule4.FDTable4.FieldByName('page').AsInteger;
-  Label3.Text := num.ToString;
-  if DataModule4.FDTable1.Locate('page', num) then
+  if not Panel1.Visible then
   begin
-    if not Panel1.Visible then
-      Image3.Bitmap.Assign(DataModule4.image)
-    else
-      Action6Execute(Sender);
+    if DataModule4.FDTable1.Locate('page', num) then
+    begin
+      Label3.Text := num.ToString;
+      Image3.Bitmap.Assign(DataModule4.image);
+    end;
+  end
+  else if DataModule4.FDTable1.Locate('page', num * 2 - 1) then
+  begin
+    Label3.Text := (2 * num - 1).ToString;
+    Action6Execute(Sender);
   end;
   process := true;
   try

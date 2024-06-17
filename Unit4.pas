@@ -33,6 +33,7 @@ type
     FDTable3INTERVAL: TFloatField;
     FDTable3REVERSE: TBooleanField;
     FDQuery1: TFDQuery;
+    FDTable4TOPPAGE: TBooleanField;
     procedure FDTable1AfterScroll(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
@@ -151,6 +152,11 @@ begin
       nm := Form5.Edit1.Text;
       FDTable1.First;
       FDTable2.AppendRecord([id, nm, fn, jpg]);
+      FDTable4.Edit;
+      FDTable4.FieldByName('double').AsBoolean := Form1.SpeedButton2.IsPressed;
+      FDTable4.FieldByName('page').AsInteger := 1;
+      FDTable4.FieldByName('toppage').AsBoolean := Form1.CheckBox2.IsChecked;
+      FDTable4.Post;
     end;
   finally
     bmp.Free;

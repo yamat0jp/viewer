@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'Viewer'
   ClientHeight = 697
   ClientWidth = 1021
   Position = ScreenCenter
@@ -21,7 +21,6 @@ object Form1: TForm1
     TabOrder = 3
     TabPosition = PlatformDefault
     OnChange = TabControl1Change
-    OnResize = TabControl1Resize
     Sizes = (
       1021s
       671s
@@ -186,7 +185,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 9028.000000000000000000
+          Position.X = 10456.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -202,6 +201,7 @@ object Form1: TForm1
       StyleLookup = ''
       TabOrder = 0
       Text = 'Contents'
+      OnResize = TabItem2Resize
       ExplicitSize.cx = 68.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
       object TrackBar1: TTrackBar
@@ -233,11 +233,13 @@ object Form1: TForm1
         Size.PlatformDefault = False
         Visible = False
         TabOrder = 2
+        OnMouseMove = Image3MouseMove
         object Image1: TImage
           MultiResBitmap = <
             item
             end>
-          Size.Width = 0.000000000000000000
+          Align = Scale
+          Size.Width = 505.000000000000000000
           Size.Height = 572.000000000000000000
           Size.PlatformDefault = False
         end
@@ -245,7 +247,9 @@ object Form1: TForm1
           MultiResBitmap = <
             item
             end>
-          Size.Width = 1021.000000000000000000
+          Align = Scale
+          Position.X = 504.000000000000000000
+          Size.Width = 517.000000000000000000
           Size.Height = 572.000000000000000000
           Size.PlatformDefault = False
         end
@@ -273,7 +277,7 @@ object Form1: TForm1
         object SpeedButton2: TSpeedButton
           StaysPressed = True
           Align = Center
-          Text = 'SpeedButton2'
+          Text = #35211#38283#12365
           OnClick = SpeedButton2Click
         end
         object Label1: TLabel
@@ -299,6 +303,15 @@ object Form1: TForm1
           Position.Y = 8.000000000000000000
           Text = 'Label4'
           TabOrder = 2
+        end
+        object CheckBox2: TCheckBox
+          Position.X = 944.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 69.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 3
+          Text = #34920#32025#12354#12426
         end
       end
     end
@@ -391,6 +404,14 @@ object Form1: TForm1
       object Memo2: TMemo
         Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
         DataDetectorTypes = []
+        Lines.Strings = (
+          #21069#20316'PDFViewer'#12392#12398#20114#25563#24615#12399#12354#12426#12414#12379#12435
+          ''
+          #12514#12496#12452#12523#12391#12398#12467#12531#12497#12452#12523#12420#26377#26009#29256#12391#12398'ibTOGO'#12418#35222#37326#12395#20837#12428#12383#35373#35336#12395#12394#12387#12390#12356#12414#12377#12290
+          #20182#31038#35069#21697#12395#22823#22793#20284#12383#20316#12426#12395#12394#12387#12390#12375#12414#12387#12390#34920#12395#20986#12375#12389#12425#12367#12394#12426#12414#12375#12383#12290
+          ''
+          #12372#33258#36523#12391#12477#12540#12473#12467#12540#12489#12363#12425#23455#34892#12501#12449#12452#12523#12434#20316#12387#12390#27005#12375#12416#12371#12392#12434#20170#12398#12392#12371#12429#12399#24819#23450#12375#12390#12356#12414#12377#12290
+          '')
         CanFocus = False
         Position.X = 128.000000000000000000
         Position.Y = 278.000000000000000000
@@ -399,7 +420,7 @@ object Form1: TForm1
         Size.PlatformDefault = False
         TabOrder = 7
         Viewport.Width = 293.000000000000000000
-        Viewport.Height = 287.000000000000000000
+        Viewport.Height = 271.000000000000000000
       end
       object Button1: TButton
         Position.X = 134.000000000000000000
@@ -527,13 +548,13 @@ object Form1: TForm1
     DataSet = DataModule4.FDTable3
     ScopeMappings = <>
     Left = 24
-    Top = 72
+    Top = 104
   end
   object BindingsList1: TBindingsList
     Methods = <>
     OutputConverters = <>
     Left = 20
-    Top = 5
+    Top = 45
     object LinkControlToField2: TLinkControlToField
       Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
       DataSource = BindSourceDB1
@@ -570,23 +591,11 @@ object Form1: TForm1
       ComponentProperty = 'Enabled'
     end
   end
-  object BindSourceDB2: TBindSourceDB
-    DataSet = DataModule4.FDTable4
-    ScopeMappings = <>
-    Left = 24
-    Top = 136
-  end
-  object BindSourceDB3: TBindSourceDB
-    DataSet = DataModule4.FDTable1
-    ScopeMappings = <>
-    Left = 24
-    Top = 208
-  end
   object BindSourceDB4: TBindSourceDB
     DataSet = DataModule4.FDTable2
     ScopeMappings = <>
     Left = 24
-    Top = 280
+    Top = 168
   end
   object ImageList1: TImageList
     Source = <>

@@ -43,8 +43,12 @@ inherited Form1_Surface: TForm1_Surface
         Anchors = [akLeft, akTop, akBottom]
         Size.Width = 1080.000000000000000000
         Size.Height = 1795.000000000000000000
+        inherited Image1: TImage
+          Size.Height = 1795.000122070313000000
+        end
         inherited Image2: TImage
-          Position.X = 59.000000000000000000
+          Position.X = 563.000000000000000000
+          Size.Height = 1795.000122070313000000
         end
       end
       inherited Image3: TImage
