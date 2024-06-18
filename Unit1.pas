@@ -225,12 +225,19 @@ procedure TForm1.Action4Execute(Sender: TObject);
 var
   cnt: Single;
 begin
+  Form3.Show;
+  Application.ProcessMessages;
   with DataModule4 do
   begin
     FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
     FDConnection1.Open;
     FDTable1.Open;
     FDTable4.Open;
+    DataModule4.FDTable1.Prepare;
+    Form3.Hide;
+    if Sender <> TabControl1 then
+      TabControl1.TabIndex := 1;
+    TrackBar1.SetFocus;
     cnt := FDTable1.RecordCount;
     TrackBar1.max := cnt;
     TrackBar1Change(nil);
@@ -371,10 +378,7 @@ procedure TForm1.ListBox1DblClick(Sender: TObject);
 begin
   if DataModule4.FDTable2.Locate('name', ListBox1.Items[ListBox1.ItemIndex])
   then
-  begin
     Action4Execute(nil);
-    TabControl1.TabIndex := 1;
-  end;
 end;
 
 procedure TForm1.MenuItem12Click(Sender: TObject);
@@ -414,7 +418,6 @@ begin
     s := ImageList1.Source.Items[rectIndex].Name;
     DataModule4.FDTable2.Locate('name', s);
     Action4Execute(nil);
-    TabControl1.TabIndex := 1;
   end;
 end;
 
@@ -495,11 +498,7 @@ begin
       TabControl1.TabIndex := 0;
       Exit;
     end;
-    if not DataModule4.FDTable1.Prepared then
-      Form3.Show;
-    DataModule4.FDTable1.Prepare;
-    Form3.Hide;
-    TrackBar1.SetFocus;
+    Action4Execute(Sender);
   end
   else
   begin
@@ -523,14 +522,18 @@ end;
 
 procedure TForm1.TrackBar1Change(Sender: TObject);
 var
-  num: Integer;
+  num, cnt: Integer;
 begin
   if process then
     Exit;
   if Sender = TrackBar1 then
-    num := Round(TrackBar1.Value)
+    cnt := Round(TrackBar1.Value)
   else
-    num := DataModule4.FDTable4.FieldByName('page').AsInteger;
+    cnt := DataModule4.FDTable4.FieldByName('page').AsInteger;
+  if RadioButton1.IsChecked then
+    num := cnt
+  else
+    num := Round(TrackBar1.max) - cnt + 1;
   if not Panel1.Visible then
   begin
     if DataModule4.FDTable1.Locate('page', num) then
@@ -547,11 +550,7 @@ begin
   process := true;
   try
     if Sender = TrackBar1 then
-      TrackBar1.Value := num
-    else if RadioButton1.IsChecked then
-      TrackBar1.Value := num
-    else
-      TrackBar1.Value := TrackBar1.max - num + 1;
+      TrackBar1.Value := cnt;
   finally
     process := false;
   end;
@@ -571,8 +570,8 @@ procedure TForm1.TrackBar1MouseWheel(Sender: TObject; Shift: TShiftState;
 var
   bool: Boolean;
 begin
-  bool := ((WheelDelta < 0) and RadioButton1.IsChecked) or
-    ((WheelDelta > 0) and RadioButton2.IsChecked);
+  bool := ((WheelDelta > 0) and RadioButton1.IsChecked) or
+    ((WheelDelta < 0) and RadioButton2.IsChecked);
   if not bool then
     Action7Execute(nil)
   else

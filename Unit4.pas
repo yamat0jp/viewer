@@ -114,7 +114,8 @@ begin
   FDConnection1.Params.Database := fn;
   FDConnection1.Open;
   FDQuery1.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB BOOLEAN);');
-  FDQuery1.ExecSQL('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER);');
+  FDQuery1.ExecSQL
+    ('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER, TOPPAGE BOOLEAN);');
   FDTable1.Open;
   FDTable4.Open;
   id := 1;
