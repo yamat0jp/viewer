@@ -585,7 +585,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 13312.000000000000000000
+          Position.X = 14740.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -642,6 +642,10 @@ object Form1: TForm1
           Size.Width = 505.000000000000000000
           Size.Height = 572.000000000000000000
           Size.PlatformDefault = False
+          OnDblClick = Image3DblClick
+          OnMouseDown = Image3MouseDown
+          OnMouseMove = Image1MouseMove
+          OnMouseUp = Image3MouseUp
         end
         object Image2: TImage
           MultiResBitmap = <
@@ -652,6 +656,9 @@ object Form1: TForm1
           Size.Width = 517.000000000000000000
           Size.Height = 572.000000000000000000
           Size.PlatformDefault = False
+          OnMouseDown = Image3MouseDown
+          OnMouseMove = Image2MouseMove
+          OnMouseUp = Image3MouseUp
         end
       end
       object Image3: TImage
@@ -942,6 +949,11 @@ object Form1: TForm1
       Category = 'navi'
       Text = 'pred'
       OnExecute = Action8Execute
+    end
+    object Action9: TAction
+      Category = 'navi'
+      Text = 'map'
+      OnExecute = Action9Execute
     end
   end
   object BindSourceDB1: TBindSourceDB

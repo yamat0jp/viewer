@@ -79,6 +79,7 @@ type
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     CheckBox2: TCheckBox;
+    Action9: TAction;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -117,6 +118,11 @@ type
     procedure Action7Execute(Sender: TObject);
     procedure Action8Execute(Sender: TObject);
     procedure TabItem2Resize(Sender: TObject);
+    procedure Action9Execute(Sender: TObject);
+    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Single);
+    procedure Image2MouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Single);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -225,16 +231,20 @@ procedure TForm1.Action4Execute(Sender: TObject);
 var
   cnt: Single;
 begin
-  Form3.Show;
-  Application.ProcessMessages;
   with DataModule4 do
   begin
-    FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
-    FDConnection1.Open;
-    FDTable1.Open;
-    FDTable4.Open;
-    DataModule4.FDTable1.Prepare;
-    Form3.Hide;
+    Form3.Show;
+    try
+      Application.ProcessMessages;
+      FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
+      FDConnection1.Open;
+      FDTable1.Open;
+      FDTable4.Open;
+      FDTable1.Prepare;
+      map;
+    finally
+      Form3.Hide;
+    end;
     if Sender <> TabControl1 then
       TabControl1.TabIndex := 1;
     TrackBar1.SetFocus;
@@ -245,6 +255,7 @@ begin
     SpeedButton2.IsPressed := FDTable4.FieldByName('double').AsBoolean;
     CheckBox2.IsChecked := FDTable4.FieldByName('toppage').AsBoolean;
     SpeedButton2Click(nil);
+    TrackBar1Change(nil);
   end;
 end;
 
@@ -295,6 +306,11 @@ begin
     TrackBar1.Value := TrackBar1.Value + 1;
 end;
 
+procedure TForm1.Action9Execute(Sender: TObject);
+begin
+  TrackBar1.Value := DataModule4.doublePage(Round(TrackBar1.Value));
+end;
+
 procedure TForm1.Button1Click(Sender: TObject);
 begin
   with DataModule4.FDTable3 do
@@ -323,13 +339,44 @@ begin
   process := false;
 end;
 
-procedure TForm1.Image3DblClick(Sender: TObject);
+procedure TForm1.Image1MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Single);
 begin
+  if grab and (WindowState <> TWindowState.wsMaximized) then
+  begin
+    Left := Left + Round(X - posCur.X);
+    Top := Top + Round(Y - posCur.Y);
+  end
+  else if (X < 2 * Image1.Width / 3) then
+    Image1.Cursor := crUpArrow
+  else
+    Image1.Cursor := crDefault;
+end;
+
+procedure TForm1.Image2MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Single);
+begin
+  if grab and (WindowState <> TWindowState.wsMaximized) then
+  begin
+    Left := Left + Round(X - posCur.X);
+    Top := Top + Round(Y - posCur.Y);
+  end
+  else if (X > Image2.Width / 3) then
+    Image2.Cursor := crVSplit
+  else
+    Image2.Cursor := crDefault;
+end;
+
+procedure TForm1.Image3DblClick(Sender: TObject);
+var
+  obj: TControl;
+begin
+  obj := Sender as TControl;
   case WindowState of
     TWindowState.wsMaximized:
       WindowState := TWindowState.wsNormal;
     TWindowState.wsNormal:
-      if Image3.Cursor = crDefault then
+      if obj.Cursor = crDefault then
         WindowState := TWindowState.wsMaximized;
   end;
   grab := false;
@@ -340,12 +387,12 @@ procedure TForm1.Image3MouseDown(Sender: TObject; Button: TMouseButton;
 begin
   Timer1.Enabled := false;
   Timer1.Enabled := CheckBox1.IsChecked;
-  if X < Image3.Width / 3 then
-    Action8Execute(nil)
-  else if X > 2 * Image3.Width / 3 then
-    Action7Execute(nil)
+  case TImage(Sender).Cursor of
+    crUpArrow:
+      Action8Execute(nil);
+    crVSplit:
+      Action7Execute(nil)
   else
-  begin
     grab := true;
     posCur := PointF(X, Y);
   end;
@@ -362,8 +409,10 @@ begin
     Left := Left + Round(X - posCur.X);
     Top := Top + Round(Y - posCur.Y);
   end
-  else if (X < obj.Width / 3) or (X > 2 * obj.Width / 3) then
+  else if X < obj.Width / 3 then
     obj.Cursor := crUpArrow
+  else if X > 2 * obj.Width / 3 then
+    obj.Cursor := crVSplit
   else
     obj.Cursor := crDefault;
 end;
@@ -465,8 +514,6 @@ begin
 end;
 
 procedure TForm1.SpeedButton2Click(Sender: TObject);
-var
-  cnt: Integer;
 begin
   with DataModule4.FDTable4 do
   begin
@@ -477,15 +524,11 @@ begin
   Panel1.Visible := SpeedButton2.IsPressed;
   Image3.Visible := not Panel1.Visible;
   if SpeedButton2.IsPressed then
-  begin
-    cnt := DataModule4.FDTable1.RecordCount;
-    TrackBar1.max := (cnt div 2) + cnt mod 2;
-    TrackBar1.Value := TrackBar1.Value / 2;
-  end
+    Action9Execute(nil)
   else
   begin
     TrackBar1.max := DataModule4.FDTable1.RecordCount;
-    TrackBar1.Value := 2 * TrackBar1.Value;
+    TrackBar1.Value := DataModule4.mapList[Round(TrackBar1.Value)].Left;
   end;
 end;
 
@@ -523,6 +566,7 @@ end;
 procedure TForm1.TrackBar1Change(Sender: TObject);
 var
   num, cnt: Integer;
+  rec: TMap;
 begin
   if process then
     Exit;
@@ -533,24 +577,40 @@ begin
   if RadioButton1.IsChecked then
     num := cnt
   else
-    num := Round(TrackBar1.max) - cnt + 1;
-  if not Panel1.Visible then
+    num := DataModule4.mapList.Count - cnt + 1;
+  if not SpeedButton2.IsPressed then
   begin
+    TrackBar1.max := DataModule4.FDTable1.RecordCount;
     if DataModule4.FDTable1.Locate('page', num) then
     begin
       Label3.Text := num.ToString;
       Image3.Bitmap.Assign(DataModule4.image);
     end;
   end
-  else if DataModule4.FDTable1.Locate('page', num * 2 - 1) then
+  else
   begin
-    Label3.Text := (2 * num - 1).ToString;
-    Action6Execute(Sender);
+    rec := DataModule4.mapList[num - 1];
+    DataModule4.FDTable1.Locate('page', rec.Left);
+    TrackBar1.max := DataModule4.mapList.Count;
+    if rec.Right = 0 then
+    begin
+      Panel1.Visible := false;
+      Image3.Visible := true;
+      Image3.Bitmap.Assign(DataModule4.image);
+      Label3.Text := rec.Left.ToString
+    end
+    else
+    begin
+      Panel1.Visible := true;
+      Image3.Visible := false;
+      Label3.Text := rec.Left.ToString + ' , ' + rec.Right.ToString;
+      Action6Execute(Sender);
+    end;
   end;
   process := true;
   try
     if Sender = TrackBar1 then
-      TrackBar1.Value := cnt;
+      TrackBar1.Value := num;
   finally
     process := false;
   end;

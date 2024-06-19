@@ -8,9 +8,14 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.IB,
   FireDAC.Phys.IBLiteDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects;
+  FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
+  System.Generics.Collections;
 
 type
+  TMap = record
+    Left, Right: integer;
+  end;
+
   TDataModule4 = class(TDataModule)
     FDConnection1: TFDConnection;
     FDTable1: TFDTable;
@@ -43,7 +48,10 @@ type
   public
     { Public êÈåæ }
     image: TBitmap;
+    mapList: TList<TMap>;
+    procedure map;
     function LoadAllFile: Boolean;
+    function doublePage(index: integer): integer;
   end;
 
 var
@@ -58,6 +66,7 @@ uses Unit1, Unit5;
 
 procedure TDataModule4.DataModuleCreate(Sender: TObject);
 begin
+  mapList := TList<TMap>.Create;
   image := TBitmap.Create;
   if Assigned(Form1) then
   begin
@@ -71,6 +80,7 @@ end;
 
 procedure TDataModule4.DataModuleDestroy(Sender: TObject);
 begin
+  mapList.Free;
   image.Free;
   if Assigned(Form1) then
   begin
@@ -79,6 +89,17 @@ begin
     FDTable3.FieldByName('reverse').AsBoolean := Form1.RadioButton2.IsChecked;
     FDTable3.Post;
   end;
+end;
+
+function TDataModule4.doublePage(index: integer): integer;
+begin
+  result := 1;
+  for var i := 0 to mapList.Count - 1 do
+    if (mapList[i].Left = index) or (mapList[i].Right = index) then
+    begin
+      result := i + 1;
+      break;
+    end;
 end;
 
 procedure TDataModule4.FDTable1AfterScroll(DataSet: TDataSet);
@@ -149,6 +170,8 @@ begin
     result := Form5.ListBox1.Items.Count > 0;
     if result then
     begin
+      FDQuery1.Open('select max(id) from "table";');
+      id := FDQuery1.Fields[0].AsInteger + 1;
       jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
       nm := Form5.Edit1.Text;
       FDTable1.First;
@@ -162,6 +185,35 @@ begin
   finally
     bmp.Free;
     jpg.Free;
+  end;
+end;
+
+procedure TDataModule4.map;
+var
+  rec: TMap;
+begin
+  mapList.Clear;
+  FDQuery1.Open('select "PAGE", sub from main;');
+  while not FDQuery1.Eof do
+  begin
+    if rec.Left = 0 then
+      rec.Left := FDQuery1.Fields[0].AsInteger
+    else
+    begin
+      if FDQuery1.Fields[1].AsBoolean then
+        rec.Right := FDQuery1.Fields[0].AsInteger;
+      mapList.Add(rec);
+      rec.Left := 0;
+      rec.Right := 0;
+      FDQuery1.Next;
+      continue;
+    end;
+    if not FDQuery1.Fields[1].AsBoolean then
+    begin
+      mapList.Add(rec);
+      rec.Left:=0;
+    end;
+    FDQuery1.Next;
   end;
 end;
 
