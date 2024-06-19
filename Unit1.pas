@@ -572,26 +572,31 @@ begin
     Exit;
   if Sender = TrackBar1 then
     cnt := Round(TrackBar1.Value)
+  else if SpeedButton2.IsPressed then
+    cnt := DataModule4.doublePage(DataModule4.FDTable1.FieldByName('page')
+      .AsInteger)
   else
     cnt := DataModule4.FDTable4.FieldByName('page').AsInteger;
-  if RadioButton1.IsChecked then
-    num := cnt
-  else
-    num := DataModule4.mapList.Count - cnt + 1;
   if not SpeedButton2.IsPressed then
   begin
     TrackBar1.max := DataModule4.FDTable1.RecordCount;
-    if DataModule4.FDTable1.Locate('page', num) then
-    begin
-      Label3.Text := num.ToString;
-      Image3.Bitmap.Assign(DataModule4.image);
-    end;
+    if RadioButton1.IsChecked then
+      num := cnt
+    else
+      num := DataModule4.FDTable1.RecordCount - cnt + 1;
+    DataModule4.FDTable1.Locate('page', num);
+    Label3.Text := num.ToString;
+    Image3.Bitmap.Assign(DataModule4.image);
   end
   else
   begin
-    rec := DataModule4.mapList[num - 1];
-    DataModule4.FDTable1.Locate('page', rec.Left);
     TrackBar1.max := DataModule4.mapList.Count;
+    rec := DataModule4.mapList[cnt - 1];
+    if RadioButton1.IsChecked then
+      num := cnt
+    else
+      num := DataModule4.mapList.Count - cnt + 1;
+    DataModule4.FDTable1.Locate('page', rec.Left);
     if rec.Right = 0 then
     begin
       Panel1.Visible := false;

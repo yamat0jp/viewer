@@ -201,7 +201,12 @@ begin
     else
     begin
       if FDQuery1.Fields[1].AsBoolean then
-        rec.Right := FDQuery1.Fields[0].AsInteger;
+        rec.Right := FDQuery1.Fields[0].AsInteger
+      else
+      begin
+        mapList.Add(rec);
+        rec.Left := FDQuery1.Fields[0].AsInteger;
+      end;
       mapList.Add(rec);
       rec.Left := 0;
       rec.Right := 0;
@@ -211,10 +216,11 @@ begin
     if not FDQuery1.Fields[1].AsBoolean then
     begin
       mapList.Add(rec);
-      rec.Left:=0;
+      rec.Left := 0;
     end;
     FDQuery1.Next;
   end;
+  FDQuery1.Close;
 end;
 
 function TDataModule4.randomName: string;
