@@ -80,6 +80,8 @@ type
     RadioButton2: TRadioButton;
     CheckBox2: TCheckBox;
     Action9: TAction;
+    BindSourceDB2: TBindSourceDB;
+    LinkControlToField3: TLinkControlToField;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -228,8 +230,6 @@ begin
 end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
-var
-  cnt: Single;
 begin
   with DataModule4 do
   begin
@@ -248,13 +248,6 @@ begin
     if Sender <> TabControl1 then
       TabControl1.TabIndex := 1;
     TrackBar1.SetFocus;
-    cnt := FDTable1.RecordCount;
-    TrackBar1.max := cnt;
-    TrackBar1Change(nil);
-    Label4.Text := '/ ' + cnt.ToString;
-    SpeedButton2.IsPressed := FDTable4.FieldByName('double').AsBoolean;
-    CheckBox2.IsChecked := FDTable4.FieldByName('toppage').AsBoolean;
-    SpeedButton2Click(nil);
     TrackBar1Change(nil);
   end;
 end;
@@ -265,8 +258,8 @@ begin
     if DataModule4.FDTable1.Active then
     begin
       Edit;
-      FieldByName('page').AsInteger := DataModule4.FDTable1.FieldByName('page')
-        .AsInteger;
+      FieldByName('page').AsInteger := DataModule4.doublePage
+        (DataModule4.FDTable1.FieldByName('page').AsInteger);
       FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
       FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
       Post;
@@ -420,6 +413,12 @@ end;
 procedure TForm1.Image3MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
 begin
+  if Sender = Image1 then
+    Image1MouseMove(Sender, Shift, X, Y)
+  else if Sender = Image2 then
+    Image2MouseMove(Sender, Shift, X, Y)
+  else
+    Image3MouseMove(Sender, Shift, X, Y);
   grab := false;
 end;
 
@@ -514,6 +513,8 @@ begin
 end;
 
 procedure TForm1.SpeedButton2Click(Sender: TObject);
+var
+  ch: Single;
 begin
   with DataModule4.FDTable4 do
   begin
@@ -523,13 +524,13 @@ begin
   end;
   Panel1.Visible := SpeedButton2.IsPressed;
   Image3.Visible := not Panel1.Visible;
+  ch := TrackBar1.Value;
   if SpeedButton2.IsPressed then
     Action9Execute(nil)
   else
-  begin
-    TrackBar1.max := DataModule4.FDTable1.RecordCount;
-    TrackBar1.Value := DataModule4.mapList[Round(TrackBar1.Value)].Left;
-  end;
+    TrackBar1.Value := DataModule4.FDTable1.FieldByName('page').AsInteger;
+  if ch = TrackBar1.Value then
+    TrackBar1Change(nil);
 end;
 
 procedure TForm1.TabControl1Change(Sender: TObject);
@@ -584,18 +585,18 @@ begin
       num := cnt
     else
       num := DataModule4.FDTable1.RecordCount - cnt + 1;
-    DataModule4.FDTable1.Locate('page', num);
+    DataModule4.FDTable1.Locate('page', cnt);
     Label3.Text := num.ToString;
     Image3.Bitmap.Assign(DataModule4.image);
   end
   else
   begin
     TrackBar1.max := DataModule4.mapList.Count;
-    rec := DataModule4.mapList[cnt - 1];
     if RadioButton1.IsChecked then
       num := cnt
     else
       num := DataModule4.mapList.Count - cnt + 1;
+    rec := DataModule4.mapList[cnt - 1];
     DataModule4.FDTable1.Locate('page', rec.Left);
     if rec.Right = 0 then
     begin
@@ -612,6 +613,7 @@ begin
       Action6Execute(Sender);
     end;
   end;
+  Label4.Text := ' / ' + DataModule4.FDTable1.RecordCount.ToString;
   process := true;
   try
     if Sender = TrackBar1 then

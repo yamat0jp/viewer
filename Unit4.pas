@@ -34,11 +34,11 @@ type
     FDTable1IMAGE: TBlobField;
     FDTable2JPEG: TBlobField;
     FDTable1SUB: TBooleanField;
-    FDQuery2: TFDQuery;
     FDTable3INTERVAL: TFloatField;
     FDTable3REVERSE: TBooleanField;
     FDQuery1: TFDQuery;
     FDTable4TOPPAGE: TBooleanField;
+    FDQuery2: TFDQuery;
     procedure FDTable1AfterScroll(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
@@ -170,8 +170,8 @@ begin
     result := Form5.ListBox1.Items.Count > 0;
     if result then
     begin
-      FDQuery1.Open('select max(id) from "table";');
-      id := FDQuery1.Fields[0].AsInteger + 1;
+      FDQuery2.Open('select max(id) from "TABLE"');
+      id := FDQuery2.Fields[0].AsInteger + 1;
       jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
       nm := Form5.Edit1.Text;
       FDTable1.First;

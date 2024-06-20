@@ -120,14 +120,14 @@ object DataModule4: TDataModule4
       Origin = 'TOPPAGE'
     end
   end
-  object FDQuery2: TFDQuery
-    Connection = FDConnection2
-    Left = 64
-    Top = 304
-  end
   object FDQuery1: TFDQuery
     Connection = FDConnection1
     Left = 64
     Top = 224
+  end
+  object FDQuery2: TFDQuery
+    Connection = FDConnection2
+    Left = 64
+    Top = 304
   end
 end

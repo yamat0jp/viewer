@@ -185,7 +185,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 15454.000000000000000000
+          Position.X = 17596.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -256,6 +256,7 @@ object Form1: TForm1
           Size.Width = 517.000000000000000000
           Size.Height = 572.000000000000000000
           Size.PlatformDefault = False
+          OnDblClick = Image3DblClick
           OnMouseDown = Image3MouseDown
           OnMouseMove = Image2MouseMove
           OnMouseUp = Image3MouseUp
@@ -602,6 +603,13 @@ object Form1: TForm1
       Component = Timer1
       ComponentProperty = 'Enabled'
     end
+    object LinkControlToField3: TLinkControlToField
+      Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
+      DataSource = BindSourceDB2
+      FieldName = 'TOPPAGE'
+      Control = CheckBox2
+      Track = True
+    end
   end
   object BindSourceDB4: TBindSourceDB
     DataSet = DataModule4.FDTable2
@@ -614,5 +622,11 @@ object Form1: TForm1
     Destination = <>
     Left = 296
     Top = 312
+  end
+  object BindSourceDB2: TBindSourceDB
+    DataSet = DataModule4.FDTable4
+    ScopeMappings = <>
+    Left = 496
+    Top = 336
   end
 end
