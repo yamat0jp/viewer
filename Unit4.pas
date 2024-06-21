@@ -53,6 +53,7 @@ type
     procedure selected(fname: string);
     function LoadAllFile: Boolean;
     function doublePage(index: integer): integer;
+    function singlePage(index: integer): integer;
   end;
 
 var
@@ -258,6 +259,11 @@ begin
     map(bool);
     Form1.CheckBox2.IsChecked := bool;
   end;
+end;
+
+function TDataModule4.singlePage(index: integer): integer;
+begin
+  result := mapList[index - 1].Left;
 end;
 
 end.

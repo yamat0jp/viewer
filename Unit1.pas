@@ -240,7 +240,7 @@ begin
   if Sender <> TabControl1 then
     TabControl1.TabIndex := 1;
   TrackBar1.SetFocus;
-  TrackBar1Change(nil);
+  TrackBar1.Value := DataModule4.FDTable4.FieldByName('page').AsInteger;
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
@@ -518,9 +518,9 @@ begin
   if SpeedButton2.IsPressed then
     Action9Execute(nil)
   else
-    TrackBar1.Value := DataModule4.FDTable1.FieldByName('page').AsInteger;
+    TrackBar1.Value := DataModule4.singlePage(Round(ch));
   if ch = TrackBar1.Value then
-    TrackBar1Change(nil);
+    TrackBar1Change(Sender);
 end;
 
 procedure TForm1.TabControl1Change(Sender: TObject);
@@ -563,10 +563,15 @@ begin
     Exit;
   if Sender = TrackBar1 then
     cnt := Round(TrackBar1.Value)
-  else if SpeedButton2.IsPressed then
-    cnt := DataModule4.doublePage(Round(TrackBar1.Value))
-  else
-    cnt := DataModule4.FDTable4.FieldByName('page').AsInteger;
+  else if Sender = SpeedButton2 then
+  begin
+    if SpeedButton2.IsPressed then
+      cnt := DataModule4.doublePage(Round(TrackBar1.Value))
+    else
+      cnt := DataModule4.singlePage(Round(TrackBar1.Value));
+  end
+  else if Sender = CheckBox2 then
+    cnt := Round(TrackBar1.Value);
   if not SpeedButton2.IsPressed then
   begin
     TrackBar1.max := DataModule4.FDTable1.RecordCount;
