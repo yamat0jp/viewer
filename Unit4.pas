@@ -49,7 +49,8 @@ type
     { Public êÈåæ }
     image: TBitmap;
     mapList: TList<TMap>;
-    procedure map;
+    procedure map(toppage: Boolean);
+    procedure selected(fname: string);
     function LoadAllFile: Boolean;
     function doublePage(index: integer): integer;
   end;
@@ -188,12 +189,21 @@ begin
   end;
 end;
 
-procedure TDataModule4.map;
+procedure TDataModule4.map(toppage: Boolean);
 var
   rec: TMap;
 begin
   mapList.Clear;
   FDQuery1.Open('select "PAGE", sub from main;');
+  rec.Left := 0;
+  rec.Right := 0;
+  if toppage then
+  begin
+    rec.Left := 1;
+    mapList.Add(rec);
+    rec.Left := 0;
+    FDQuery1.Next;
+  end;
   while not FDQuery1.Eof do
   begin
     if rec.Left = 0 then
@@ -230,6 +240,24 @@ begin
   for var i := 1 to 5 do
     result := result + Random(10).ToString;
   result := ExtractFilePath(ParamStr(0)) + result + '.ib';
+end;
+
+procedure TDataModule4.selected(fname: string);
+var
+  bool: Boolean;
+begin
+  if FDTable2.Locate('name', fname) then
+  begin
+    FDConnection1.Close;
+    FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
+    FDConnection1.Open;
+    FDTable1.Open;
+    FDTable4.Open;
+    FDTable1.Prepare;
+    bool := FDTable4.FieldByName('toppage').AsBoolean;
+    map(bool);
+    Form1.CheckBox2.IsChecked := bool;
+  end;
 end;
 
 end.

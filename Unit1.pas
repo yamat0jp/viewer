@@ -80,8 +80,6 @@ type
     RadioButton2: TRadioButton;
     CheckBox2: TCheckBox;
     Action9: TAction;
-    BindSourceDB2: TBindSourceDB;
-    LinkControlToField3: TLinkControlToField;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -231,25 +229,18 @@ end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
 begin
-  with DataModule4 do
-  begin
-    Form3.Show;
-    try
-      Application.ProcessMessages;
-      FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
-      FDConnection1.Open;
-      FDTable1.Open;
-      FDTable4.Open;
-      FDTable1.Prepare;
-      map;
-    finally
-      Form3.Hide;
-    end;
-    if Sender <> TabControl1 then
-      TabControl1.TabIndex := 1;
-    TrackBar1.SetFocus;
-    TrackBar1Change(nil);
+  Form3.Show;
+  try
+    Application.ProcessMessages;
+    DataModule4.selected(PChar(Sender));
+    DataModule4.map(CheckBox1.IsChecked);
+  finally
+    Form3.Hide;
   end;
+  if Sender <> TabControl1 then
+    TabControl1.TabIndex := 1;
+  TrackBar1.SetFocus;
+  TrackBar1Change(nil);
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
@@ -424,9 +415,7 @@ end;
 
 procedure TForm1.ListBox1DblClick(Sender: TObject);
 begin
-  if DataModule4.FDTable2.Locate('name', ListBox1.Items[ListBox1.ItemIndex])
-  then
-    Action4Execute(nil);
+  Action4Execute(Pointer(ListBox1.Items[ListBox1.ItemIndex]));
 end;
 
 procedure TForm1.MenuItem12Click(Sender: TObject);
@@ -464,8 +453,7 @@ begin
   if rectIndex > -1 then
   begin
     s := ImageList1.Source.Items[rectIndex].Name;
-    DataModule4.FDTable2.Locate('name', s);
-    Action4Execute(nil);
+    Action4Execute(Pointer(s));
   end;
 end;
 
@@ -520,10 +508,12 @@ begin
   begin
     Edit;
     FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
+    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
     Post;
   end;
   Panel1.Visible := SpeedButton2.IsPressed;
   Image3.Visible := not Panel1.Visible;
+  DataModule4.map(CheckBox2.IsChecked);
   ch := TrackBar1.Value;
   if SpeedButton2.IsPressed then
     Action9Execute(nil)
@@ -574,8 +564,7 @@ begin
   if Sender = TrackBar1 then
     cnt := Round(TrackBar1.Value)
   else if SpeedButton2.IsPressed then
-    cnt := DataModule4.doublePage(DataModule4.FDTable1.FieldByName('page')
-      .AsInteger)
+    cnt := DataModule4.doublePage(Round(TrackBar1.Value))
   else
     cnt := DataModule4.FDTable4.FieldByName('page').AsInteger;
   if not SpeedButton2.IsPressed then
