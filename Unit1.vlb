@@ -141,7 +141,7 @@ Visible=True
 Coordinates=168,175,82,33
 
 [DataModule4.FDTable4]
-Coordinates=944,21,127,33
+Coordinates=944,21,127,105
 
 [Action3]
 Coordinates=145,171,52,33
@@ -215,4 +215,7 @@ Coordinates=0,134,52,33
 
 [DataModule4.FDQuery2]
 Coordinates=133,230,130,51
+
+[Action10]
+Coordinates=64,249,57,33
 

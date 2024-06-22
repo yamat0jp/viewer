@@ -149,6 +149,7 @@
         <DCCReference Include="Unit6.pas">
             <Form>Form6</Form>
         </DCCReference>
+        <DCCReference Include="Thread.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

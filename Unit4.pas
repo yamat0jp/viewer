@@ -9,7 +9,7 @@ uses
   FireDAC.Phys.IBLiteDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Threading;
 
 type
   TMap = record
@@ -63,7 +63,7 @@ implementation
 
 {%CLASSGROUP 'FMX.Controls.TControl'}
 
-uses Unit1, Unit5;
+uses Unit1, Unit5, Thread;
 {$R *.dfm}
 
 procedure TDataModule4.DataModuleCreate(Sender: TObject);
@@ -124,11 +124,10 @@ end;
 function TDataModule4.LoadAllFile: Boolean;
 var
   id: integer;
-  bmp, jpg: TBitmap;
-  sub: Boolean;
   fn, nm: string;
-  st, zs: TStream;
   rect: TRect;
+  list: TList;
+  jpg: TBitmap;
 begin
   repeat
     fn := randomName;
@@ -141,38 +140,26 @@ begin
     ('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER, TOPPAGE BOOLEAN);');
   FDTable1.Open;
   FDTable4.Open;
-  id := 1;
-  bmp := TBitmap.Create;
+  FDQuery1.SQL.Text :=
+    'insert into main("PAGE", image, sub) values(:page_id, :image, :subimage)';
+  FDQuery1.Params.ArraySize := Form5.ListBox1.Count;
+  TParallel.For(0, Form5.ListBox1.Count - 1,
+    procedure(i: integer)
+    var
+      th: TMyThread;
+    begin
+      th := TMyThread.Create(Form5.ListBox1.Items[i]);
+      FDQuery1.Params[0].AsIntegers[i] := i + 1;
+      FDQuery1.Params[1].LoadFromStream(th.Stream, ftBlob, i);
+      FDQuery1.Params[2].AsBooleans[i] := th.Sub;
+    end);
+  FDQuery1.Execute(FDQuery1.Params.ArraySize);
+  result := Form5.ListBox1.Count > 0;
   jpg := TBitmap.Create;
   try
-    for var s in Form5.ListBox1.Items do
-    begin
-      jpg.LoadFromFile(s);
-      sub := jpg.Width < jpg.Height;
-      rect := jpg.Bounds;
-      bmp.Width := jpg.Width;
-      bmp.Height := jpg.Height;
-      bmp.Canvas.BeginScene;
-      bmp.Canvas.DrawBitmap(jpg, rect, rect, 1.0);
-      bmp.Canvas.EndScene;
-      FDTable1.Append;
-      st := FDTable1.CreateBlobStream(FDTable1.Fields[1], bmWrite);
-      zs := TZCompressionStream.Create(clMax, st);
-      try
-        bmp.SaveToStream(zs);
-        FDTable1.Fields[0].AsInteger := id;
-        FDTable1.Fields[2].AsBoolean := sub;
-      finally
-        st.Free;
-        zs.Free;
-        FDTable1.Post;
-      end;
-      inc(id);
-    end;
-    result := Form5.ListBox1.Items.Count > 0;
     if result then
     begin
-      FDQuery2.Open('select max(id) from "TABLE"');
+      FDQuery2.Open('select max(id) from "TABLE";');
       id := FDQuery2.Fields[0].AsInteger + 1;
       jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
       nm := Form5.Edit1.Text;
@@ -185,7 +172,6 @@ begin
       FDTable4.Post;
     end;
   finally
-    bmp.Free;
     jpg.Free;
   end;
 end;
