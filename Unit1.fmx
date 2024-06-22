@@ -666,7 +666,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 21166.000000000000000000
+          Position.X = 21880.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -801,7 +801,7 @@ object Form1: TForm1
           Size.PlatformDefault = False
           TabOrder = 3
           Text = #34920#32025#12354#12426
-          OnChange = SpeedButton2Click
+          OnChange = CheckBox2Change
         end
       end
     end
@@ -1037,6 +1037,11 @@ object Form1: TForm1
       Category = 'navi'
       Text = 'map'
       OnExecute = Action9Execute
+    end
+    object Action10: TAction
+      Category = 'paint'
+      Text = 'drawIndex'
+      OnExecute = Action10Execute
     end
   end
   object BindSourceDB1: TBindSourceDB

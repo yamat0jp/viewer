@@ -80,6 +80,7 @@ type
     RadioButton2: TRadioButton;
     CheckBox2: TCheckBox;
     Action9: TAction;
+    Action10: TAction;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -123,6 +124,8 @@ type
       X, Y: Single);
     procedure Image2MouseMove(Sender: TObject; Shift: TShiftState;
       X, Y: Single);
+    procedure Action10Execute(Sender: TObject);
+    procedure CheckBox2Change(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -144,6 +147,38 @@ implementation
 {$R *.Windows.fmx MSWINDOWS}
 
 uses Unit3, Unit4, Unit5;
+
+procedure TForm1.Action10Execute(Sender: TObject);
+var
+  rec: TMap;
+  cnt: Integer;
+begin
+  cnt := Integer(Sender);
+  if not SpeedButton2.IsPressed then
+  begin
+    DataModule4.FDTable1.Locate('page', cnt);
+    Image3.Bitmap.Assign(DataModule4.image);
+  end
+  else
+  begin
+    rec := DataModule4.mapList[cnt - 1];
+    DataModule4.FDTable1.Locate('page', rec.Left);
+    if rec.Right = 0 then
+    begin
+      Panel1.Visible := false;
+      Image3.Visible := true;
+      Image3.Bitmap.Assign(DataModule4.image);
+      Label3.Text := rec.Left.ToString
+    end
+    else
+    begin
+      Panel1.Visible := true;
+      Image3.Visible := false;
+      Label3.Text := rec.Left.ToString + ' , ' + rec.Right.ToString;
+      Action6Execute(Sender);
+    end;
+  end;
+end;
 
 procedure TForm1.Action1Execute(Sender: TObject);
 begin
@@ -228,6 +263,8 @@ begin
 end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
+var
+  ch: Single;
 begin
   Form3.Show;
   try
@@ -239,8 +276,12 @@ begin
   end;
   if Sender <> TabControl1 then
     TabControl1.TabIndex := 1;
+  SpeedButton2Click(nil);
+  ch := TrackBar1.Value;
   TrackBar1.SetFocus;
   TrackBar1.Value := DataModule4.FDTable4.FieldByName('page').AsInteger;
+  if TrackBar1.Value = ch then
+    TrackBar1Change(nil);
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
@@ -308,6 +349,25 @@ begin
       Edit1.Text := '';
     end;
   Edit2.Text := '';
+end;
+
+procedure TForm1.CheckBox2Change(Sender: TObject);
+var
+  cnt: Integer;
+begin
+  with DataModule4.FDTable4 do
+  begin
+    Edit;
+    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
+    Post;
+  end;
+  DataModule4.map(CheckBox2.IsChecked);
+  if SpeedButton2.IsPressed then
+  begin
+    TrackBar1.max := DataModule4.mapList.Count;
+    cnt := DataModule4.mapList[Round(TrackBar1.Value) - 1].Left;
+    Action10Execute(Pointer(DataModule4.doublePage(cnt)));
+  end;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -508,17 +568,21 @@ begin
   begin
     Edit;
     FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
-    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
     Post;
   end;
   Panel1.Visible := SpeedButton2.IsPressed;
   Image3.Visible := not Panel1.Visible;
-  DataModule4.map(CheckBox2.IsChecked);
   ch := TrackBar1.Value;
   if SpeedButton2.IsPressed then
-    Action9Execute(nil)
+  begin
+    Action9Execute(nil);
+    TrackBar1.max := DataModule4.mapList.Count;
+  end
   else
+  begin
+    TrackBar1.max := DataModule4.FDTable1.RecordCount;
     TrackBar1.Value := DataModule4.singlePage(Round(ch));
+  end;
   if ch = TrackBar1.Value then
     TrackBar1Change(Sender);
 end;
@@ -557,7 +621,6 @@ end;
 procedure TForm1.TrackBar1Change(Sender: TObject);
 var
   num, cnt: Integer;
-  rec: TMap;
 begin
   if process then
     Exit;
@@ -570,43 +633,24 @@ begin
     else
       cnt := DataModule4.singlePage(Round(TrackBar1.Value));
   end
-  else if Sender = CheckBox2 then
+  else
     cnt := Round(TrackBar1.Value);
   if not SpeedButton2.IsPressed then
   begin
-    TrackBar1.max := DataModule4.FDTable1.RecordCount;
     if RadioButton1.IsChecked then
       num := cnt
     else
       num := DataModule4.FDTable1.RecordCount - cnt + 1;
-    DataModule4.FDTable1.Locate('page', cnt);
     Label3.Text := num.ToString;
-    Image3.Bitmap.Assign(DataModule4.image);
   end
   else
   begin
-    TrackBar1.max := DataModule4.mapList.Count;
     if RadioButton1.IsChecked then
       num := cnt
     else
       num := DataModule4.mapList.Count - cnt + 1;
-    rec := DataModule4.mapList[cnt - 1];
-    DataModule4.FDTable1.Locate('page', rec.Left);
-    if rec.Right = 0 then
-    begin
-      Panel1.Visible := false;
-      Image3.Visible := true;
-      Image3.Bitmap.Assign(DataModule4.image);
-      Label3.Text := rec.Left.ToString
-    end
-    else
-    begin
-      Panel1.Visible := true;
-      Image3.Visible := false;
-      Label3.Text := rec.Left.ToString + ' , ' + rec.Right.ToString;
-      Action6Execute(Sender);
-    end;
   end;
+  Action10Execute(Pointer(cnt));
   Label4.Text := ' / ' + DataModule4.FDTable1.RecordCount.ToString;
   process := true;
   try
