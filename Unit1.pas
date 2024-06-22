@@ -270,18 +270,17 @@ begin
   try
     Application.ProcessMessages;
     DataModule4.selected(PChar(Sender));
-    DataModule4.map(CheckBox1.IsChecked);
   finally
     Form3.Hide;
   end;
-  if Sender <> TabControl1 then
-    TabControl1.TabIndex := 1;
-  SpeedButton2Click(nil);
   ch := TrackBar1.Value;
-  TrackBar1.SetFocus;
   TrackBar1.Value := DataModule4.FDTable4.FieldByName('page').AsInteger;
+  SpeedButton2Click(nil);
   if TrackBar1.Value = ch then
     TrackBar1Change(nil);
+  if Sender <> TabControl1 then
+    TabControl1.TabIndex := 1;
+  TrackBar1.SetFocus;
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
@@ -596,7 +595,6 @@ begin
       TabControl1.TabIndex := 0;
       Exit;
     end;
-    Action4Execute(Sender);
   end
   else
   begin

@@ -74,7 +74,7 @@ begin
   begin
     Form1.ScrollBox1.Repaint;
     Form1.CheckBox1.IsChecked := FDTable3.FieldByName('stay').AsBoolean;
-    Form1.Timer1.Interval := FDTable3.FieldByName('interval').AsInteger;
+    Form1.Timer1.Interval := 1000 * FDTable3.FieldByName('interval').AsInteger;
     Form1.SpinBox1.Value := Form1.SpinBox1.Value;
     Form1.RadioButton2.IsChecked := FDTable3.FieldByName('reverse').AsBoolean;
   end;
@@ -231,6 +231,8 @@ begin
     end;
     FDQuery1.Next;
   end;
+  if rec.Left <> 0 then
+    mapList.Add(rec);
   FDQuery1.Close;
 end;
 
