@@ -200,7 +200,8 @@ begin
     ListBox1.Items.Delete(ListBox1.ItemIndex);
     ImageList1.Source.Delete(id);
     ImageList1.Destination.Delete(id);
-    DeleteFile(FDTable2.Lookup('name', s, 'file'));
+    FDTable2.Locate('name', s);
+    DeleteFile(FDTable2.FieldByName('file').AsString);
     FDTable2.Delete;
   end;
   tmp := [];
