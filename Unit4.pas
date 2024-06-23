@@ -241,6 +241,7 @@ begin
     FDTable1.Open;
     FDTable4.Open;
     FDTable1.Prepare;
+    FDTable1.Locate('page',FDTable4.FieldByName('page').AsInteger);
     bool := FDTable4.FieldByName('toppage').AsBoolean;
     map(bool);
     Form1.CheckBox2.IsChecked := bool;

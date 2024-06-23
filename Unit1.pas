@@ -115,7 +115,6 @@ type
     procedure Image3MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
     procedure Image3DblClick(Sender: TObject);
-    procedure RadioButton2Click(Sender: TObject);
     procedure Action7Execute(Sender: TObject);
     procedure Action8Execute(Sender: TObject);
     procedure TabItem2Resize(Sender: TObject);
@@ -126,6 +125,7 @@ type
       X, Y: Single);
     procedure Action10Execute(Sender: TObject);
     procedure CheckBox2Change(Sender: TObject);
+    procedure RadioButton1Change(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -264,8 +264,6 @@ begin
 end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
-var
-  ch: Single;
 begin
   Form3.Show;
   try
@@ -274,24 +272,19 @@ begin
   finally
     Form3.Hide;
   end;
-  ch := TrackBar1.Value;
-  TrackBar1.Value := DataModule4.FDTable4.FieldByName('page').AsInteger;
-  SpeedButton2Click(nil);
-  if TrackBar1.Value = ch then
-    TrackBar1Change(nil);
-  if Sender <> TabControl1 then
-    TabControl1.TabIndex := 1;
-  TrackBar1.SetFocus;
+  TabControl1.TabIndex := 1;
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
+var
+  ch: Integer;
 begin
+  ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
   with DataModule4.FDTable4 do
     if DataModule4.FDTable1.Active then
     begin
       Edit;
-      FieldByName('page').AsInteger := DataModule4.doublePage
-        (DataModule4.FDTable1.FieldByName('page').AsInteger);
+      FieldByName('page').AsInteger := ch;
       FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
       FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
       Post;
@@ -332,8 +325,20 @@ begin
 end;
 
 procedure TForm1.Action9Execute(Sender: TObject);
+var
+  ch, max: Integer;
 begin
-  TrackBar1.Value := DataModule4.doublePage(Round(TrackBar1.Value));
+  ch := Integer(Sender);
+  if SpeedButton2.IsPressed then
+  begin
+    ch := DataModule4.doublePage(ch);
+    max := DataModule4.mapList.Count;
+  end
+  else
+    max := DataModule4.FDTable1.RecordCount;
+  if RadioButton2.IsChecked then
+    ch := max - ch + 1;
+  TrackBar1.Value := ch;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -497,7 +502,7 @@ begin
   Close;
 end;
 
-procedure TForm1.RadioButton2Click(Sender: TObject);
+procedure TForm1.RadioButton1Change(Sender: TObject);
 begin
   with DataModule4.FDTable3 do
   begin
@@ -571,7 +576,7 @@ end;
 
 procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
-  ch: integer;
+  ch: Integer;
 begin
   with DataModule4.FDTable4 do
   begin
@@ -605,6 +610,8 @@ begin
       TabControl1.TabIndex := 0;
       Exit;
     end;
+    Action9Execute(Pointer(DataModule4.FDTable1.RecNo));
+    TrackBar1.SetFocus;
   end
   else
   begin
@@ -643,11 +650,16 @@ begin
     else
       num := DataModule4.FDTable1.RecordCount - cnt + 1;
     Label3.Text := num.ToString;
+    TrackBar1.max := DataModule4.FDTable1.RecordCount;
   end
-  else if RadioButton1.IsChecked then
-    num := cnt
   else
-    num := DataModule4.mapList.Count - cnt + 1;
+  begin
+    if RadioButton1.IsChecked then
+      num := cnt
+    else
+      num := DataModule4.mapList.Count - cnt + 1;
+    TrackBar1.max := DataModule4.mapList.Count;
+  end;
   Action10Execute(Pointer(num));
   Label4.Text := ' / ' + DataModule4.FDTable1.RecordCount.ToString;
   process := true;
