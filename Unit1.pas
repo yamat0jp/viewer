@@ -576,7 +576,7 @@ end;
 
 procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
-  ch , num: Integer;
+  ch, num: Integer;
 begin
   with DataModule4.FDTable4 do
   begin
@@ -589,16 +589,18 @@ begin
   ch := Round(TrackBar1.Value);
   if SpeedButton2.IsPressed then
   begin
-    num := DataModule4.doublePage(ch);
     TrackBar1.max := DataModule4.mapList.Count;
+    num := DataModule4.doublePage(ch);
   end
   else
   begin
-    num := DataModule4.FDTable1.RecordCount;
-    TrackBar1.Value := DataModule4.singlePage(ch);
+    TrackBar1.max := DataModule4.FDTable1.RecordCount;
+    num := DataModule4.singlePage(ch);
   end;
-  if RadioButton2.IsChecked then
-    TrackBar1.Value := TrackBar1.Max - num + 1;
+  if RadioButton1.IsChecked then
+    TrackBar1.Value := num
+  else
+    TrackBar1.Value := TrackBar1.max - num + 1;
   if ch = TrackBar1.Value then
     Action10Execute(Pointer(ch));
 end;
