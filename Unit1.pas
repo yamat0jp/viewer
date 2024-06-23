@@ -359,6 +359,7 @@ end;
 procedure TForm1.CheckBox2Change(Sender: TObject);
 var
   cnt: Integer;
+  bool: Boolean;
 begin
   with DataModule4.FDTable4 do
   begin
@@ -369,10 +370,11 @@ begin
   DataModule4.map(CheckBox2.IsChecked);
   if SpeedButton2.IsPressed then
   begin
+    bool := RadioButton1.IsChecked;
     TrackBar1.max := DataModule4.mapList.Count;
-    cnt := DataModule4.mapList[Round(TrackBar1.Value) - 1].Left;
-    if RadioButton2.IsChecked then
-      cnt := DataModule4.FDTable1.RecordCount - cnt + 1;
+    cnt := DataModule4.singlePage(Round(TrackBar1.Value), bool);
+    if not bool then
+      cnt := DataModule4.FDTable1.RecordCount - cnt;
     Action10Execute(Pointer(DataModule4.doublePage(cnt)));
   end;
 end;
@@ -576,7 +578,7 @@ end;
 
 procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
-  ch, num: Integer;
+  ch: Integer;
 begin
   with DataModule4.FDTable4 do
   begin
@@ -589,15 +591,14 @@ begin
   ch := Round(TrackBar1.Value);
   if SpeedButton2.IsPressed then
   begin
-    num := DataModule4.doublePage(ch);
+    TrackBar1.Value := DataModule4.doublePage(ch);
     TrackBar1.max := DataModule4.mapList.Count;
   end
   else
   begin
     TrackBar1.max := DataModule4.FDTable1.RecordCount;
-    num := DataModule4.singlePage(ch);
+    TrackBar1.Value := DataModule4.singlePage(ch, RadioButton1.IsChecked);
   end;
-  TrackBar1.Value := num;
   if ch = TrackBar1.Value then
     Action10Execute(Pointer(ch));
 end;
