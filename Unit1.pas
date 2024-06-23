@@ -589,18 +589,15 @@ begin
   ch := Round(TrackBar1.Value);
   if SpeedButton2.IsPressed then
   begin
-    TrackBar1.max := DataModule4.mapList.Count;
     num := DataModule4.doublePage(ch);
+    TrackBar1.max := DataModule4.mapList.Count;
   end
   else
   begin
     TrackBar1.max := DataModule4.FDTable1.RecordCount;
     num := DataModule4.singlePage(ch);
   end;
-  if RadioButton1.IsChecked then
-    TrackBar1.Value := num
-  else
-    TrackBar1.Value := TrackBar1.max - num + 1;
+  TrackBar1.Value := num;
   if ch = TrackBar1.Value then
     Action10Execute(Pointer(ch));
 end;

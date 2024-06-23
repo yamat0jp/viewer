@@ -53,7 +53,7 @@ type
     procedure selected(fname: string);
     function LoadAllFile: Boolean;
     function doublePage(index: integer): integer;
-    function singlePage(index: integer): integer;
+    function singlePage(index: integer;left: boolean = true): integer;
   end;
 
 var
@@ -248,9 +248,12 @@ begin
   end;
 end;
 
-function TDataModule4.singlePage(index: integer): integer;
+function TDataModule4.singlePage(index: integer; left: Boolean): integer;
 begin
-  result := mapList[index - 1].Left;
+  if left then
+    result := mapList[index - 1].Left
+  else
+    result := mapList[index - 1].Right;
 end;
 
 end.
