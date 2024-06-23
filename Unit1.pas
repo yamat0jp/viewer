@@ -571,7 +571,7 @@ end;
 
 procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
-  ch: Single;
+  ch: integer;
 begin
   with DataModule4.FDTable4 do
   begin
@@ -581,19 +581,19 @@ begin
   end;
   Panel1.Visible := SpeedButton2.IsPressed;
   Image3.Visible := not Panel1.Visible;
-  ch := TrackBar1.Value;
+  ch := Round(TrackBar1.Value);
   if SpeedButton2.IsPressed then
   begin
-    TrackBar1.Value := DataModule4.doublePage(Round(ch));
+    TrackBar1.Value := DataModule4.doublePage(ch);
     TrackBar1.max := DataModule4.mapList.Count;
   end
   else
   begin
     TrackBar1.max := DataModule4.FDTable1.RecordCount;
-    TrackBar1.Value := DataModule4.singlePage(Round(ch));
+    TrackBar1.Value := DataModule4.singlePage(ch);
   end;
   if ch = TrackBar1.Value then
-    TrackBar1Change(Sender);
+    Action10Execute(Pointer(ch));
 end;
 
 procedure TForm1.TabControl1Change(Sender: TObject);
