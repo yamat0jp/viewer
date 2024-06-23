@@ -129,6 +129,9 @@ var
   list: TList;
   jpg: TBitmap;
 begin
+  result := Form5.ListBox1.Count > 0;
+  if not result then
+    Exit;
   repeat
     fn := randomName;
   until not FDTable2.Locate('file', fn);
@@ -152,25 +155,22 @@ begin
       FDQuery1.Params[0].AsIntegers[i] := i + 1;
       FDQuery1.Params[1].LoadFromStream(th.Stream, ftBlob, i);
       FDQuery1.Params[2].AsBooleans[i] := th.Sub;
+      th.Free;
     end);
   FDQuery1.Execute(FDQuery1.Params.ArraySize);
-  result := Form5.ListBox1.Count > 0;
   jpg := TBitmap.Create;
   try
-    if result then
-    begin
-      FDQuery2.Open('select max(id) from "TABLE";');
-      id := FDQuery2.Fields[0].AsInteger + 1;
-      jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
-      nm := Form5.Edit1.Text;
-      FDTable1.First;
-      FDTable2.AppendRecord([id, nm, fn, jpg]);
-      FDTable4.Edit;
-      FDTable4.FieldByName('double').AsBoolean := Form1.SpeedButton2.IsPressed;
-      FDTable4.FieldByName('page').AsInteger := 1;
-      FDTable4.FieldByName('toppage').AsBoolean := Form1.CheckBox2.IsChecked;
-      FDTable4.Post;
-    end;
+    FDQuery2.Open('select max(id) from "TABLE";');
+    id := FDQuery2.Fields[0].AsInteger + 1;
+    jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
+    nm := Form5.Edit1.Text;
+    FDTable1.First;
+    FDTable2.AppendRecord([id, nm, fn, jpg]);
+    FDTable4.Edit;
+    FDTable4.FieldByName('double').AsBoolean := Form1.SpeedButton2.IsPressed;
+    FDTable4.FieldByName('page').AsInteger := 1;
+    FDTable4.FieldByName('toppage').AsBoolean := Form1.CheckBox2.IsChecked;
+    FDTable4.Post;
   finally
     jpg.Free;
   end;

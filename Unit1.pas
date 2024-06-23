@@ -175,7 +175,7 @@ begin
       Panel1.Visible := true;
       Image3.Visible := false;
       Label3.Text := rec.Left.ToString + ' , ' + rec.Right.ToString;
-      Action6Execute(Sender);
+      Action6Execute(nil);
     end;
   end;
 end;
@@ -366,6 +366,8 @@ begin
   begin
     TrackBar1.max := DataModule4.mapList.Count;
     cnt := DataModule4.mapList[Round(TrackBar1.Value) - 1].Left;
+    if RadioButton2.IsChecked then
+      cnt := DataModule4.FDTable1.RecordCount - cnt + 1;
     Action10Execute(Pointer(DataModule4.doublePage(cnt)));
   end;
 end;
@@ -428,18 +430,24 @@ end;
 
 procedure TForm1.Image3MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
+var
+  bool: Boolean;
 begin
   Timer1.Enabled := false;
   Timer1.Enabled := CheckBox1.IsChecked;
   case TImage(Sender).Cursor of
     crUpArrow:
-      Action8Execute(nil);
+      bool := RadioButton1.IsChecked;
     crVSplit:
-      Action7Execute(nil)
+      bool := not RadioButton1.IsChecked;
   else
     grab := true;
     posCur := PointF(X, Y);
   end;
+  if bool then
+    Action8Execute(nil)
+  else
+    Action7Execute(nil);
 end;
 
 procedure TForm1.Image3MouseMove(Sender: TObject; Shift: TShiftState;
@@ -575,7 +583,7 @@ begin
   ch := TrackBar1.Value;
   if SpeedButton2.IsPressed then
   begin
-    Action9Execute(nil);
+    TrackBar1.Value := DataModule4.doublePage(Round(ch));
     TrackBar1.max := DataModule4.mapList.Count;
   end
   else
@@ -625,15 +633,8 @@ begin
     Exit;
   if Sender = TrackBar1 then
     cnt := Round(TrackBar1.Value)
-  else if Sender = SpeedButton2 then
-  begin
-    if SpeedButton2.IsPressed then
-      cnt := DataModule4.doublePage(Round(TrackBar1.Value))
-    else
-      cnt := DataModule4.singlePage(Round(TrackBar1.Value));
-  end
   else
-    cnt := Round(TrackBar1.Value);
+    cnt := DataModule4.FDTable1.RecNo;
   if not SpeedButton2.IsPressed then
   begin
     if RadioButton1.IsChecked then
@@ -642,19 +643,15 @@ begin
       num := DataModule4.FDTable1.RecordCount - cnt + 1;
     Label3.Text := num.ToString;
   end
+  else if RadioButton1.IsChecked then
+    num := cnt
   else
-  begin
-    if RadioButton1.IsChecked then
-      num := cnt
-    else
-      num := DataModule4.mapList.Count - cnt + 1;
-  end;
-  Action10Execute(Pointer(cnt));
+    num := DataModule4.mapList.Count - cnt + 1;
+  Action10Execute(Pointer(num));
   Label4.Text := ' / ' + DataModule4.FDTable1.RecordCount.ToString;
   process := true;
   try
-    if Sender = TrackBar1 then
-      TrackBar1.Value := num;
+    TrackBar1.Value := cnt;
   finally
     process := false;
   end;
