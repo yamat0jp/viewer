@@ -666,7 +666,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 27592.000000000000000000
+          Position.X = 28306.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -872,6 +872,7 @@ object Form1: TForm1
         Position.Y = 104.000000000000000000
       end
       object CheckBox1: TCheckBox
+        IsChecked = True
         Position.X = 336.000000000000000000
         Position.Y = 38.000000000000000000
         TabOrder = 6
@@ -886,7 +887,6 @@ object Form1: TForm1
         Value = 10.000000000000000000
         Position.X = 356.000000000000000000
         Position.Y = 80.000000000000000000
-        Enabled = False
         Size.Width = 100.000000000000000000
         Size.Height = 22.000000000000000000
         Size.PlatformDefault = False
@@ -985,7 +985,6 @@ object Form1: TForm1
     end
   end
   object Timer1: TTimer
-    Enabled = False
     OnTimer = Timer1Timer
     Left = 208
     Top = 312
