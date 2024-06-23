@@ -125,8 +125,6 @@ function TDataModule4.LoadAllFile: Boolean;
 var
   id: integer;
   fn, nm: string;
-  rect: TRect;
-  list: TList;
   jpg: TBitmap;
 begin
   result := Form5.ListBox1.Count > 0;

@@ -443,6 +443,7 @@ begin
   else
     grab := true;
     posCur := PointF(X, Y);
+    Exit;
   end;
   if bool then
     Action8Execute(nil)
