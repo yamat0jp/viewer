@@ -835,7 +835,7 @@ object Form1: TForm1
         Size.Width = 461.000000000000000000
         Size.Height = 671.000000000000000000
         Size.PlatformDefault = False
-        TabOrder = 1
+        TabOrder = 7
         Viewport.Width = 457.000000000000000000
         Viewport.Height = 667.000000000000000000
       end
@@ -846,7 +846,7 @@ object Form1: TForm1
         Size.Height = 17.000000000000000000
         Size.PlatformDefault = False
         Text = 'PassWord'
-        TabOrder = 2
+        TabOrder = 8
       end
       object Label2: TLabel
         Position.X = 15.000000000000000000
@@ -855,32 +855,32 @@ object Form1: TForm1
         Size.Height = 17.000000000000000000
         Size.PlatformDefault = False
         Text = 'New PassWord'
-        TabOrder = 3
+        TabOrder = 9
       end
       object Edit1: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
-        TabOrder = 4
+        TabOrder = 0
         Password = True
         Position.X = 128.000000000000000000
         Position.Y = 33.000000000000000000
       end
       object Edit2: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
-        TabOrder = 5
+        TabOrder = 1
         Password = True
-        Position.X = 128.000000000000000000
+        Position.X = 121.000000000000000000
         Position.Y = 104.000000000000000000
       end
       object CheckBox1: TCheckBox
         IsChecked = True
         Position.X = 336.000000000000000000
-        Position.Y = 38.000000000000000000
-        TabOrder = 6
+        Position.Y = 36.000000000000000000
+        TabOrder = 3
         Text = 'StayOnTop'
       end
       object SpinBox1: TSpinBox
         Touch.InteractiveGestures = [LongTap, DoubleTap]
-        TabOrder = 0
+        TabOrder = 4
         Cursor = crIBeam
         Min = 10.000000000000000000
         Max = 60.000000000000000000
@@ -908,14 +908,14 @@ object Form1: TForm1
         Size.Width = 297.000000000000000000
         Size.Height = 291.000000000000000000
         Size.PlatformDefault = False
-        TabOrder = 7
+        TabOrder = 10
         Viewport.Width = 293.000000000000000000
         Viewport.Height = 287.000000000000000000
       end
       object Button1: TButton
         Position.X = 134.000000000000000000
         Position.Y = 190.000000000000000000
-        TabOrder = 8
+        TabOrder = 2
         Text = 'assign'
         OnClick = Button1Click
       end
@@ -924,7 +924,7 @@ object Form1: TForm1
         IsChecked = True
         Position.X = 336.000000000000000000
         Position.Y = 176.000000000000000000
-        TabOrder = 9
+        TabOrder = 5
         Text = #24038#12363#12425#12402#12425#12367
         OnChange = RadioButton1Change
       end
@@ -932,7 +932,7 @@ object Form1: TForm1
         GroupName = 'selection'
         Position.X = 336.000000000000000000
         Position.Y = 224.000000000000000000
-        TabOrder = 10
+        TabOrder = 6
         Text = #21491#12363#12425#12402#12425#12367
         OnChange = RadioButton1Change
       end
@@ -962,8 +962,10 @@ object Form1: TForm1
     object MenuItem2: TMenuItem
       Text = 'Edit'
       object MenuItem6: TMenuItem
+        Action = Action11
+        Enabled = True
         Locked = True
-        Text = 'Back'
+        ImageIndex = -1
       end
     end
     object MenuItem9: TMenuItem
@@ -1041,6 +1043,11 @@ object Form1: TForm1
       Category = 'paint'
       Text = 'drawIndex'
       OnExecute = Action10Execute
+    end
+    object Action11: TAction
+      Category = 'navi'
+      Text = 'back'
+      OnExecute = Action11Execute
     end
   end
   object BindSourceDB1: TBindSourceDB

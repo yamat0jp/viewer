@@ -81,6 +81,7 @@ type
     CheckBox2: TCheckBox;
     Action9: TAction;
     Action10: TAction;
+    Action11: TAction;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -126,6 +127,7 @@ type
     procedure Action10Execute(Sender: TObject);
     procedure CheckBox2Change(Sender: TObject);
     procedure RadioButton1Change(Sender: TObject);
+    procedure Action11Execute(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -178,6 +180,11 @@ begin
       Action6Execute(nil);
     end;
   end;
+end;
+
+procedure TForm1.Action11Execute(Sender: TObject);
+begin
+  TabControl1.TabIndex := 0;
 end;
 
 procedure TForm1.Action1Execute(Sender: TObject);
