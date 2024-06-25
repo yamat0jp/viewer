@@ -25,22 +25,22 @@ type
     FDConnection2: TFDConnection;
     FDTable2ID: TIntegerField;
     FDTable3: TFDTable;
-    FDTable3STAY: TBooleanField;
     FDTable3PWD: TStringField;
     FDTable4: TFDTable;
-    FDTable4DOUBLE: TBooleanField;
     FDTable4PAGE: TIntegerField;
     FDTable1PAGE: TIntegerField;
     FDTable1IMAGE: TBlobField;
     FDTable2JPEG: TBlobField;
-    FDTable1SUB: TBooleanField;
-    FDTable3INTERVAL: TFloatField;
-    FDTable3REVERSE: TBooleanField;
     FDQuery1: TFDQuery;
-    FDTable4TOPPAGE: TBooleanField;
     FDQuery2: TFDQuery;
     FDTable2name: TWideStringField;
     FDTable2file: TWideStringField;
+    FDTable4double: TIntegerField;
+    FDTable4toppage: TIntegerField;
+    FDTable1sub: TIntegerField;
+    FDTable3stay: TIntegerField;
+    FDTable3reverse: TIntegerField;
+    FDTable3interval: TIntegerField;
     procedure FDTable1AfterScroll(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
@@ -76,9 +76,9 @@ begin
     'template.sdb';
   FDConnection2.Open;
   FDQuery2.SQL.Add
-    ('create table if not exists profile(stay integer, interval integer, reverse integer, pwd string(64));');
+    ('create table if not exists profile(stay integer, interval integer, reverse integer, pwd nvarchar(64));');
   FDQuery2.SQL.Add
-    ('create table if not exists "TABLE"(id integer, name text, file text, jpeg blob);');
+    ('create table if not exists "TABLE"(id integer, name nvarchar(255), file nvarchar(255), jpeg blob);');
   FDQuery2.ExecSQL;
   FDTable2.Active := true;
   FDTable3.Active := true;
@@ -156,9 +156,9 @@ begin
   FDConnection1.Close;
   FDConnection1.Params.Database := fn;
   FDConnection1.Open;
-  FDQuery1.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB numeric);');
+  FDQuery1.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB integer);');
   FDQuery1.ExecSQL
-    ('CREATE TABLE INFO("DOUBLE" numeric,"PAGE" INTEGER, TOPPAGE numeric);');
+    ('CREATE TABLE INFO("DOUBLE" integer,"PAGE" INTEGER, TOPPAGE integer);');
   FDTable1.Open;
   FDTable4.Open;
   FDQuery1.SQL.Text :=

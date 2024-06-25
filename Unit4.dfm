@@ -6,6 +6,7 @@ object DataModule4: TDataModule4
   object FDConnection1: TFDConnection
     Params.Strings = (
       'DriverID=SQLite')
+    Connected = True
     LoginPrompt = False
     Left = 152
     Top = 128
@@ -26,9 +27,8 @@ object DataModule4: TDataModule4
       FieldName = 'IMAGE'
       Origin = 'IMAGE'
     end
-    object FDTable1SUB: TBooleanField
-      FieldName = 'SUB'
-      Origin = 'SUB'
+    object FDTable1sub: TIntegerField
+      FieldName = 'sub'
     end
   end
   object FDTable2: TFDTable
@@ -57,7 +57,9 @@ object DataModule4: TDataModule4
   end
   object FDConnection2: TFDConnection
     Params.Strings = (
+      'OpenMode=CreateUTF16'
       'DriverID=SQLite')
+    Connected = True
     LoginPrompt = False
     Left = 264
     Top = 128
@@ -68,17 +70,14 @@ object DataModule4: TDataModule4
     TableName = 'PROFILE'
     Left = 152
     Top = 384
-    object FDTable3STAY: TBooleanField
-      FieldName = 'STAY'
-      Origin = 'STAY'
+    object FDTable3stay: TIntegerField
+      FieldName = 'stay'
     end
-    object FDTable3INTERVAL: TFloatField
-      FieldName = 'INTERVAL'
-      Origin = 'INTERVAL'
+    object FDTable3interval: TIntegerField
+      FieldName = 'interval'
     end
-    object FDTable3REVERSE: TBooleanField
-      FieldName = 'REVERSE'
-      Origin = 'REVERSE'
+    object FDTable3reverse: TIntegerField
+      FieldName = 'reverse'
     end
     object FDTable3PWD: TStringField
       FieldName = 'PWD'
@@ -92,17 +91,15 @@ object DataModule4: TDataModule4
     TableName = 'INFO'
     Left = 264
     Top = 216
-    object FDTable4DOUBLE: TBooleanField
-      FieldName = 'DOUBLE'
-      Origin = '"DOUBLE"'
+    object FDTable4double: TIntegerField
+      FieldName = 'double'
     end
     object FDTable4PAGE: TIntegerField
       FieldName = 'PAGE'
       Origin = '"PAGE"'
     end
-    object FDTable4TOPPAGE: TBooleanField
-      FieldName = 'TOPPAGE'
-      Origin = 'TOPPAGE'
+    object FDTable4toppage: TIntegerField
+      FieldName = 'toppage'
     end
   end
   object FDQuery1: TFDQuery
