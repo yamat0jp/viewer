@@ -5,13 +5,7 @@ object DataModule4: TDataModule4
   Width = 640
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'User_Name=sysdba'
-      'Password=masterkey'
-      'OpenMode=OpenOrCreate'
-      'Database=C:\Users\yamat\Documents\GitHub\form\TEMPLATE.IB'
-      'CharacterSet=UTF8'
-      'DriverID=IBLite')
-    Connected = True
+      'DriverID=SQLite')
     LoginPrompt = False
     Left = 152
     Top = 128
@@ -38,7 +32,6 @@ object DataModule4: TDataModule4
     end
   end
   object FDTable2: TFDTable
-    Active = True
     IndexFieldNames = 'ID'
     Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
@@ -49,15 +42,13 @@ object DataModule4: TDataModule4
       FieldName = 'ID'
       Origin = 'ID'
     end
-    object FDTable2NAME: TWideStringField
-      FieldName = 'NAME'
-      Origin = 'NAME'
-      Size = 1020
+    object FDTable2name: TWideStringField
+      FieldName = 'name'
+      Size = 0
     end
-    object FDTable2FILE: TWideStringField
-      FieldName = 'FILE'
-      Origin = '"FILE"'
-      Size = 512
+    object FDTable2file: TWideStringField
+      FieldName = 'file'
+      Size = 0
     end
     object FDTable2JPEG: TBlobField
       FieldName = 'JPEG'
@@ -66,18 +57,12 @@ object DataModule4: TDataModule4
   end
   object FDConnection2: TFDConnection
     Params.Strings = (
-      'User_Name=sysdba'
-      'Password=masterkey'
-      'Database=C:\Users\yamat\Documents\GitHub\form\LITE.IB'
-      'CharacterSet=UTF8'
-      'DriverID=IBLite')
-    Connected = True
+      'DriverID=SQLite')
     LoginPrompt = False
     Left = 264
     Top = 128
   end
   object FDTable3: TFDTable
-    Active = True
     Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     TableName = 'PROFILE'

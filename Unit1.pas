@@ -292,8 +292,14 @@ begin
     begin
       Edit;
       FieldByName('page').AsInteger := ch;
-      FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
-      FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
+      if SpeedButton2.IsPressed then
+        FieldByName('double').AsInteger := 1
+      else
+        FieldByName('double').AsInteger := 0;
+      if CheckBox2.IsChecked then
+        FieldByName('toppage').AsInteger := 1
+      else
+        FieldByName('toppage').AsInteger := 0;
       Post;
     end;
 end;
@@ -371,7 +377,10 @@ begin
   with DataModule4.FDTable4 do
   begin
     Edit;
-    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
+    if CheckBox2.IsChecked then
+      FieldByName('toppage').AsInteger := 1
+    else
+      FieldByName('toppage').AsInteger := 0;
     Post;
   end;
   DataModule4.map(CheckBox2.IsChecked);
@@ -516,7 +525,10 @@ begin
   with DataModule4.FDTable3 do
   begin
     Edit;
-    FieldByName('reverse').AsBoolean := Sender = RadioButton2;
+    if Sender = RadioButton2 then
+      FieldByName('reverse').AsInteger := 1
+    else
+      FieldByName('reverse').AsInteger := 0;
     Post;
   end;
   with DataModule4 do
@@ -590,7 +602,10 @@ begin
   with DataModule4.FDTable4 do
   begin
     Edit;
-    FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
+    if SpeedButton2.IsPressed then
+      FieldByName('double').AsInteger := 1
+    else
+      FieldByName('double').AsInteger := 0;
     Post;
   end;
   Panel1.Visible := SpeedButton2.IsPressed;

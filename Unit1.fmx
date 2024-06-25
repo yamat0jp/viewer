@@ -666,7 +666,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 30448.000000000000000000
+          Position.X = 31162.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
