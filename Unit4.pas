@@ -76,7 +76,7 @@ begin
     'template.sdb';
   FDConnection2.Open;
   FDQuery2.SQL.Add
-    ('create table if not exists profile(stay integer, interval integer, reverse integer, pwd nvarchar(64));');
+    ('create table if not exists profile(stay integer, interval integer, reverse integer, pwd varchar(64));');
   FDQuery2.SQL.Add
     ('create table if not exists "TABLE"(id integer, name nvarchar(255), file nvarchar(255), jpeg blob);');
   FDQuery2.ExecSQL;
