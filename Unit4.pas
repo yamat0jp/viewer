@@ -25,7 +25,6 @@ type
     FDTable2NAME: TWideStringField;
     FDTable3: TFDTable;
     FDTable3STAY: TBooleanField;
-    FDTable3PWD: TStringField;
     FDTable2FILE: TWideStringField;
     FDTable4: TFDTable;
     FDTable4DOUBLE: TBooleanField;
@@ -34,11 +33,12 @@ type
     FDTable1IMAGE: TBlobField;
     FDTable2JPEG: TBlobField;
     FDTable1SUB: TBooleanField;
-    FDTable3INTERVAL: TFloatField;
     FDTable3REVERSE: TBooleanField;
     FDQuery1: TFDQuery;
     FDTable4TOPPAGE: TBooleanField;
     FDQuery2: TFDQuery;
+    FDTable3interval: TIntegerField;
+    FDTable3pwd: TWideStringField;
     procedure FDTable1AfterScroll(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
@@ -70,6 +70,14 @@ procedure TDataModule4.DataModuleCreate(Sender: TObject);
 begin
   mapList := TList<TMap>.Create;
   image := TBitmap.Create;
+  FDConnection2.Params.Database:=ExtractFilePath(ParamStr(0))+'LITE.IB';
+  FDConnection2.Open;
+  if not FDTable2.Exists then
+    FDTable2.CreateTable(false);
+  if not FDTable3.Exists then
+    FDQuery2.ExecSQL('create table profile(stay boolean, interval integer, reverse boolean, pwd varchar(64));');
+  FDTable2.Open;
+  FDTable3.Open;
   if Assigned(Form1) then
   begin
     Form1.ScrollBox1.Repaint;

@@ -666,7 +666,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 30448.000000000000000000
+          Position.X = 31162.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -836,8 +836,8 @@ object Form1: TForm1
         Size.Height = 671.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 7
-        Viewport.Width = 457.000000000000000000
-        Viewport.Height = 667.000000000000000000
+        Viewport.Width = 461.000000000000000000
+        Viewport.Height = 671.000000000000000000
       end
       object PassWord: TLabel
         Position.X = 15.000000000000000000
@@ -872,7 +872,6 @@ object Form1: TForm1
         Position.Y = 104.000000000000000000
       end
       object CheckBox1: TCheckBox
-        IsChecked = True
         Position.X = 336.000000000000000000
         Position.Y = 36.000000000000000000
         TabOrder = 3
@@ -887,6 +886,7 @@ object Form1: TForm1
         Value = 10.000000000000000000
         Position.X = 356.000000000000000000
         Position.Y = 80.000000000000000000
+        Enabled = False
         Size.Width = 100.000000000000000000
         Size.Height = 22.000000000000000000
         Size.PlatformDefault = False
@@ -909,8 +909,8 @@ object Form1: TForm1
         Size.Height = 291.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 10
-        Viewport.Width = 293.000000000000000000
-        Viewport.Height = 287.000000000000000000
+        Viewport.Width = 297.000000000000000000
+        Viewport.Height = 291.000000000000000000
       end
       object Button1: TButton
         Position.X = 134.000000000000000000
@@ -967,6 +967,11 @@ object Form1: TForm1
         Locked = True
         ImageIndex = -1
       end
+      object MenuItem7: TMenuItem
+        Locked = True
+        Text = 'table'
+        OnClick = MenuItem7Click
+      end
     end
     object MenuItem9: TMenuItem
       Text = 'Setting'
@@ -987,6 +992,7 @@ object Form1: TForm1
     end
   end
   object Timer1: TTimer
+    Enabled = False
     OnTimer = Timer1Timer
     Left = 208
     Top = 312

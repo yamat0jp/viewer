@@ -22,9 +22,6 @@ Visible=True
 Coordinates=10,143,60,33
 Visible=False
 
-[FDTable3PWD]
-Coordinates=278,209,84,33
-
 [FDTable2FILE]
 Coordinates=117,232,83,33
 
@@ -48,7 +45,7 @@ Coordinates=428,157,104,33
 Coordinates=428,209,94,33
 
 []
-Coordinates=150,143,63,51
+Coordinates=385,1,112,33
 
 [FDTable2JPEG]
 Coordinates=318,157,88,33
@@ -64,9 +61,6 @@ Coordinates=10,10,127,105
 
 [Form1.BindSourceDB3]
 Coordinates=220,153,127,123
-
-[FDTable3INTERVAL]
-Coordinates=385,1,112,33
 
 [Form1.BindSourceDB4]
 Coordinates=10,143,127,141

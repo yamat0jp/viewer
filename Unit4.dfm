@@ -8,10 +8,8 @@ object DataModule4: TDataModule4
       'User_Name=sysdba'
       'Password=masterkey'
       'OpenMode=OpenOrCreate'
-      'Database=C:\Users\yamat\Documents\GitHub\form\TEMPLATE.IB'
       'CharacterSet=UTF8'
       'DriverID=IBLite')
-    Connected = True
     LoginPrompt = False
     Left = 152
     Top = 128
@@ -38,7 +36,6 @@ object DataModule4: TDataModule4
     end
   end
   object FDTable2: TFDTable
-    Active = True
     IndexFieldNames = 'ID'
     Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
@@ -68,16 +65,14 @@ object DataModule4: TDataModule4
     Params.Strings = (
       'User_Name=sysdba'
       'Password=masterkey'
-      'Database=C:\Users\yamat\Documents\GitHub\form\LITE.IB'
       'CharacterSet=UTF8'
+      'OpenMode=OpenOrCreate'
       'DriverID=IBLite')
-    Connected = True
     LoginPrompt = False
     Left = 264
     Top = 128
   end
   object FDTable3: TFDTable
-    Active = True
     Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     TableName = 'PROFILE'
@@ -87,18 +82,16 @@ object DataModule4: TDataModule4
       FieldName = 'STAY'
       Origin = 'STAY'
     end
-    object FDTable3INTERVAL: TFloatField
-      FieldName = 'INTERVAL'
-      Origin = 'INTERVAL'
+    object FDTable3interval: TIntegerField
+      FieldName = 'interval'
     end
     object FDTable3REVERSE: TBooleanField
       FieldName = 'REVERSE'
       Origin = 'REVERSE'
     end
-    object FDTable3PWD: TStringField
-      FieldName = 'PWD'
-      Origin = 'PWD'
-      Size = 25
+    object FDTable3pwd: TWideStringField
+      FieldName = 'pwd'
+      Size = 0
     end
   end
   object FDTable4: TFDTable

@@ -5,6 +5,7 @@ object Form6: TForm6
   Caption = 'Form6'
   ClientHeight = 79
   ClientWidth = 282
+  Position = MainFormCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]

@@ -82,6 +82,7 @@ type
     Action9: TAction;
     Action10: TAction;
     Action11: TAction;
+    MenuItem7: TMenuItem;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -128,6 +129,7 @@ type
     procedure CheckBox2Change(Sender: TObject);
     procedure RadioButton1Change(Sender: TObject);
     procedure Action11Execute(Sender: TObject);
+    procedure MenuItem7Click(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -509,6 +511,11 @@ end;
 procedure TForm1.MenuItem5Click(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TForm1.MenuItem7Click(Sender: TObject);
+begin
+  ListBox1.Visible:=not ListBox1.Visible;
 end;
 
 procedure TForm1.RadioButton1Change(Sender: TObject);
