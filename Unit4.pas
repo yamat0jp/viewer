@@ -9,7 +9,7 @@ uses
   FireDAC.Phys.IBLiteDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
-  System.Generics.Collections, System.Threading;
+  System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef;
 
 type
   TMap = record

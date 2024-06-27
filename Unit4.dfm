@@ -7,9 +7,9 @@ object DataModule4: TDataModule4
     Params.Strings = (
       'User_Name=sysdba'
       'Password=masterkey'
-      'OpenMode=OpenOrCreate'
       'CharacterSet=UTF8'
-      'DriverID=IBLite')
+      'OpenMode=OpenOrCreate'
+      'DriverID=IB')
     LoginPrompt = False
     Left = 152
     Top = 128
@@ -67,7 +67,7 @@ object DataModule4: TDataModule4
       'Password=masterkey'
       'CharacterSet=UTF8'
       'OpenMode=OpenOrCreate'
-      'DriverID=IBLite')
+      'DriverID=IB')
     LoginPrompt = False
     Left = 264
     Top = 128

@@ -21,12 +21,15 @@ type
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
+    Label2: TLabel;
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Edit1ChangeTracking(Sender: TObject);
     procedure ListBox1DragOver(Sender: TObject; const Data: TDragObject;
       const Point: TPointF; var Operation: TDragOperation);
     procedure SpeedButton2Click(Sender: TObject);
+    procedure ListBox1Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { private êÈåæ }
   public
@@ -59,11 +62,21 @@ begin
   end;
 end;
 
+procedure TForm5.FormCreate(Sender: TObject);
+begin
+  Label2.WordWrap := false;
+end;
+
 procedure TForm5.FormShow(Sender: TObject);
 begin
   Edit1.Text := '';
   ListBox1.Items.Clear;
   Button1.Enabled := false;
+end;
+
+procedure TForm5.ListBox1Change(Sender: TObject);
+begin
+  Label2.Text := ListBox1.Items[ListBox1.ItemIndex];
 end;
 
 procedure TForm5.ListBox1DragOver(Sender: TObject; const Data: TDragObject;
@@ -81,7 +94,8 @@ begin
     for var name in OpenDialog1.Files do
     begin
       s := LowerCase(ExtractFileExt(name));
-      if (s = '.jpg') or (s = '.jpeg') or (s = '.webp') then
+      if (s = '.jpg') or (s = '.jpeg') or (s = '.webp') or (s = '.png') or
+        (s = '.bmp') then
         ListBox1.Items.Add(name);
     end;
     Edit1.Text := ChangeFileExt(ExtractFileName(ListBox1.Items[0]), '');
