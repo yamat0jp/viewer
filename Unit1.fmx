@@ -666,7 +666,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 31876.000000000000000000
+          Position.X = 32590.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -861,7 +861,7 @@ object Form1: TForm1
         Touch.InteractiveGestures = [LongTap, DoubleTap]
         TabOrder = 0
         Password = True
-        Position.X = 128.000000000000000000
+        Position.X = 121.000000000000000000
         Position.Y = 33.000000000000000000
       end
       object Edit2: TEdit
@@ -983,6 +983,7 @@ object Form1: TForm1
     end
   end
   object PopupMenu1: TPopupMenu
+    OnPopup = PopupMenu1Popup
     Left = 280
     Top = 216
     object MenuItem15: TMenuItem

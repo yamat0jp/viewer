@@ -130,6 +130,7 @@ type
     procedure RadioButton1Change(Sender: TObject);
     procedure Action11Execute(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
+    procedure PopupMenu1Popup(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -518,6 +519,11 @@ begin
   ListBox1.Visible:=not ListBox1.Visible;
 end;
 
+procedure TForm1.PopupMenu1Popup(Sender: TObject);
+begin
+  MenuItem15.Enabled := ListBox1.ItemIndex > -1;
+end;
+
 procedure TForm1.RadioButton1Change(Sender: TObject);
 begin
   with DataModule4.FDTable3 do
@@ -563,10 +569,10 @@ begin
       ScrollBox1.Repaint;
       Exit;
     end;
+  ListBox1.ItemIndex := -1;
   if rectIndex > -1 then
   begin
     rectIndex := -1;
-    ListBox1.ItemIndex := -1;
     ScrollBox1.Hint := '';
     ScrollBox1.Repaint;
   end;
