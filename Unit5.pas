@@ -21,12 +21,14 @@ type
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
+    Label2: TLabel;
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Edit1ChangeTracking(Sender: TObject);
     procedure ListBox1DragOver(Sender: TObject; const Data: TDragObject;
       const Point: TPointF; var Operation: TDragOperation);
     procedure SpeedButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { private êÈåæ }
   public
@@ -57,6 +59,11 @@ begin
     Label1.Visible := true;
     Button1.Enabled := false;
   end;
+end;
+
+procedure TForm5.FormCreate(Sender: TObject);
+begin
+  Label2.WordWrap := false;
 end;
 
 procedure TForm5.FormShow(Sender: TObject);
