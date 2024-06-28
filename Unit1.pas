@@ -351,15 +351,18 @@ begin
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
+var
+  s: string;
 begin
   with DataModule4.FDTable3 do
     if (Edit1.Text <> Edit2.Text) and (Edit1.Text = FieldByName('pwd').AsString)
     then
     begin
+      s := Edit2.Text;
       Edit;
-      FieldByName('pwd').AsString := Edit2.Text;
+      FieldByName('pwd').AsString := s;
       Post;
-      Showmessage('Assigned New Password');
+      Showmessage('Assigned with New Password');
       Edit1.Text := '';
     end;
   Edit2.Text := '';
@@ -515,7 +518,7 @@ end;
 
 procedure TForm1.MenuItem7Click(Sender: TObject);
 begin
-  ListBox1.Visible:=not ListBox1.Visible;
+  ListBox1.Visible := not ListBox1.Visible;
 end;
 
 procedure TForm1.RadioButton1Change(Sender: TObject);

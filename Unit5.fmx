@@ -62,6 +62,7 @@ object Form5: TForm5
     DefaultItemStyles.ItemStyle = ''
     DefaultItemStyles.GroupHeaderStyle = ''
     DefaultItemStyles.GroupFooterStyle = ''
+    OnChange = ListBox1Change
     Viewport.Width = 269.000000000000000000
     Viewport.Height = 381.000000000000000000
   end

@@ -29,6 +29,7 @@ type
       const Point: TPointF; var Operation: TDragOperation);
     procedure SpeedButton2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure ListBox1Change(Sender: TObject);
   private
     { private êÈåæ }
   public
@@ -73,6 +74,11 @@ begin
   Button1.Enabled := false;
 end;
 
+procedure TForm5.ListBox1Change(Sender: TObject);
+begin
+  Label2.Text := ListBox1.Items[ListBox1.ItemIndex];
+end;
+
 procedure TForm5.ListBox1DragOver(Sender: TObject; const Data: TDragObject;
   const Point: TPointF; var Operation: TDragOperation);
 begin
@@ -88,7 +94,8 @@ begin
     for var name in OpenDialog1.Files do
     begin
       s := LowerCase(ExtractFileExt(name));
-      if (s = '.jpg') or (s = '.jpeg') or (s = '.webp') then
+      if (s = '.jpg') or (s = '.jpeg') or (s = '.webp') or (s = '.bmp') or
+        (s = '.png') or (s = '.gif') then
         ListBox1.Items.Add(name);
     end;
     Edit1.Text := ChangeFileExt(ExtractFileName(ListBox1.Items[0]), '');
