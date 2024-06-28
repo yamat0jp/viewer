@@ -9,7 +9,8 @@ uses
   FireDAC.Phys.IBLiteDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
-  System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef;
+  System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef,
+  FireDAC.Phys.FB, FireDAC.Phys.FBDef;
 
 type
   TMap = record
@@ -70,7 +71,7 @@ procedure TDataModule4.DataModuleCreate(Sender: TObject);
 begin
   mapList := TList<TMap>.Create;
   image := TBitmap.Create;
-  FDConnection2.Params.Database:=ExtractFilePath(ParamStr(0))+'LITE.IB';
+  FDConnection2.Params.Database:=ExtractFilePath(ParamStr(0))+'LITE.FB';
   FDConnection2.Open;
   if not FDTable2.Exists then
     FDTable2.CreateTable(false);
@@ -234,7 +235,7 @@ begin
   result := '';
   for var i := 1 to 5 do
     result := result + Random(10).ToString;
-  result := ExtractFilePath(ParamStr(0)) + result + '.ib';
+  result := ExtractFilePath(ParamStr(0)) + result + '.fb';
 end;
 
 procedure TDataModule4.selected(fname: string);

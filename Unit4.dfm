@@ -5,11 +5,11 @@ object DataModule4: TDataModule4
   Width = 640
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'User_Name=sysdba'
-      'Password=masterkey'
       'CharacterSet=UTF8'
       'OpenMode=OpenOrCreate'
-      'DriverID=IB')
+      'User_Name=sysdba'
+      'Password=masterkey'
+      'DriverID=FB')
     LoginPrompt = False
     Left = 152
     Top = 128
@@ -63,11 +63,11 @@ object DataModule4: TDataModule4
   end
   object FDConnection2: TFDConnection
     Params.Strings = (
-      'User_Name=sysdba'
-      'Password=masterkey'
       'CharacterSet=UTF8'
       'OpenMode=OpenOrCreate'
-      'DriverID=IB')
+      'User_Name=sysdba'
+      'Password=masterkey'
+      'DriverID=FB')
     LoginPrompt = False
     Left = 264
     Top = 128
