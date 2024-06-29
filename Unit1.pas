@@ -347,7 +347,10 @@ begin
     max := DataModule4.FDTable1.RecordCount;
   if RadioButton2.IsChecked then
     ch := max - ch + 1;
-  TrackBar1.Value := ch;
+  if TrackBar1.Value = ch then
+    TrackBar1Change(nil)
+  else
+    TrackBar1.Value := ch;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -566,10 +569,10 @@ begin
       ScrollBox1.Repaint;
       Exit;
     end;
+  ListBox1.ItemIndex := -1;
   if rectIndex > -1 then
   begin
     rectIndex := -1;
-    ListBox1.ItemIndex := -1;
     ScrollBox1.Hint := '';
     ScrollBox1.Repaint;
   end;

@@ -53,7 +53,7 @@ type
     procedure selected(fname: string);
     function LoadAllFile: Boolean;
     function doublePage(index: integer): integer;
-    function singlePage(index: integer;left: boolean = true): integer;
+    function singlePage(index: integer; Left: Boolean = true): integer;
   end;
 
 var
@@ -70,12 +70,13 @@ procedure TDataModule4.DataModuleCreate(Sender: TObject);
 begin
   mapList := TList<TMap>.Create;
   image := TBitmap.Create;
-  FDConnection2.Params.Database:=ExtractFilePath(ParamStr(0))+'LITE.IB';
+  FDConnection2.Params.Database := ExtractFilePath(ParamStr(0)) + 'LITE.IB';
   FDConnection2.Open;
   if not FDTable2.Exists then
     FDTable2.CreateTable(false);
   if not FDTable3.Exists then
-    FDQuery2.ExecSQL('create table profile(stay boolean, interval integer, reverse boolean, pwd varchar(64));');
+    FDQuery2.ExecSQL
+      ('create table profile(stay boolean, interval integer, reverse boolean, pwd varchar(64));');
   FDTable2.Open;
   FDTable3.Open;
   if Assigned(Form1) then
@@ -249,16 +250,16 @@ begin
     FDTable1.Open;
     FDTable4.Open;
     FDTable1.Prepare;
-    FDTable1.Locate('page',FDTable4.FieldByName('page').AsInteger);
+    FDTable1.Locate('page', FDTable4.FieldByName('page').AsInteger);
     bool := FDTable4.FieldByName('toppage').AsBoolean;
     map(bool);
     Form1.CheckBox2.IsChecked := bool;
   end;
 end;
 
-function TDataModule4.singlePage(index: integer; left: Boolean): integer;
+function TDataModule4.singlePage(index: integer; Left: Boolean): integer;
 begin
-  if left then
+  if Left then
     result := mapList[index - 1].Left
   else
     result := mapList[index - 1].Right;
