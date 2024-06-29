@@ -1,27 +1,14 @@
 object DataModule4: TDataModule4
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Height = 480
-  Width = 640
-  object FDConnection1: TFDConnection
-    Params.Strings = (
-      'CharacterSet=UTF8'
-      'OpenMode=OpenOrCreate'
-      'User_Name=sysdba'
-      'Password=masterkey'
-      'DriverID=FB')
-    LoginPrompt = False
-    Left = 152
-    Top = 128
-  end
+  Height = 317
+  Width = 350
   object FDTable1: TFDTable
     AfterScroll = FDTable1AfterScroll
     IndexFieldNames = 'PAGE'
-    Connection = FDConnection1
     ResourceOptions.AssignedValues = [rvEscapeExpand]
-    TableName = 'MAIN'
-    Left = 152
-    Top = 216
+    Left = 168
+    Top = 88
     object FDTable1PAGE: TIntegerField
       FieldName = 'PAGE'
       Origin = '"PAGE"'
@@ -40,8 +27,8 @@ object DataModule4: TDataModule4
     Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     TableName = '"TABLE"'
-    Left = 152
-    Top = 304
+    Left = 168
+    Top = 176
     object FDTable2ID: TIntegerField
       FieldName = 'ID'
       Origin = 'ID'
@@ -72,45 +59,18 @@ object DataModule4: TDataModule4
   end
   object FDConnection2: TFDConnection
     Params.Strings = (
-      'CharacterSet=UTF8'
-      'OpenMode=OpenOrCreate'
       'User_Name=sysdba'
       'Password=masterkey'
-      'DriverID=FB')
+      'CharacterSet=UTF8'
+      'OpenMode=OpenOrCreate'
+      'DriverID=IB')
     LoginPrompt = False
     Left = 264
     Top = 128
   end
-  object FDTable3: TFDTable
-    Connection = FDConnection2
-    ResourceOptions.AssignedValues = [rvEscapeExpand]
-    TableName = 'PROFILE'
-    Left = 152
-    Top = 384
-    object FDTable3STAY: TBooleanField
-      FieldName = 'STAY'
-      Origin = 'STAY'
-    end
-    object FDTable3interval: TIntegerField
-      FieldName = 'interval'
-    end
-    object FDTable3REVERSE: TBooleanField
-      FieldName = 'REVERSE'
-      Origin = 'REVERSE'
-    end
-    object FDTable3pwd: TWideStringField
-      FieldName = 'pwd'
-      Size = 0
-    end
-  end
-  object FDQuery1: TFDQuery
-    Connection = FDConnection1
-    Left = 64
-    Top = 224
-  end
   object FDQuery2: TFDQuery
     Connection = FDConnection2
-    Left = 64
-    Top = 304
+    Left = 80
+    Top = 176
   end
 end

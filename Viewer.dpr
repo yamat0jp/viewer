@@ -25,7 +25,7 @@ end;
 
 begin
   DataModule4 := TDataModule4.Create(nil);
-  if DataModule4.FDTable3.FieldByName('pwd').AsString = '' then
+  if DataModule4.pwd = '' then
   begin
     DataModule4.Free;
     main;

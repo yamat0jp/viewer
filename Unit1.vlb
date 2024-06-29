@@ -85,10 +85,6 @@ Coordinates=588,155,70,33
 Coordinates=830,210,127,33
 Visible=False
 
-[DataModule4.FDTable3]
-Coordinates=481,10,127,33
-Visible=False
-
 [Action2]
 Coordinates=282,427,52,33
 
@@ -151,7 +147,8 @@ Coordinates=852,65,49,51
 Visible=True
 
 [DataModule4.]
-Coordinates=944,21,127,105
+Coordinates=481,10,127,33
+Visible=False
 
 [SpeedButton2]
 Coordinates=187,258,84,69
@@ -160,9 +157,6 @@ ExplicitSubNodes=IsPressed
 
 [ToolBar2]
 Coordinates=531,576,58,33
-
-[DataModule4.FDQuery1]
-Coordinates=392,258,130,51
 
 [Label1]
 Coordinates=10,408,46,51

@@ -10,7 +10,7 @@ uses
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
   System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef,
-  FireDAC.Phys.FB, FireDAC.Phys.FBDef;
+  FireDAC.Phys.FB, FireDAC.Phys.FBDef, IniFiles;
 
 type
   TMap = record
@@ -18,24 +18,17 @@ type
   end;
 
   TDataModule4 = class(TDataModule)
-    FDConnection1: TFDConnection;
     FDTable1: TFDTable;
     FDTable2: TFDTable;
     FDConnection2: TFDConnection;
     FDTable2ID: TIntegerField;
     FDTable2NAME: TWideStringField;
-    FDTable3: TFDTable;
-    FDTable3STAY: TBooleanField;
     FDTable2FILE: TWideStringField;
     FDTable1PAGE: TIntegerField;
     FDTable1IMAGE: TBlobField;
     FDTable2JPEG: TBlobField;
     FDTable1SUB: TBooleanField;
-    FDTable3REVERSE: TBooleanField;
-    FDQuery1: TFDQuery;
     FDQuery2: TFDQuery;
-    FDTable3interval: TIntegerField;
-    FDTable3pwd: TWideStringField;
     FDTable2double: TBooleanField;
     FDTable2page: TIntegerField;
     FDTable2toppage: TBooleanField;
@@ -49,11 +42,12 @@ type
     { Public êÈåæ }
     image: TBitmap;
     mapList: TList<TMap>;
+    pwd: string;
     procedure map(toppage: Boolean);
     procedure selected(fname: string);
     function LoadAllFile: Boolean;
     function doublePage(index: integer): integer;
-    function singlePage(index: integer;left: boolean = true): integer;
+    function singlePage(index: integer; Left: Boolean = true): integer;
   end;
 
 var
@@ -67,37 +61,49 @@ uses Unit1, Unit5, Thread;
 {$R *.dfm}
 
 procedure TDataModule4.DataModuleCreate(Sender: TObject);
+var
+  Ini: TIniFile;
+  num: integer;
 begin
   mapList := TList<TMap>.Create;
   image := TBitmap.Create;
-  FDConnection2.Params.Database:=ExtractFilePath(ParamStr(0))+'LITE.FB';
+  FDConnection2.Params.Database := ExtractFilePath(ParamStr(0)) + 'LITE.IB';
   FDConnection2.Open;
   if not FDTable2.Exists then
     FDTable2.CreateTable(false);
-  if not FDTable3.Exists then
-    FDQuery2.ExecSQL('create table profile(stay boolean, interval integer, reverse boolean, pwd varchar(64));');
   FDTable2.Open;
-  FDTable3.Open;
   if Assigned(Form1) then
   begin
     Form1.ScrollBox1.Repaint;
-    Form1.CheckBox1.IsChecked := FDTable3.FieldByName('stay').AsBoolean;
-    Form1.Timer1.Interval := 1000 * FDTable3.FieldByName('interval').AsInteger;
-    Form1.SpinBox1.Value := Form1.SpinBox1.Value;
-    Form1.RadioButton2.IsChecked := FDTable3.FieldByName('reverse').AsBoolean;
+    Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'LITE.INI');
+    try
+      Form1.CheckBox1.IsChecked := Ini.ReadBool('lite', 'stay', false);
+      num := Ini.ReadInteger('lite', 'interval', 10);
+      Form1.Timer1.Interval := 1000 * num;
+      Form1.SpinBox1.Value := num;
+      Form1.RadioButton2.IsChecked := Ini.ReadBool('lite', 'reverse', false);;
+    finally
+      Ini.Free;
+    end;
   end;
 end;
 
 procedure TDataModule4.DataModuleDestroy(Sender: TObject);
+var
+  Ini: TIniFile;
 begin
   mapList.Free;
   image.Free;
   if Assigned(Form1) then
   begin
-    FDTable3.Edit;
-    FDTable3.FieldByName('stay').AsBoolean := Form1.CheckBox1.IsChecked;
-    FDTable3.FieldByName('reverse').AsBoolean := Form1.RadioButton2.IsChecked;
-    FDTable3.Post;
+    Ini := TIniFile.Create(ExtractFileName(ParamStr(0)) + 'LITE.INI');
+    try
+      Ini.WriteBool('lite', 'stay', Form1.CheckBox1.IsChecked);
+      Ini.WriteBool('lite', 'reverse', Form1.RadioButton2.IsChecked);
+      Ini.WriteInteger('lite', 'interval', Round(Form1.SpinBox1.Value));
+    finally
+      Ini.Free;
+    end;
   end;
 end;
 
@@ -134,7 +140,7 @@ var
   id: integer;
   fn, nm: string;
   jpg: TBitmap;
-  db, tp: Boolean;
+  DB, tp: Boolean;
 begin
   result := Form5.ListBox1.Count > 0;
   if not result then
@@ -142,36 +148,34 @@ begin
   repeat
     fn := randomName;
   until not FDTable2.Locate('file', fn);
-  FDConnection1.Close;
-  FDConnection1.Params.Database := fn;
-  FDConnection1.Open;
-  FDQuery1.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB BOOLEAN);');
+  FDTable1.TableName := fn;
+  FDTable1.CreateTable;
   FDTable1.Open;
-  FDQuery1.SQL.Text :=
+  FDQuery2.SQL.Text :=
     'insert into main("PAGE", image, sub) values(:page_id, :image, :subimage)';
-  FDQuery1.Params.ArraySize := Form5.ListBox1.Count;
+  FDQuery2.Params.ArraySize := Form5.ListBox1.Count;
   TParallel.For(0, Form5.ListBox1.Count - 1,
     procedure(i: integer)
     var
       th: TMyThread;
     begin
       th := TMyThread.Create(Form5.ListBox1.Items[i]);
-      FDQuery1.Params[0].AsIntegers[i] := i + 1;
-      FDQuery1.Params[1].LoadFromStream(th.Stream, ftBlob, i);
-      FDQuery1.Params[2].AsBooleans[i] := th.Sub;
+      FDQuery2.Params[0].AsIntegers[i] := i + 1;
+      FDQuery2.Params[1].LoadFromStream(th.Stream, ftBlob, i);
+      FDQuery2.Params[2].AsBooleans[i] := th.Sub;
       th.Free;
     end);
-  FDQuery1.Execute(FDQuery1.Params.ArraySize);
+  FDQuery2.Execute(FDQuery2.Params.ArraySize);
   jpg := TBitmap.Create;
   try
     FDQuery2.Open('select max(id) from "TABLE";');
     id := FDQuery2.Fields[0].AsInteger + 1;
     jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
     nm := Form5.Edit1.Text;
-    db := Form1.SpeedButton2.IsPressed;
+    DB := Form1.SpeedButton2.IsPressed;
     tp := Form1.CheckBox2.IsChecked;
     FDTable1.First;
-    FDTable2.AppendRecord([id, nm, fn, jpg, db, 1, tp]);
+    FDTable2.AppendRecord([id, nm, fn, jpg, DB, 1, tp]);
   finally
     jpg.Free;
   end;
@@ -182,7 +186,8 @@ var
   rec: TMap;
 begin
   mapList.Clear;
-  FDQuery1.Open('select "PAGE", sub from main;');
+  FDQuery2.ParamByName('main').AsString := FDTable2.TableName;
+  FDQuery2.Open('select "PAGE", sub from :main;');
   rec.Left := 0;
   rec.Right := 0;
   if toppage then
@@ -190,37 +195,37 @@ begin
     rec.Left := 1;
     mapList.Add(rec);
     rec.Left := 0;
-    FDQuery1.Next;
+    FDQuery2.Next;
   end;
-  while not FDQuery1.Eof do
+  while not FDQuery2.Eof do
   begin
     if rec.Left = 0 then
-      rec.Left := FDQuery1.Fields[0].AsInteger
+      rec.Left := FDQuery2.Fields[0].AsInteger
     else
     begin
-      if FDQuery1.Fields[1].AsBoolean then
-        rec.Right := FDQuery1.Fields[0].AsInteger
+      if FDQuery2.Fields[1].AsBoolean then
+        rec.Right := FDQuery2.Fields[0].AsInteger
       else
       begin
         mapList.Add(rec);
-        rec.Left := FDQuery1.Fields[0].AsInteger;
+        rec.Left := FDQuery2.Fields[0].AsInteger;
       end;
       mapList.Add(rec);
       rec.Left := 0;
       rec.Right := 0;
-      FDQuery1.Next;
+      FDQuery2.Next;
       continue;
     end;
-    if not FDQuery1.Fields[1].AsBoolean then
+    if not FDQuery2.Fields[1].AsBoolean then
     begin
       mapList.Add(rec);
       rec.Left := 0;
     end;
-    FDQuery1.Next;
+    FDQuery2.Next;
   end;
   if rec.Left <> 0 then
     mapList.Add(rec);
-  FDQuery1.Close;
+  FDQuery2.Close;
 end;
 
 function TDataModule4.randomName: string;
@@ -238,21 +243,19 @@ var
 begin
   if FDTable2.Locate('name', fname) then
   begin
-    FDConnection1.Close;
-    FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
-    FDConnection1.Open;
+    FDTable1.TableName := FDTable2.FieldByName('file').AsString;
     FDTable1.Open;
     FDTable1.Prepare;
-    FDTable1.Locate('page',FDTable2.FieldByName('page').AsInteger);
+    FDTable1.Locate('page', FDTable2.FieldByName('page').AsInteger);
     bool := FDTable2.FieldByName('toppage').AsBoolean;
     map(bool);
     Form1.CheckBox2.IsChecked := bool;
   end;
 end;
 
-function TDataModule4.singlePage(index: integer; left: Boolean): integer;
+function TDataModule4.singlePage(index: integer; Left: Boolean): integer;
 begin
-  if left then
+  if Left then
     result := mapList[index - 1].Left
   else
     result := mapList[index - 1].Right;

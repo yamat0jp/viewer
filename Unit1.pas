@@ -14,7 +14,7 @@ uses
   System.Rtti, System.Bindings.Outputs, FMX.Bind.Editors,
   Data.Bind.EngExt,
   FMX.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope, Data.DB,
-  System.ImageList, FMX.ImgList;
+  System.ImageList, FMX.ImgList, FireDAC.Stan.Param;
 
 type
   TForm1 = class(TForm)
@@ -205,15 +205,16 @@ var
 begin
   with DataModule4 do
   begin
-    FDConnection1.Close;
     s := ListBox1.Items[ListBox1.ItemIndex];
     id := ImageList1.Source.IndexOf(s);
     ListBox1.Items.Delete(ListBox1.ItemIndex);
     ImageList1.Source.Delete(id);
     ImageList1.Destination.Delete(id);
     FDTable2.Locate('name', s);
-    DeleteFile(FDTable2.FieldByName('file').AsString);
     FDTable2.Delete;
+    FDQuery2.ParamByName('main').AsString :=
+      FDTable2.FieldByName('file').AsString;
+    FDQuery2.ExecSQL('drop table :main;');
   end;
   tmp := [];
   for var rect in rects do
@@ -357,16 +358,12 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  with DataModule4.FDTable3 do
-    if (Edit1.Text <> Edit2.Text) and (Edit1.Text = FieldByName('pwd').AsString)
-    then
-    begin
-      Edit;
-      FieldByName('pwd').AsString := Edit2.Text;
-      Post;
-      Showmessage('Assigned New Password');
-      Edit1.Text := '';
-    end;
+  if (Edit1.Text <> Edit2.Text) and (Edit1.Text = DataModule4.pwd) then
+  begin
+    DataModule4.pwd := Edit2.Text;
+    Showmessage('Assigned New Password');
+    Edit1.Text := '';
+  end;
   Edit2.Text := '';
 end;
 
@@ -520,7 +517,7 @@ end;
 
 procedure TForm1.MenuItem7Click(Sender: TObject);
 begin
-  ListBox1.Visible:=not ListBox1.Visible;
+  ListBox1.Visible := not ListBox1.Visible;
 end;
 
 procedure TForm1.PopupMenu1Popup(Sender: TObject);
@@ -530,12 +527,6 @@ end;
 
 procedure TForm1.RadioButton1Change(Sender: TObject);
 begin
-  with DataModule4.FDTable3 do
-  begin
-    Edit;
-    FieldByName('reverse').AsBoolean := Sender = RadioButton2;
-    Post;
-  end;
   with DataModule4 do
     if FDTable1.Active then
     begin
