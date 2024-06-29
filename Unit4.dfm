@@ -60,6 +60,15 @@ object DataModule4: TDataModule4
       FieldName = 'JPEG'
       Origin = 'JPEG'
     end
+    object FDTable2double: TBooleanField
+      FieldName = 'double'
+    end
+    object FDTable2page: TIntegerField
+      FieldName = 'page'
+    end
+    object FDTable2toppage: TBooleanField
+      FieldName = 'toppage'
+    end
   end
   object FDConnection2: TFDConnection
     Params.Strings = (
@@ -92,25 +101,6 @@ object DataModule4: TDataModule4
     object FDTable3pwd: TWideStringField
       FieldName = 'pwd'
       Size = 0
-    end
-  end
-  object FDTable4: TFDTable
-    Connection = FDConnection1
-    ResourceOptions.AssignedValues = [rvEscapeExpand]
-    TableName = 'INFO'
-    Left = 264
-    Top = 216
-    object FDTable4DOUBLE: TBooleanField
-      FieldName = 'DOUBLE'
-      Origin = '"DOUBLE"'
-    end
-    object FDTable4PAGE: TIntegerField
-      FieldName = 'PAGE'
-      Origin = '"PAGE"'
-    end
-    object FDTable4TOPPAGE: TBooleanField
-      FieldName = 'TOPPAGE'
-      Origin = 'TOPPAGE'
     end
   end
   object FDQuery1: TFDQuery

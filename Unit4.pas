@@ -27,19 +27,18 @@ type
     FDTable3: TFDTable;
     FDTable3STAY: TBooleanField;
     FDTable2FILE: TWideStringField;
-    FDTable4: TFDTable;
-    FDTable4DOUBLE: TBooleanField;
-    FDTable4PAGE: TIntegerField;
     FDTable1PAGE: TIntegerField;
     FDTable1IMAGE: TBlobField;
     FDTable2JPEG: TBlobField;
     FDTable1SUB: TBooleanField;
     FDTable3REVERSE: TBooleanField;
     FDQuery1: TFDQuery;
-    FDTable4TOPPAGE: TBooleanField;
     FDQuery2: TFDQuery;
     FDTable3interval: TIntegerField;
     FDTable3pwd: TWideStringField;
+    FDTable2double: TBooleanField;
+    FDTable2page: TIntegerField;
+    FDTable2toppage: TBooleanField;
     procedure FDTable1AfterScroll(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
@@ -135,6 +134,7 @@ var
   id: integer;
   fn, nm: string;
   jpg: TBitmap;
+  db, tp: Boolean;
 begin
   result := Form5.ListBox1.Count > 0;
   if not result then
@@ -146,10 +146,7 @@ begin
   FDConnection1.Params.Database := fn;
   FDConnection1.Open;
   FDQuery1.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB BOOLEAN);');
-  FDQuery1.ExecSQL
-    ('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER, TOPPAGE BOOLEAN);');
   FDTable1.Open;
-  FDTable4.Open;
   FDQuery1.SQL.Text :=
     'insert into main("PAGE", image, sub) values(:page_id, :image, :subimage)';
   FDQuery1.Params.ArraySize := Form5.ListBox1.Count;
@@ -171,13 +168,10 @@ begin
     id := FDQuery2.Fields[0].AsInteger + 1;
     jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
     nm := Form5.Edit1.Text;
+    db := Form1.SpeedButton2.IsPressed;
+    tp := Form1.CheckBox2.IsChecked;
     FDTable1.First;
-    FDTable2.AppendRecord([id, nm, fn, jpg]);
-    FDTable4.Edit;
-    FDTable4.FieldByName('double').AsBoolean := Form1.SpeedButton2.IsPressed;
-    FDTable4.FieldByName('page').AsInteger := 1;
-    FDTable4.FieldByName('toppage').AsBoolean := Form1.CheckBox2.IsChecked;
-    FDTable4.Post;
+    FDTable2.AppendRecord([id, nm, fn, jpg, db, 1, tp]);
   finally
     jpg.Free;
   end;
@@ -248,10 +242,9 @@ begin
     FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
     FDConnection1.Open;
     FDTable1.Open;
-    FDTable4.Open;
     FDTable1.Prepare;
-    FDTable1.Locate('page',FDTable4.FieldByName('page').AsInteger);
-    bool := FDTable4.FieldByName('toppage').AsBoolean;
+    FDTable1.Locate('page',FDTable2.FieldByName('page').AsInteger);
+    bool := FDTable2.FieldByName('toppage').AsBoolean;
     map(bool);
     Form1.CheckBox2.IsChecked := bool;
   end;

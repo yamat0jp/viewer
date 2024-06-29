@@ -666,7 +666,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 32590.000000000000000000
+          Position.X = 34018.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -825,6 +825,9 @@ object Form1: TForm1
           #12496#12540#12472#12519#12531
           'ver 1.0'
           ''
+          'Delphi CE'
+          'Firebird'
+          ''
           ''
           #35613#36766
           ''
@@ -901,7 +904,8 @@ object Form1: TForm1
           #34920#12395#20986#12375#12389#12425#12367#12394#12426#12414#12375#12383#12290
           ''
           'DELPHI 11 CE '#12391#20316#25104#12373#12428#12390#12356#12414#12377
-          '')
+          ''
+          #12487#12540#12479#12505#12540#12473#12399'Firebird'#12395#33853#12385#30528#12365#12414#12375#12383)
         CanFocus = False
         Position.X = 128.000000000000000000
         Position.Y = 278.000000000000000000
@@ -1075,13 +1079,6 @@ object Form1: TForm1
       Control = SpinBox1
       Track = True
     end
-    object LinkControlToField5: TLinkControlToField
-      Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
-      DataSource = BindSourceDB4
-      FieldName = 'JPEG'
-      Control = Image4
-      Track = False
-    end
     object LinkPropertyToFieldEnabled: TLinkPropertyToField
       Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
       DataSource = BindSourceDB1
@@ -1103,17 +1100,31 @@ object Form1: TForm1
       Component = Timer1
       ComponentProperty = 'Enabled'
     end
-  end
-  object BindSourceDB4: TBindSourceDB
-    DataSet = DataModule4.FDTable2
-    ScopeMappings = <>
-    Left = 24
-    Top = 168
+    object LinkControlToField3: TLinkControlToField
+      Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
+      DataSource = BindSourceDB2
+      FieldName = 'JPEG'
+      Control = Image4
+      Track = False
+    end
+    object LinkControlToField4: TLinkControlToField
+      Category = #12463#12452#12483#12463' '#12496#12452#12531#12487#12451#12531#12464
+      DataSource = BindSourceDB2
+      FieldName = 'toppage'
+      Control = CheckBox2
+      Track = True
+    end
   end
   object ImageList1: TImageList
     Source = <>
     Destination = <>
     Left = 296
     Top = 312
+  end
+  object BindSourceDB2: TBindSourceDB
+    DataSet = DataModule4.FDTable2
+    ScopeMappings = <>
+    Left = 24
+    Top = 168
   end
 end

@@ -59,8 +59,6 @@ type
     Button1: TButton;
     LinkControlToField2: TLinkControlToField;
     Image4: TImage;
-    BindSourceDB4: TBindSourceDB;
-    LinkControlToField5: TLinkControlToField;
     LinkPropertyToFieldEnabled: TLinkPropertyToField;
     ToolBar2: TToolBar;
     SpeedButton2: TSpeedButton;
@@ -83,6 +81,9 @@ type
     Action10: TAction;
     Action11: TAction;
     MenuItem7: TMenuItem;
+    BindSourceDB2: TBindSourceDB;
+    LinkControlToField3: TLinkControlToField;
+    LinkControlToField4: TLinkControlToField;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -290,7 +291,7 @@ var
   ch: Integer;
 begin
   ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
-  with DataModule4.FDTable4 do
+  with DataModule4.FDTable2 do
     if DataModule4.FDTable1.Active then
     begin
       Edit;
@@ -348,7 +349,10 @@ begin
     max := DataModule4.FDTable1.RecordCount;
   if RadioButton2.IsChecked then
     ch := max - ch + 1;
-  TrackBar1.Value := ch;
+  if ch = TrackBar1.Value then
+    TrackBar1Change(nil)
+  else
+    TrackBar1.Value := ch;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -371,7 +375,7 @@ var
   cnt: Integer;
   bool: Boolean;
 begin
-  with DataModule4.FDTable4 do
+  with DataModule4.FDTable2 do
   begin
     Edit;
     FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
@@ -535,10 +539,10 @@ begin
   with DataModule4 do
     if FDTable1.Active then
     begin
-      FDTable4.Edit;
-      FDTable4.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
+      FDTable2.Edit;
+      FDTable2.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
         .AsInteger;
-      FDTable4.Post;
+      FDTable2.Post;
     end;
 end;
 
@@ -600,7 +604,7 @@ procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
   ch: Integer;
 begin
-  with DataModule4.FDTable4 do
+  with DataModule4.FDTable2 do
   begin
     Edit;
     FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
