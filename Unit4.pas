@@ -70,7 +70,8 @@ begin
   FDConnection2.Params.Database := ExtractFilePath(ParamStr(0)) + 'LITE.FB';
   FDConnection2.Open;
   if not FDTable2.Exists then
-    FDTable2.CreateTable(false);
+    FDQuery2.ExecSQL
+      ('create table "TABLE"(id integer primary key, name varchar(64), file varchar(255), jpeg blob, "DOUBLE" boolean, "PAGE" integer, toppage boolean)');
   FDTable2.Open;
   if Assigned(Form1) then
   begin
@@ -81,7 +82,7 @@ begin
       num := Ini.ReadInteger('lite', 'interval', 10);
       Form1.Timer1.Interval := 1000 * num;
       Form1.SpinBox1.Value := num;
-      Form1.RadioButton2.IsChecked := Ini.ReadBool('lite', 'reverse', false);;
+      Form1.RadioButton2.IsChecked := Ini.ReadBool('lite', 'reverse', false);
     finally
       Ini.Free;
     end;
@@ -153,7 +154,7 @@ begin
   FDTable1.CreateTable(false);
   FDTable1.Open;
   FDQuery2.SQL.Text :=
-    Format('insert into %s("PAGE", image, sub) values(:page_id, :image, :subimage);',
+    Format('insert into %s("PAGE", image, sub) values(:page_id, :image, :subimage)',
     [fn]);
   FDQuery2.Params.ArraySize := Form5.ListBox1.Count;
   TParallel.For(0, Form5.ListBox1.Count - 1,
@@ -170,7 +171,7 @@ begin
   FDQuery2.Execute(FDQuery2.Params.ArraySize);
   jpg := TBitmap.Create;
   try
-    FDQuery2.Open('select max(id) from "TABLE";');
+    FDQuery2.Open('select max(id) from "TABLE"');
     id := FDQuery2.Fields[0].AsInteger + 1;
     jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
     nm := Form5.Edit1.Text;
@@ -188,7 +189,7 @@ var
   rec: TMap;
 begin
   mapList.Clear;
-  FDQuery2.Open('select "PAGE", sub from '+ FDTable1.TableName);
+  FDQuery2.Open('select "PAGE", sub from ' + FDTable1.TableName);
   rec.Left := 0;
   rec.Right := 0;
   if toppage then

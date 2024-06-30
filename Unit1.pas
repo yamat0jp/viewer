@@ -162,13 +162,13 @@ begin
   cnt := Integer(Sender);
   if not SpeedButton2.IsPressed then
   begin
-    DataModule4.FDTable1.Locate('page', cnt);
+    DataModule4.FDTable1.Locate('PAGE', cnt);
     Image3.Bitmap.Assign(DataModule4.image);
   end
   else
   begin
     rec := DataModule4.mapList[cnt - 1];
-    DataModule4.FDTable1.Locate('page', rec.Left);
+    DataModule4.FDTable1.Locate('PAGE', rec.Left);
     if rec.Right = 0 then
     begin
       Panel1.Visible := false;
@@ -199,7 +199,7 @@ end;
 
 procedure TForm1.Action2Execute(Sender: TObject);
 var
-  s: string;
+  s, tb: string;
   id: Integer;
   tmp: TArray<TRectF>;
 begin
@@ -209,12 +209,13 @@ begin
   ImageList1.Source.Delete(id);
   ImageList1.Destination.Delete(id);
   with DataModule4 do
-  begin
-    FDTable2.Locate('name', s);
-    FDQuery2.SQL.Text := 'drop table ' + FDTable2.FieldByName('file').AsString;
-    FDQuery2.ExecSQL;
-    FDTable2.Delete;
-  end;
+    if FDTable2.Locate('name', s) then
+    begin
+      FDTable1.Close;
+      tb := FDTable2.FieldByName('file').AsString;
+      FDQuery2.ExecSQL('drop table ' + tb);
+      FDTable2.Delete;
+    end;
   tmp := [];
   for var rect in rects do
     if rect <> rects[id] then
@@ -290,13 +291,13 @@ procedure TForm1.Action5Execute(Sender: TObject);
 var
   ch: Integer;
 begin
-  ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
+  ch := DataModule4.FDTable1.FieldByName('PAGE').AsInteger;
   with DataModule4.FDTable2 do
     if DataModule4.FDTable1.Active then
     begin
       Edit;
-      FieldByName('page').AsInteger := ch;
-      FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
+      FieldByName('PAGE').AsInteger := ch;
+      FieldByName('DOUBLE').AsBoolean := SpeedButton2.IsPressed;
       FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
       Post;
     end;
@@ -530,7 +531,7 @@ begin
     if FDTable1.Active then
     begin
       FDTable2.Edit;
-      FDTable2.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
+      FDTable2.FieldByName('PAGE').AsInteger := FDTable1.FieldByName('PAGE')
         .AsInteger;
       FDTable2.Post;
     end;
@@ -597,7 +598,7 @@ begin
   with DataModule4.FDTable2 do
   begin
     Edit;
-    FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
+    FieldByName('DOUBLE').AsBoolean := SpeedButton2.IsPressed;
     Post;
   end;
   Panel1.Visible := SpeedButton2.IsPressed;
