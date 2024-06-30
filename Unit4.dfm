@@ -6,6 +6,7 @@ object DataModule4: TDataModule4
   object FDTable1: TFDTable
     AfterScroll = FDTable1AfterScroll
     IndexFieldNames = 'PAGE'
+    Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     Left = 168
     Top = 88
@@ -63,7 +64,7 @@ object DataModule4: TDataModule4
       'Password=masterkey'
       'CharacterSet=UTF8'
       'OpenMode=OpenOrCreate'
-      'DriverID=IB')
+      'DriverID=FB')
     LoginPrompt = False
     Left = 264
     Top = 128

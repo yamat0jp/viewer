@@ -67,7 +67,7 @@ var
 begin
   mapList := TList<TMap>.Create;
   image := TBitmap.Create;
-  FDConnection2.Params.Database := ExtractFilePath(ParamStr(0)) + 'LITE.IB';
+  FDConnection2.Params.Database := ExtractFilePath(ParamStr(0)) + 'LITE.FB';
   FDConnection2.Open;
   if not FDTable2.Exists then
     FDTable2.CreateTable(false);
@@ -96,7 +96,7 @@ begin
   image.Free;
   if Assigned(Form1) then
   begin
-    Ini := TIniFile.Create(ExtractFileName(ParamStr(0)) + 'LITE.INI');
+    Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'LITE.INI');
     try
       Ini.WriteBool('lite', 'stay', Form1.CheckBox1.IsChecked);
       Ini.WriteBool('lite', 'reverse', Form1.RadioButton2.IsChecked);
@@ -148,11 +148,13 @@ begin
   repeat
     fn := randomName;
   until not FDTable2.Locate('file', fn);
+  FDTable1.Close;
   FDTable1.TableName := fn;
-  FDTable1.CreateTable;
+  FDTable1.CreateTable(false);
   FDTable1.Open;
   FDQuery2.SQL.Text :=
-    'insert into main("PAGE", image, sub) values(:page_id, :image, :subimage)';
+    Format('insert into %s("PAGE", image, sub) values(:page_id, :image, :subimage);',
+    [fn]);
   FDQuery2.Params.ArraySize := Form5.ListBox1.Count;
   TParallel.For(0, Form5.ListBox1.Count - 1,
     procedure(i: integer)
@@ -160,9 +162,9 @@ begin
       th: TMyThread;
     begin
       th := TMyThread.Create(Form5.ListBox1.Items[i]);
-      FDQuery2.Params[0].AsIntegers[i] := i + 1;
-      FDQuery2.Params[1].LoadFromStream(th.Stream, ftBlob, i);
-      FDQuery2.Params[2].AsBooleans[i] := th.Sub;
+      FDQuery2.Params.ParamByName('page_id').AsIntegers[i] := i + 1;
+      FDQuery2.Params.ParamByName('image').LoadFromStream(th.Stream, ftBlob, i);
+      FDQuery2.Params.ParamByName('subimage').AsBooleans[i] := th.Sub;
       th.Free;
     end);
   FDQuery2.Execute(FDQuery2.Params.ArraySize);
@@ -186,8 +188,7 @@ var
   rec: TMap;
 begin
   mapList.Clear;
-  FDQuery2.ParamByName('main').AsString := FDTable2.TableName;
-  FDQuery2.Open('select "PAGE", sub from :main;');
+  FDQuery2.Open('select "PAGE", sub from '+ FDTable1.TableName);
   rec.Left := 0;
   rec.Right := 0;
   if toppage then
@@ -234,7 +235,7 @@ begin
   result := '';
   for var i := 1 to 5 do
     result := result + Random(10).ToString;
-  result := ExtractFilePath(ParamStr(0)) + result + '.fb';
+  result := 'tb' + result;
 end;
 
 procedure TDataModule4.selected(fname: string);
@@ -243,6 +244,7 @@ var
 begin
   if FDTable2.Locate('name', fname) then
   begin
+    FDTable1.Close;
     FDTable1.TableName := FDTable2.FieldByName('file').AsString;
     FDTable1.Open;
     FDTable1.Prepare;

@@ -203,18 +203,17 @@ var
   id: Integer;
   tmp: TArray<TRectF>;
 begin
+  s := ListBox1.Items[ListBox1.ItemIndex];
+  id := ImageList1.Source.IndexOf(s);
+  ListBox1.Items.Delete(ListBox1.ItemIndex);
+  ImageList1.Source.Delete(id);
+  ImageList1.Destination.Delete(id);
   with DataModule4 do
   begin
-    s := ListBox1.Items[ListBox1.ItemIndex];
-    id := ImageList1.Source.IndexOf(s);
-    ListBox1.Items.Delete(ListBox1.ItemIndex);
-    ImageList1.Source.Delete(id);
-    ImageList1.Destination.Delete(id);
     FDTable2.Locate('name', s);
+    FDQuery2.SQL.Text := 'drop table ' + FDTable2.FieldByName('file').AsString;
+    FDQuery2.ExecSQL;
     FDTable2.Delete;
-    FDQuery2.ParamByName('main').AsString :=
-      FDTable2.FieldByName('file').AsString;
-    FDQuery2.ExecSQL('drop table :main;');
   end;
   tmp := [];
   for var rect in rects do
