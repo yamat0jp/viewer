@@ -1,33 +1,16 @@
-﻿[FDConnection1]
-Coordinates=78,143,90,33
-
-[FDTable2ID]
+﻿[FDTable2ID]
 Coordinates=206,213,70,33
 
 [FDTable1]
 Coordinates=150,153,60,105
 Visible=True
 
-[FDTable3]
-Coordinates=390,30,60,123
-Visible=True
-
 [FDTable2]
 Coordinates=10,143,60,33
 Visible=False
 
-[FDTable3PWD]
-Coordinates=278,209,84,33
-
 [FDConnection2]
 Coordinates=18,232,90,33
-
-[FDTable4]
-Coordinates=10,10,60,33
-Visible=False
-
-[FDTable4PAGE]
-Coordinates=428,53,89,33
 
 [FDTable1PAGE]
 Coordinates=428,105,89,33
@@ -36,7 +19,8 @@ Coordinates=428,105,89,33
 Coordinates=428,209,94,33
 
 []
-Coordinates=385,1,112,33
+Coordinates=10,10,60,33
+Visible=False
 
 [FDTable2JPEG]
 Coordinates=318,157,88,33
@@ -52,9 +36,6 @@ Coordinates=220,153,127,123
 
 [Form1.BindSourceDB4]
 Coordinates=10,143,127,141
-
-[FDQuery1]
-Coordinates=89,1,63,51
 
 [FDTable2name]
 Coordinates=303,261,87,33

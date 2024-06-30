@@ -2,7 +2,7 @@ object Form5: TForm5
   Left = 0
   Top = 0
   BorderStyle = ToolWindow
-  Caption = 'Form5'
+  Caption = #30011#20687#12434#36984#25246#12375#12390#12367#12384#12373#12356
   ClientHeight = 480
   ClientWidth = 640
   FormFactor.Width = 320
@@ -11,12 +11,13 @@ object Form5: TForm5
   OnShow = FormShow
   DesignerMasterStyle = 0
   object Button1: TButton
+    Default = True
     Enabled = False
     ModalResult = 1
     Position.X = 528.000000000000000000
     Position.Y = 80.000000000000000000
     TabOrder = 0
-    Text = 'Button1'
+    Text = 'OK'
   end
   object Button2: TButton
     Cancel = True
@@ -24,7 +25,7 @@ object Form5: TForm5
     Position.X = 528.000000000000000000
     Position.Y = 136.000000000000000000
     TabOrder = 1
-    Text = 'Button2'
+    Text = 'Cancel'
   end
   object Edit1: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -49,9 +50,9 @@ object Form5: TForm5
   end
   object ListBox1: TListBox
     Position.X = 56.000000000000000000
-    Position.Y = 32.000000000000000000
+    Position.Y = 56.000000000000000000
     Size.Width = 273.000000000000000000
-    Size.Height = 417.000000000000000000
+    Size.Height = 393.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 5
     OnDragOver = ListBox1DragOver
@@ -61,7 +62,7 @@ object Form5: TForm5
     DefaultItemStyles.GroupHeaderStyle = ''
     DefaultItemStyles.GroupFooterStyle = ''
     Viewport.Width = 269.000000000000000000
-    Viewport.Height = 413.000000000000000000
+    Viewport.Height = 389.000000000000000000
   end
   object Label1: TLabel
     Position.X = 376.000000000000000000
@@ -87,5 +88,10 @@ object Form5: TForm5
     Position.Y = 396.000000000000000000
     Text = 'Delete'
     OnClick = SpeedButton2Click
+  end
+  object Label2: TLabel
+    Position.X = 48.000000000000000000
+    Position.Y = 16.000000000000000000
+    TabOrder = 12
   end
 end

@@ -199,18 +199,11 @@ var
   id: Integer;
   tmp: TArray<TRectF>;
 begin
-  with DataModule4 do
-  begin
-    FDConnection1.Close;
-    s := ListBox1.Items[ListBox1.ItemIndex];
-    id := ImageList1.Source.IndexOf(s);
-    ListBox1.Items.Delete(ListBox1.ItemIndex);
-    ImageList1.Source.Delete(id);
-    ImageList1.Destination.Delete(id);
-    FDTable2.Locate('name', s);
-    DeleteFile(FDTable2.FieldByName('file').AsString);
-    FDTable2.Delete;
-  end;
+  s := ListBox1.Items[ListBox1.ItemIndex];
+  id := ImageList1.Source.IndexOf(s);
+  ListBox1.Items.Delete(ListBox1.ItemIndex);
+  ImageList1.Source.Delete(id);
+  ImageList1.Destination.Delete(id);
   tmp := [];
   for var rect in rects do
     if rect <> rects[id] then
@@ -219,6 +212,13 @@ begin
   SetLength(rects, Length(tmp));
   rects := tmp;
   ScrollBox1.Repaint;
+  with DataModule4 do
+  begin
+    FDTable1.Close;
+    FDTable2.Locate('name', s);
+    FDTable2.Delete;
+    FDQuery2.ExecSQL('drop table ' + FDTable2.FieldByName('file').AsString);
+  end;
 end;
 
 procedure TForm1.Action3Execute(Sender: TObject);
@@ -287,7 +287,7 @@ var
   ch: Integer;
 begin
   ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
-  with DataModule4.FDTable4 do
+  with DataModule4.FDTable2 do
     if DataModule4.FDTable1.Active then
     begin
       Edit;
@@ -351,18 +351,18 @@ begin
     max := DataModule4.FDTable1.RecordCount;
   if RadioButton2.IsChecked then
     ch := max - ch + 1;
-  TrackBar1.Value := ch;
+  if ch = TrackBar1.Value then
+    TrackBar1Change(TrackBar1)
+  else
+    TrackBar1.Value := ch;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  with DataModule4.FDTable3 do
-    if (Edit1.Text <> Edit2.Text) and (Edit1.Text = FieldByName('pwd').AsString)
-    then
+  with DataModule4 do
+    if (Edit1.Text <> Edit2.Text) and (Edit1.Text = pwd) then
     begin
-      Edit;
-      FieldByName('pwd').AsString := Edit2.Text;
-      Post;
+      pwd := Edit2.Text;
       Showmessage('Assigned New Password');
       Edit1.Text := '';
     end;
@@ -374,7 +374,7 @@ var
   cnt: Integer;
   bool: Boolean;
 begin
-  with DataModule4.FDTable4 do
+  with DataModule4.FDTable2 do
   begin
     Edit;
     if CheckBox2.IsChecked then
@@ -522,22 +522,13 @@ end;
 
 procedure TForm1.RadioButton1Change(Sender: TObject);
 begin
-  with DataModule4.FDTable3 do
-  begin
-    Edit;
-    if Sender = RadioButton2 then
-      FieldByName('reverse').AsInteger := 1
-    else
-      FieldByName('reverse').AsInteger := 0;
-    Post;
-  end;
   with DataModule4 do
     if FDTable1.Active then
     begin
-      FDTable4.Edit;
-      FDTable4.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
+      FDTable2.Edit;
+      FDTable2.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
         .AsInteger;
-      FDTable4.Post;
+      FDTable2.Post;
     end;
 end;
 
@@ -599,7 +590,7 @@ procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
   ch: Integer;
 begin
-  with DataModule4.FDTable4 do
+  with DataModule4.FDTable2 do
   begin
     Edit;
     if SpeedButton2.IsPressed then
