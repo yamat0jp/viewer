@@ -208,14 +208,6 @@ begin
   ListBox1.Items.Delete(ListBox1.ItemIndex);
   ImageList1.Source.Delete(id);
   ImageList1.Destination.Delete(id);
-  with DataModule4 do
-    if FDTable2.Locate('name', s) then
-    begin
-      FDTable1.Close;
-      tb := FDTable2.FieldByName('file').AsString;
-      FDQuery2.ExecSQL('drop table ' + tb);
-      FDTable2.Delete;
-    end;
   tmp := [];
   for var rect in rects do
     if rect <> rects[id] then
@@ -223,6 +215,14 @@ begin
   Finalize(rects);
   SetLength(rects, Length(tmp));
   rects := tmp;
+  with DataModule4 do
+    if FDTable2.Locate('name', s) then
+    begin
+      FDTable1.Close;
+      tb := FDTable2.FieldByName('file').AsString;
+      FDTable2.Delete;
+      FDQuery2.ExecSQL('drop table ' + tb);
+    end;
   ScrollBox1.Repaint;
 end;
 
@@ -299,7 +299,7 @@ begin
       FieldByName('PAGE').AsInteger := ch;
       FieldByName('DOUBLE').AsBoolean := SpeedButton2.IsPressed;
       FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
-      Post;
+      Post;        //update ‚ª‚Å‚«‚È‚¢
     end;
 end;
 
@@ -350,7 +350,10 @@ begin
     max := DataModule4.FDTable1.RecordCount;
   if RadioButton2.IsChecked then
     ch := max - ch + 1;
-  TrackBar1.Value := ch;
+  if TrackBar1.Value = ch then
+    TrackBar1Change(TrackBar1)
+  else
+    TrackBar1.Value := ch;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
