@@ -350,10 +350,7 @@ begin
     max := DataModule4.FDTable1.RecordCount;
   if RadioButton2.IsChecked then
     ch := max - ch + 1;
-  if ch = TrackBar1.Value then
-    TrackBar1Change(nil)
-  else
-    TrackBar1.Value := ch;
+  TrackBar1.Value := ch;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
