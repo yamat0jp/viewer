@@ -1,15 +1,15 @@
 object DataModule4: TDataModule4
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Height = 322
-  Width = 336
+  Height = 260
+  Width = 251
   object FDTable1: TFDTable
     AfterScroll = FDTable1AfterScroll
     IndexFieldNames = 'PAGE'
     Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
-    Left = 136
-    Top = 112
+    Left = 144
+    Top = 48
     object FDTable1PAGE: TIntegerField
       FieldName = 'PAGE'
       Origin = '"PAGE"'
@@ -27,8 +27,8 @@ object DataModule4: TDataModule4
     Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     TableName = '"TABLE"'
-    Left = 136
-    Top = 200
+    Left = 144
+    Top = 136
     object FDTable2ID: TIntegerField
       FieldName = 'ID'
       Origin = 'ID'
@@ -51,22 +51,20 @@ object DataModule4: TDataModule4
     object FDTable2page: TIntegerField
       FieldName = 'page'
     end
-    object FDTable2toppage: TBooleanField
+    object FDTable2toppage: TIntegerField
       FieldName = 'toppage'
     end
   end
   object FDConnection2: TFDConnection
     Params.Strings = (
-      'OpenMode=CreateUTF16'
       'DriverID=SQLite')
-    Connected = True
     LoginPrompt = False
-    Left = 248
-    Top = 24
+    Left = 56
+    Top = 40
   end
   object FDQuery2: TFDQuery
     Connection = FDConnection2
-    Left = 48
-    Top = 200
+    Left = 56
+    Top = 136
   end
 end

@@ -19,7 +19,7 @@ Coordinates=428,105,89,33
 Coordinates=428,209,94,33
 
 []
-Coordinates=10,10,60,33
+Coordinates=303,261,87,33
 Visible=False
 
 [FDTable2JPEG]
@@ -37,12 +37,6 @@ Coordinates=220,153,127,123
 [Form1.BindSourceDB4]
 Coordinates=10,143,127,141
 
-[FDTable2name]
-Coordinates=303,261,87,33
-
 [FDQuery2]
 Coordinates=89,71,63,51
-
-[FDTable2file]
-Coordinates=303,1,75,33
 

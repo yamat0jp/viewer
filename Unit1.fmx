@@ -676,7 +676,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 31876.000000000000000000
+          Position.X = 34018.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -846,8 +846,8 @@ object Form1: TForm1
         Size.Height = 671.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 7
-        Viewport.Width = 461.000000000000000000
-        Viewport.Height = 671.000000000000000000
+        Viewport.Width = 457.000000000000000000
+        Viewport.Height = 667.000000000000000000
       end
       object PassWord: TLabel
         Position.X = 15.000000000000000000
@@ -871,7 +871,7 @@ object Form1: TForm1
         Touch.InteractiveGestures = [LongTap, DoubleTap]
         TabOrder = 0
         Password = True
-        Position.X = 128.000000000000000000
+        Position.X = 121.000000000000000000
         Position.Y = 33.000000000000000000
       end
       object Edit2: TEdit
@@ -919,11 +919,11 @@ object Form1: TForm1
         Size.Height = 291.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 10
-        Viewport.Width = 297.000000000000000000
-        Viewport.Height = 291.000000000000000000
+        Viewport.Width = 293.000000000000000000
+        Viewport.Height = 287.000000000000000000
       end
       object Button1: TButton
-        Position.X = 134.000000000000000000
+        Position.X = 128.000000000000000000
         Position.Y = 190.000000000000000000
         TabOrder = 2
         Text = 'assign'
@@ -976,6 +976,11 @@ object Form1: TForm1
         Enabled = True
         Locked = True
         ImageIndex = -1
+      end
+      object MenuItem7: TMenuItem
+        Locked = True
+        Text = 'table'
+        OnClick = MenuItem7Click
       end
     end
     object MenuItem9: TMenuItem

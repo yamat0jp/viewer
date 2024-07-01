@@ -7,7 +7,8 @@ uses
   System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Edit, System.IOUtils,
-  FMX.Layouts, FMX.ListBox;
+  FMX.Layouts, FMX.ListBox, Data.Bind.EngExt, FMX.Bind.DBEngExt, System.Rtti,
+  System.Bindings.Outputs, FMX.Bind.Editors, Data.Bind.Components;
 
 type
   TForm5 = class(TForm)
@@ -22,12 +23,15 @@ type
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
     Label2: TLabel;
+    BindingsList1: TBindingsList;
+    LinkFillControlToPropertyText: TLinkFillControlToProperty;
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Edit1ChangeTracking(Sender: TObject);
     procedure ListBox1DragOver(Sender: TObject; const Data: TDragObject;
       const Point: TPointF; var Operation: TDragOperation);
     procedure SpeedButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { private êÈåæ }
   public
@@ -60,6 +64,11 @@ begin
   end;
 end;
 
+procedure TForm5.FormCreate(Sender: TObject);
+begin
+  Label2.WordWrap := false;
+end;
+
 procedure TForm5.FormShow(Sender: TObject);
 begin
   Edit1.Text := '';
@@ -82,7 +91,8 @@ begin
     for var name in OpenDialog1.Files do
     begin
       s := LowerCase(ExtractFileExt(name));
-      if (s = '.jpg') or (s = '.jpeg') or (s = '.webp') then
+      if (s = '.jpg') or (s = '.jpeg') or (s = '.webp') or (s = '.gif') or
+        (s = '.bmp') then
         ListBox1.Items.Add(name);
     end;
     Edit1.Text := ChangeFileExt(ExtractFileName(ListBox1.Items[0]), '');

@@ -11,7 +11,7 @@ uses
   FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
   System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef,
   FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs,
-  FireDAC.Phys.SQLiteWrapper.Stat, IniFiles;
+  FireDAC.Phys.SQLiteWrapper.Stat, IniFiles, System.Variants;
 
 type
   TMap = record
@@ -27,12 +27,12 @@ type
     FDTable1IMAGE: TBlobField;
     FDTable2JPEG: TBlobField;
     FDQuery2: TFDQuery;
-    FDTable2name: TWideStringField;
-    FDTable2file: TWideStringField;
     FDTable1sub: TIntegerField;
     FDTable2page: TIntegerField;
     FDTable2double: TIntegerField;
-    FDTable2toppage: TBooleanField;
+    FDTable2toppage: TIntegerField;
+    FDTable2name: TWideStringField;
+    FDTable2file: TWideStringField;
     procedure FDTable1AfterScroll(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
@@ -72,7 +72,7 @@ begin
     'template.sdb';
   FDConnection2.Open;
   FDQuery2.ExecSQL
-    ('create table if not exists "TABLE"(id integer, name nvarchar(255), file nvarchar(255), jpeg blob, "DOUBLE" integer, "PAGE" integer, toppage integer);');
+    ('create table if not exists "TABLE"(id integer, name varchar(255), file varchar(255), jpeg blob, "DOUBLE" integer, "PAGE" integer, toppage integer);');
   FDTable2.Open;
   if Assigned(Form1) then
   begin
@@ -139,17 +139,18 @@ end;
 
 function TDataModule4.LoadAllFile: Boolean;
 var
-  id, pg: integer;
+  id, DB, toppage: integer;
   fn, nm: string;
   jpg: TBitmap;
-  DB, toppage: Boolean;
 begin
   result := Form5.ListBox1.Count > 0;
   if not result then
     Exit;
   repeat
     fn := randomName;
-  until not FDTable2.Locate('file', fn);
+  until VarIsNull(FDTable2.Lookup('file', fn, 'name'));
+  FDTable1.Close;
+  FDTable1.TableName := fn;
   FDQuery2.ExecSQL
     (Format('CREATE TABLE %s("PAGE" INTEGER,IMAGE BLOB,SUB integer)', [fn]));
   FDTable1.Open;
@@ -174,15 +175,21 @@ begin
   FDQuery2.Execute(FDQuery2.Params.ArraySize);
   jpg := TBitmap.Create;
   try
-    FDQuery2.Open('select max(id) from "TABLE";');
-    id := FDQuery2.Fields[0].asinteger + 1;
+    id := 1;
+    FDQuery2.Open('select max(id) from "TABLE"');
+    if FDTable2.RecordCount > 0 then
+      inc(id, FDQuery2.Fields[0].AsInteger);
     jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
     nm := Form5.Edit1.Text;
-    FDTable1.First;
-    DB := Form1.SpeedButton2.IsPressed;
-    pg := FDTable1.FieldByName('page').asinteger;
-    toppage := Form1.CheckBox2.IsChecked;
-    FDTable2.AppendRecord([id, nm, fn, jpg, DB, pg, toppage]);
+    if Form1.SpeedButton2.IsPressed then
+      DB := 1
+    else
+      DB := 0;
+    if Form1.CheckBox2.IsChecked then
+      toppage := 1
+    else
+      toppage := 0;
+    FDTable2.AppendRecord([id, nm, fn, jpg, DB, 1, toppage]);
   finally
     jpg.Free;
   end;
@@ -206,15 +213,15 @@ begin
   while not FDQuery2.Eof do
   begin
     if rec.Left = 0 then
-      rec.Left := FDQuery2.Fields[0].asinteger
+      rec.Left := FDQuery2.Fields[0].AsInteger
     else
     begin
-      if FDQuery2.Fields[1].asinteger = 1 then
-        rec.Right := FDQuery2.Fields[0].asinteger
+      if FDQuery2.Fields[1].AsInteger = 1 then
+        rec.Right := FDQuery2.Fields[0].AsInteger
       else
       begin
         mapList.Add(rec);
-        rec.Left := FDQuery2.Fields[0].asinteger;
+        rec.Left := FDQuery2.Fields[0].AsInteger;
       end;
       mapList.Add(rec);
       rec.Left := 0;
@@ -222,7 +229,7 @@ begin
       FDQuery2.Next;
       continue;
     end;
-    if FDQuery2.Fields[1].asinteger = 0 then
+    if FDQuery2.Fields[1].AsInteger = 0 then
     begin
       mapList.Add(rec);
       rec.Left := 0;
@@ -240,7 +247,7 @@ begin
   result := '';
   for var i := 1 to 5 do
     result := result + Random(10).ToString;
-  result := ExtractFilePath(ParamStr(0)) + 'tb' + result;
+  result := 'tb' + result;
 end;
 
 procedure TDataModule4.selected(fname: string);
@@ -253,8 +260,8 @@ begin
     FDTable1.CreateTable;
     FDTable1.Open;
     FDTable1.Prepare;
-    FDTable1.Locate('page', FDTable2.FieldByName('page').asinteger);
-    bool := FDTable2.FieldByName('toppage').asinteger = 1;
+    FDTable1.Locate('page', FDTable2.FieldByName('page').AsInteger);
+    bool := FDTable2.FieldByName('toppage').AsInteger = 1;
     map(bool);
     Form1.CheckBox2.IsChecked := bool;
   end;

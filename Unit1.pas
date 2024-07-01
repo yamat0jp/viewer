@@ -82,6 +82,7 @@ type
     Action9: TAction;
     Action10: TAction;
     Action11: TAction;
+    MenuItem7: TMenuItem;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -128,6 +129,7 @@ type
     procedure CheckBox2Change(Sender: TObject);
     procedure RadioButton1Change(Sender: TObject);
     procedure Action11Execute(Sender: TObject);
+    procedure MenuItem7Click(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -189,7 +191,7 @@ end;
 
 procedure TForm1.Action1Execute(Sender: TObject);
 begin
-  if (Form5.ShowModal = mrOK) and (DataModule4.LoadAllFile) then
+  if (Form5.ShowModal = mrOK) and DataModule4.LoadAllFile then
     Action3Execute(Sender);
 end;
 
@@ -211,7 +213,6 @@ begin
   Finalize(rects);
   SetLength(rects, Length(tmp));
   rects := tmp;
-  ScrollBox1.Repaint;
   with DataModule4 do
   begin
     FDTable1.Close;
@@ -219,6 +220,7 @@ begin
     FDTable2.Delete;
     FDQuery2.ExecSQL('drop table ' + FDTable2.FieldByName('file').AsString);
   end;
+  ScrollBox1.Repaint;
 end;
 
 procedure TForm1.Action3Execute(Sender: TObject);
@@ -243,6 +245,11 @@ begin
     while not Eof do
     begin
       s := FieldByName('name').AsString;
+      if s = '' then
+      begin
+        Next;
+        continue;
+      end;
       ListBox1.Items.Add(s);
       item := ImageList1.Source.Add;
       item.Name := s;
@@ -520,6 +527,11 @@ begin
   Close;
 end;
 
+procedure TForm1.MenuItem7Click(Sender: TObject);
+begin
+  ListBox1.Visible:=not ListBox1.Visible;
+end;
+
 procedure TForm1.RadioButton1Change(Sender: TObject);
 begin
   with DataModule4 do
@@ -559,10 +571,10 @@ begin
       ScrollBox1.Repaint;
       Exit;
     end;
+  ListBox1.ItemIndex := -1;
   if rectIndex > -1 then
   begin
     rectIndex := -1;
-    ListBox1.ItemIndex := -1;
     ScrollBox1.Hint := '';
     ScrollBox1.Repaint;
   end;
