@@ -92,7 +92,6 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SpeedButton2Click(Sender: TObject);
-    procedure Action5Execute(Sender: TObject);
     procedure TrackBar1Change(Sender: TObject);
     procedure TrackBar1KeyUp(Sender: TObject; var Key: Word; var KeyChar: Char;
       Shift: TShiftState);
@@ -131,6 +130,7 @@ type
     procedure Action11Execute(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
     procedure PopupMenu1Popup(Sender: TObject);
+    procedure Action5Execute(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -202,16 +202,15 @@ var
   id: Integer;
   tmp: TArray<TRectF>;
 begin
+  s := ListBox1.Items[ListBox1.ItemIndex];
+  id := ImageList1.Source.IndexOf(s);
+  ListBox1.Items.Delete(ListBox1.ItemIndex);
+  ImageList1.Source.Delete(id);
+  ImageList1.Destination.Delete(id);
   with DataModule4 do
   begin
-    FDConnection1.Close;
-    s := ListBox1.Items[ListBox1.ItemIndex];
-    id := ImageList1.Source.IndexOf(s);
-    ListBox1.Items.Delete(ListBox1.ItemIndex);
-    ImageList1.Source.Delete(id);
-    ImageList1.Destination.Delete(id);
     FDTable2.Locate('name', s);
-    DeleteFile(FDTable2.FieldByName('file').AsString);
+    FDQuery2.ExecSQL('drop table ' + FDTable2.FieldByName('file').AsString);
     FDTable2.Delete;
   end;
   tmp := [];
@@ -290,15 +289,14 @@ var
   ch: Integer;
 begin
   ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
-  with DataModule4.FDTable4 do
-    if DataModule4.FDTable1.Active then
-    begin
-      Edit;
-      FieldByName('page').AsInteger := ch;
-      FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
-      FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
-      Post;
-    end;
+  with DataModule4.FDTable2 do
+  begin
+    Edit;
+    FieldByName('page').AsInteger := ch;
+    FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
+    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
+    Post;
+  end;
 end;
 
 procedure TForm1.Action6Execute(Sender: TObject);
@@ -353,16 +351,12 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  with DataModule4.FDTable3 do
-    if (Edit1.Text <> Edit2.Text) and (Edit1.Text = FieldByName('pwd').AsString)
-    then
-    begin
-      Edit;
-      FieldByName('pwd').AsString := Edit2.Text;
-      Post;
-      Showmessage('Assigned New Password');
-      Edit1.Text := '';
-    end;
+  if (Edit1.Text <> Edit2.Text) and (Edit1.Text = DataModule4.pwd) then
+  begin
+    DataModule4.pwd := Edit2.Text;
+    Showmessage('Assigned New Password');
+    Edit1.Text := '';
+  end;
   Edit2.Text := '';
 end;
 
@@ -371,7 +365,7 @@ var
   cnt: Integer;
   bool: Boolean;
 begin
-  with DataModule4.FDTable4 do
+  with DataModule4.FDTable2 do
   begin
     Edit;
     FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
@@ -516,7 +510,7 @@ end;
 
 procedure TForm1.MenuItem7Click(Sender: TObject);
 begin
-  ListBox1.Visible:=not ListBox1.Visible;
+  ListBox1.Visible := not ListBox1.Visible;
 end;
 
 procedure TForm1.PopupMenu1Popup(Sender: TObject);
@@ -526,19 +520,14 @@ end;
 
 procedure TForm1.RadioButton1Change(Sender: TObject);
 begin
-  with DataModule4.FDTable3 do
-  begin
-    Edit;
-    FieldByName('reverse').AsBoolean := Sender = RadioButton2;
-    Post;
-  end;
   with DataModule4 do
     if FDTable1.Active then
     begin
-      FDTable4.Edit;
-      FDTable4.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
+      FDTable2.Edit;
+      FDTable2.FieldByName('reverse').AsBoolean := Sender = RadioButton2;
+      FDTable2.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
         .AsInteger;
-      FDTable4.Post;
+      FDTable2.Post;
     end;
 end;
 
@@ -600,7 +589,7 @@ procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
   ch: Integer;
 begin
-  with DataModule4.FDTable4 do
+  with DataModule4.FDTable2 do
   begin
     Edit;
     FieldByName('double').AsBoolean := SpeedButton2.IsPressed;

@@ -38,7 +38,7 @@ end;
 
 procedure TForm6.FormCreate(Sender: TObject);
 begin
-  pwd := DataModule4.FDTable3.FieldByName('pwd').AsString;
+  pwd := DataModule4.pwd;
   Edit1.SetFocus;
 end;
 
