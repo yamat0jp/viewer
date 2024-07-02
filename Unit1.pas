@@ -126,7 +126,6 @@ type
       X, Y: Single);
     procedure Action10Execute(Sender: TObject);
     procedure CheckBox2Change(Sender: TObject);
-    procedure RadioButton1Change(Sender: TObject);
     procedure Action11Execute(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
     procedure PopupMenu1Popup(Sender: TObject);
@@ -346,7 +345,10 @@ begin
     max := DataModule4.FDTable1.RecordCount;
   if RadioButton2.IsChecked then
     ch := max - ch + 1;
-  TrackBar1.Value := ch;
+  if ch = TrackBar1.Value then
+    TrackBar1Change(TrackBar1)
+  else
+    TrackBar1.Value := ch;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -518,19 +520,6 @@ begin
   MenuItem15.Enabled := ListBox1.ItemIndex > -1;
 end;
 
-procedure TForm1.RadioButton1Change(Sender: TObject);
-begin
-  with DataModule4 do
-    if FDTable1.Active then
-    begin
-      FDTable2.Edit;
-      FDTable2.FieldByName('reverse').AsBoolean := Sender = RadioButton2;
-      FDTable2.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
-        .AsInteger;
-      FDTable2.Post;
-    end;
-end;
-
 procedure TForm1.ScrollBox1Click(Sender: TObject);
 var
   s: string;
@@ -600,8 +589,8 @@ begin
   ch := Round(TrackBar1.Value);
   if SpeedButton2.IsPressed then
   begin
-    TrackBar1.Value := DataModule4.doublePage(ch);
     TrackBar1.max := DataModule4.mapList.Count;
+    TrackBar1.Value := DataModule4.doublePage(ch);
   end
   else
   begin

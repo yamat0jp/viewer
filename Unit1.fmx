@@ -676,7 +676,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 33304.000000000000000000
+          Position.X = 34018.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -835,6 +835,9 @@ object Form1: TForm1
           #12496#12540#12472#12519#12531
           'ver 1.0'
           ''
+          'Delphi 11 CE'
+          'InterBase toGo'
+          ''
           ''
           #35613#36766
           ''
@@ -936,7 +939,6 @@ object Form1: TForm1
         Position.Y = 176.000000000000000000
         TabOrder = 5
         Text = #24038#12363#12425#12402#12425#12367
-        OnChange = RadioButton1Change
       end
       object RadioButton2: TRadioButton
         GroupName = 'selection'
@@ -944,7 +946,6 @@ object Form1: TForm1
         Position.Y = 224.000000000000000000
         TabOrder = 6
         Text = #21491#12363#12425#12402#12425#12367
-        OnChange = RadioButton1Change
       end
     end
   end

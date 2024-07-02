@@ -149,7 +149,7 @@ begin
   until not FDTable2.Locate('file', fn);
   FDQuery2.ExecSQL
     (Format('CREATE TABLE %s("PAGE" INTEGER,IMAGE BLOB,SUB BOOLEAN);', [fn]));
-  FDTable1.TableName:=fn;
+  FDTable1.TableName := fn;
   FDTable1.Open;
   FDQuery2.SQL.Text :=
     Format('insert into %s("PAGE", image, sub) values(:page_id, :image, :subimage)',
@@ -187,7 +187,8 @@ var
   rec: TMap;
 begin
   mapList.Clear;
-  FDQuery2.Open('select "PAGE", sub from main;');
+  FDQuery2.Open('select "PAGE", sub from ' + FDTable2.FieldByName('file')
+    .AsString);
   rec.Left := 0;
   rec.Right := 0;
   if toppage then
@@ -243,7 +244,8 @@ var
 begin
   if FDTable2.Locate('name', fname) then
   begin
-    FDTable1.TableName:=FDTable2.FieldByName('file').AsString;
+    FDTable1.Close;
+    FDTable1.TableName := FDTable2.FieldByName('file').AsString;
     FDTable1.Open;
     FDTable1.Prepare;
     FDTable1.Locate('page', FDTable2.FieldByName('page').AsInteger);
