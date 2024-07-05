@@ -106,7 +106,6 @@ type
       const ARect: TRectF);
     procedure SpeedButton1Click(Sender: TObject);
     procedure Action3Execute(Sender: TObject);
-    procedure ScrollBox1Resize(Sender: TObject);
     procedure ScrollBox1Click(Sender: TObject);
     procedure ListBox1DblClick(Sender: TObject);
     procedure Image3MouseMove(Sender: TObject; Shift: TShiftState;
@@ -130,6 +129,7 @@ type
     procedure MenuItem7Click(Sender: TObject);
     procedure PopupMenu1Popup(Sender: TObject);
     procedure Action5Execute(Sender: TObject);
+    procedure ScrollBox1Resized(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -192,7 +192,7 @@ end;
 procedure TForm1.Action1Execute(Sender: TObject);
 begin
   if (Form5.ShowModal = mrOK) and (DataModule4.LoadAllFile) then
-    Action3Execute(Sender);
+    Action3Execute(nil);
 end;
 
 procedure TForm1.Action2Execute(Sender: TObject);
@@ -224,7 +224,6 @@ end;
 
 procedure TForm1.Action3Execute(Sender: TObject);
 var
-  cnt: Integer;
   s: string;
   max: Single;
   src, dst: TRectF;
@@ -235,11 +234,10 @@ begin
   ListBox1.Items.Clear;
   ImageList1.Source.Clear;
   ImageList1.Destination.Clear;
-  cnt := 0;
   dst := RectF(0, 50, 0, 0);
   with DataModule4.FDTable2 do
   begin
-    SetLength(rects, RecordCount);
+    rects := [];
     First;
     while not Eof do
     begin
@@ -263,9 +261,8 @@ begin
         dst.Width := 100;
         dst.Height := 100;
       end;
-      rects[cnt] := dst;
+      rects := rects + [dst];
       Next;
-      inc(cnt);
     end;
   end;
   ScrollBox1.Repaint;
@@ -563,9 +560,9 @@ begin
     ImageList1.Draw(Canvas, rects[i], i);
 end;
 
-procedure TForm1.ScrollBox1Resize(Sender: TObject);
+procedure TForm1.ScrollBox1Resized(Sender: TObject);
 begin
-  if Assigned(DataModule4.FDTable2) then
+  if Assigned(DataModule4) then
     Action3Execute(nil);
 end;
 

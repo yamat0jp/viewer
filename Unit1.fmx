@@ -66,7 +66,7 @@ object Form1: TForm1
         ParentShowHint = False
         ShowHint = True
         OnPaint = ScrollBox1Paint
-        OnResize = ScrollBox1Resize
+        OnResized = ScrollBox1Resized
         OnClick = ScrollBox1Click
         OnMouseMove = ScrollBox1MouseMove
         Viewport.Width = 764.000000000000000000
@@ -676,7 +676,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 34018.000000000000000000
+          Position.X = 35446.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end

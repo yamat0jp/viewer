@@ -64,6 +64,8 @@ object DataModule4: TDataModule4
       'Password=masterkey'
       'CharacterSet=UTF8'
       'OpenMode=OpenOrCreate'
+      'Port=3050'
+      'Protocol=TCPIP'
       'DriverID=IB')
     LoginPrompt = False
     Left = 72

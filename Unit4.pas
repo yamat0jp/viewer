@@ -66,8 +66,11 @@ var
 begin
   mapList := TList<TMap>.Create;
   image := TBitmap.Create;
-  FDConnection2.Params.Database := ExtractFilePath(ParamStr(0)) + 'LITE.IB';
-  FDConnection2.Open;
+  if not FDConnection2.Connected then
+  begin
+    FDConnection2.Params.Database := ExtractFilePath(ParamStr(0)) + 'LITE.IB';
+    FDConnection2.Open;
+  end;
   if not FDTable2.Exists then
     FDTable2.CreateTable(false);
   FDTable2.Open;
@@ -149,6 +152,7 @@ begin
   until not FDTable2.Locate('file', fn);
   FDQuery2.ExecSQL
     (Format('CREATE TABLE %s("PAGE" INTEGER,IMAGE BLOB,SUB BOOLEAN);', [fn]));
+  FDTable1.Close;
   FDTable1.TableName := fn;
   FDTable1.Open;
   FDQuery2.SQL.Text :=
