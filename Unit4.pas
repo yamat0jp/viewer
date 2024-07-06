@@ -9,7 +9,7 @@ uses
   FireDAC.Phys.IBLiteDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
-  System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef, IniFiles;
+  System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef, System.Win.Registry;
 
 type
   TMap = record
@@ -61,7 +61,7 @@ uses Unit1, Unit5, Thread;
 
 procedure TDataModule4.DataModuleCreate(Sender: TObject);
 var
-  ini: TIniFile;
+  ini: TRegistryIniFile;
   num: integer;
 begin
   mapList := TList<TMap>.Create;
@@ -77,7 +77,7 @@ begin
   if Assigned(Form1) then
   begin
     Form1.ScrollBox1.Repaint;
-    ini := TIniFile.Create('LITE.INI');
+    ini := TRegistryIniFile.Create('Software\Viewer');
     try
       Form1.CheckBox1.IsChecked := ini.ReadBool('view', 'stay', false);
       num := ini.ReadInteger('view', 'interval', 10);
@@ -92,13 +92,13 @@ end;
 
 procedure TDataModule4.DataModuleDestroy(Sender: TObject);
 var
-  ini: TIniFile;
+  ini: TRegistryIniFile;
 begin
   mapList.Free;
   image.Free;
   if Assigned(Form1) then
   begin
-    ini := TIniFile.Create('LITE.INI');
+    ini := TRegistryIniFile.Create('Software\Viewer');
     try
       ini.WriteBool('view', 'stay', Form1.CheckBox1.IsChecked);
       ini.WriteBool('view', 'reverse', Form1.RadioButton2.IsChecked);
@@ -252,7 +252,8 @@ begin
     FDTable1.TableName := FDTable2.FieldByName('file').AsString;
     FDTable1.Open;
     FDTable1.Prepare;
-    FDTable1.Locate('page', FDTable2.FieldByName('page').AsInteger);
+    if not FDTable1.Locate('page', FDTable2.FieldByName('page').AsInteger) then
+      FDTable1.First;
     bool := FDTable2.FieldByName('toppage').AsBoolean;
     map(bool);
     Form1.CheckBox2.IsChecked := bool;

@@ -1,6 +1,6 @@
 program Viewer;
 
-{$R *.dres}
+
 
 uses
   System.StartUpCopy,
