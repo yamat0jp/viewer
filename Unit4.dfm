@@ -1,15 +1,17 @@
 object DataModule4: TDataModule4
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Height = 480
-  Width = 640
+  Height = 403
+  Width = 418
   object FDConnection1: TFDConnection
     Params.Strings = (
       'User_Name=sysdba'
       'Password=masterkey'
-      'OpenMode=OpenOrCreate'
+      'Protocol=TCPIP'
+      'Port=3050'
       'CharacterSet=UTF8'
-      'DriverID=IBLite')
+      'OpenMode=OpenOrCreate'
+      'DriverID=IB')
     LoginPrompt = False
     Left = 152
     Top = 128
@@ -60,58 +62,28 @@ object DataModule4: TDataModule4
       FieldName = 'JPEG'
       Origin = 'JPEG'
     end
+    object FDTable2double: TBooleanField
+      FieldName = 'double'
+    end
+    object FDTable2page: TIntegerField
+      FieldName = 'page'
+    end
+    object FDTable2toppage: TBooleanField
+      FieldName = 'toppage'
+    end
   end
   object FDConnection2: TFDConnection
     Params.Strings = (
       'User_Name=sysdba'
       'Password=masterkey'
+      'Protocol=TCPIP'
+      'Port=3050'
       'CharacterSet=UTF8'
       'OpenMode=OpenOrCreate'
-      'DriverID=IBLite')
+      'DriverID=IB')
     LoginPrompt = False
     Left = 264
     Top = 128
-  end
-  object FDTable3: TFDTable
-    Connection = FDConnection2
-    ResourceOptions.AssignedValues = [rvEscapeExpand]
-    TableName = 'PROFILE'
-    Left = 152
-    Top = 384
-    object FDTable3STAY: TBooleanField
-      FieldName = 'STAY'
-      Origin = 'STAY'
-    end
-    object FDTable3interval: TIntegerField
-      FieldName = 'interval'
-    end
-    object FDTable3REVERSE: TBooleanField
-      FieldName = 'REVERSE'
-      Origin = 'REVERSE'
-    end
-    object FDTable3pwd: TWideStringField
-      FieldName = 'pwd'
-      Size = 0
-    end
-  end
-  object FDTable4: TFDTable
-    Connection = FDConnection1
-    ResourceOptions.AssignedValues = [rvEscapeExpand]
-    TableName = 'INFO'
-    Left = 264
-    Top = 216
-    object FDTable4DOUBLE: TBooleanField
-      FieldName = 'DOUBLE'
-      Origin = '"DOUBLE"'
-    end
-    object FDTable4PAGE: TIntegerField
-      FieldName = 'PAGE'
-      Origin = '"PAGE"'
-    end
-    object FDTable4TOPPAGE: TBooleanField
-      FieldName = 'TOPPAGE'
-      Origin = 'TOPPAGE'
-    end
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1

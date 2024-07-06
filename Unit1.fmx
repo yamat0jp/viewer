@@ -11,6 +11,7 @@ object Form1: TForm1
   OnActivate = Action3Execute
   OnCreate = FormCreate
   OnClose = FormClose
+  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
   object TabControl1: TTabControl
     Align = Client
@@ -676,7 +677,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 34018.000000000000000000
+          Position.X = 34732.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -1072,7 +1073,6 @@ object Form1: TForm1
     end
   end
   object BindSourceDB1: TBindSourceDB
-    DataSet = DataModule4.FDTable3
     ScopeMappings = <>
     Left = 24
     Top = 104

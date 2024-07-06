@@ -12,7 +12,7 @@ uses
   FMX.EditBox, FMX.SpinBox, FMX.Ani, FMX.Objects, System.Actions,
   FMX.ActnList,
   System.Rtti, System.Bindings.Outputs, FMX.Bind.Editors,
-  Data.Bind.EngExt,
+  Data.Bind.EngExt, Win.Registry,
   FMX.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope, Data.DB,
   System.ImageList, FMX.ImgList;
 
@@ -130,6 +130,7 @@ type
     procedure RadioButton1Change(Sender: TObject);
     procedure Action11Execute(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -281,6 +282,12 @@ begin
   finally
     Form3.Hide;
   end;
+  with DataModule4.FDTable2 do
+  begin
+    SpeedButton2.IsPressed:=FieldByName('double').AsBoolean;
+    TrackBar1.Value:=FieldByName('page').AsInteger;
+    CheckBox2.IsChecked:=FieldByName('toppage').AsBoolean;
+  end;
   TabControl1.TabIndex := 1;
 end;
 
@@ -289,8 +296,8 @@ var
   ch: Integer;
 begin
   ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
-  with DataModule4.FDTable4 do
-    if DataModule4.FDTable1.Active then
+  with DataModule4.FDTable2 do
+    if Locate('page',ch) then
     begin
       Edit;
       FieldByName('page').AsInteger := ch;
@@ -354,20 +361,13 @@ begin
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
-var
-  s: string;
 begin
-  with DataModule4.FDTable3 do
-    if (Edit1.Text <> Edit2.Text) and (Edit1.Text = FieldByName('pwd').AsString)
-    then
-    begin
-      s := Edit2.Text;
-      Edit;
-      FieldByName('pwd').AsString := s;
-      Post;
-      Showmessage('Assigned with New Password');
-      Edit1.Text := '';
-    end;
+  if (Edit1.Text <> Edit2.Text) and (Edit1.Text = DataModule4.pwd) then
+  begin
+    DataModule4.pwd := Edit2.Text;
+    Showmessage('Assigned with New Password');
+    Edit1.Text := '';
+  end;
   Edit2.Text := '';
 end;
 
@@ -376,12 +376,6 @@ var
   cnt: Integer;
   bool: Boolean;
 begin
-  with DataModule4.FDTable4 do
-  begin
-    Edit;
-    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
-    Post;
-  end;
   DataModule4.map(CheckBox2.IsChecked);
   if SpeedButton2.IsPressed then
   begin
@@ -400,11 +394,38 @@ begin
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
+var
+  ini: TRegistryIniFile;
+  num: Integer;
 begin
   Image1.Width := Panel1.Width / 2;
   Image2.Position.X := Panel1.Width / 2;
   rectIndex := -1;
   process := false;
+  ini := TRegistryIniFile.Create('Software\' + 'View');
+  try
+    CheckBox1.IsChecked := ini.ReadBool('view', 'stay', false);
+    num := ini.ReadInteger('view', 'interval', 10);
+    RadioButton2.IsChecked := ini.ReadBool('view', 'reverse', false);
+  finally
+    ini.Free;
+  end;
+  Timer1.Interval := 1000 * num;
+  SpinBox1.Value := num;
+end;
+
+procedure TForm1.FormDestroy(Sender: TObject);
+var
+  ini: TRegistryIniFile;
+begin
+  ini := TRegistryIniFile.Create('Software\' + 'View');
+  try
+    ini.WriteBool('view', 'stay', CheckBox1.IsChecked);
+    ini.WriteInteger('view', 'interval', Timer1.Interval div 1000);
+    ini.WriteBool('view', 'reverse', RadioButton2.IsChecked);
+  finally
+    ini.Free;
+  end;
 end;
 
 procedure TForm1.Image1MouseMove(Sender: TObject; Shift: TShiftState;
@@ -526,20 +547,15 @@ end;
 
 procedure TForm1.RadioButton1Change(Sender: TObject);
 begin
-  with DataModule4.FDTable3 do
-  begin
-    Edit;
-    FieldByName('reverse').AsBoolean := Sender = RadioButton2;
-    Post;
-  end;
-  with DataModule4 do
+  {
+    with DataModule4 do
     if FDTable1.Active then
     begin
-      FDTable4.Edit;
-      FDTable4.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
-        .AsInteger;
-      FDTable4.Post;
-    end;
+    FDTable2.Edit;
+    FDTable2.FieldByName('page').AsInteger := FDTable1.FieldByName('page')
+    .AsInteger;
+    FDTable2.Post;
+    end; }
 end;
 
 procedure TForm1.ScrollBox1Click(Sender: TObject);
@@ -600,12 +616,6 @@ procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
   ch: Integer;
 begin
-  with DataModule4.FDTable4 do
-  begin
-    Edit;
-    FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
-    Post;
-  end;
   Panel1.Visible := SpeedButton2.IsPressed;
   Image3.Visible := not Panel1.Visible;
   ch := Round(TrackBar1.Value);

@@ -9,7 +9,7 @@ uses
   FireDAC.Phys.IBLiteDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
-  System.Generics.Collections, System.Threading;
+  System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef;
 
 type
   TMap = record
@@ -23,22 +23,16 @@ type
     FDConnection2: TFDConnection;
     FDTable2ID: TIntegerField;
     FDTable2NAME: TWideStringField;
-    FDTable3: TFDTable;
-    FDTable3STAY: TBooleanField;
     FDTable2FILE: TWideStringField;
-    FDTable4: TFDTable;
-    FDTable4DOUBLE: TBooleanField;
-    FDTable4PAGE: TIntegerField;
     FDTable1PAGE: TIntegerField;
     FDTable1IMAGE: TBlobField;
     FDTable2JPEG: TBlobField;
     FDTable1SUB: TBooleanField;
-    FDTable3REVERSE: TBooleanField;
     FDQuery1: TFDQuery;
-    FDTable4TOPPAGE: TBooleanField;
     FDQuery2: TFDQuery;
-    FDTable3interval: TIntegerField;
-    FDTable3pwd: TWideStringField;
+    FDTable2double: TBooleanField;
+    FDTable2page: TIntegerField;
+    FDTable2toppage: TBooleanField;
     procedure FDTable1AfterScroll(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
@@ -49,6 +43,7 @@ type
     { Public êÈåæ }
     image: TBitmap;
     mapList: TList<TMap>;
+    pwd: string;
     procedure map(toppage: Boolean);
     procedure selected(fname: string);
     function LoadAllFile: Boolean;
@@ -74,31 +69,28 @@ begin
   FDConnection2.Open;
   if not FDTable2.Exists then
     FDTable2.CreateTable(false);
-  if not FDTable3.Exists then
-    FDQuery2.ExecSQL
-      ('create table profile(stay boolean, interval integer, reverse boolean, pwd varchar(64));');
   FDTable2.Open;
-  FDTable3.Open;
   if Assigned(Form1) then
   begin
     Form1.ScrollBox1.Repaint;
-    Form1.CheckBox1.IsChecked := FDTable3.FieldByName('stay').AsBoolean;
-    Form1.Timer1.Interval := 1000 * FDTable3.FieldByName('interval').AsInteger;
+    Form1.CheckBox1.IsChecked := FDTable2.FieldByName('stay').AsBoolean;
+    Form1.Timer1.Interval := 1000 * FDTable2.FieldByName('interval').AsInteger;
     Form1.SpinBox1.Value := Form1.SpinBox1.Value;
-    Form1.RadioButton2.IsChecked := FDTable3.FieldByName('reverse').AsBoolean;
+    Form1.RadioButton2.IsChecked := FDTable2.FieldByName('reverse').AsBoolean;
   end;
 end;
 
 procedure TDataModule4.DataModuleDestroy(Sender: TObject);
+
 begin
   mapList.Free;
   image.Free;
   if Assigned(Form1) then
   begin
-    FDTable3.Edit;
-    FDTable3.FieldByName('stay').AsBoolean := Form1.CheckBox1.IsChecked;
-    FDTable3.FieldByName('reverse').AsBoolean := Form1.RadioButton2.IsChecked;
-    FDTable3.Post;
+    FDTable2.Edit;
+    FDTable2.FieldByName('stay').AsBoolean := Form1.CheckBox1.IsChecked;
+    FDTable2.FieldByName('reverse').AsBoolean := Form1.RadioButton2.IsChecked;
+    FDTable2.Post;
   end;
 end;
 
@@ -135,6 +127,7 @@ var
   id: integer;
   fn, nm: string;
   jpg: TBitmap;
+  DB, tp: Boolean;
 begin
   result := Form5.ListBox1.Count > 0;
   if not result then
@@ -149,7 +142,6 @@ begin
   FDQuery1.ExecSQL
     ('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER, TOPPAGE BOOLEAN);');
   FDTable1.Open;
-  FDTable4.Open;
   FDQuery1.SQL.Text :=
     'insert into main("PAGE", image, sub) values(:page_id, :image, :subimage)';
   FDQuery1.Params.ArraySize := Form5.ListBox1.Count;
@@ -172,12 +164,9 @@ begin
     jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
     nm := Form5.Edit1.Text;
     FDTable1.First;
-    FDTable2.AppendRecord([id, nm, fn, jpg]);
-    FDTable4.Edit;
-    FDTable4.FieldByName('double').AsBoolean := Form1.SpeedButton2.IsPressed;
-    FDTable4.FieldByName('page').AsInteger := 1;
-    FDTable4.FieldByName('toppage').AsBoolean := Form1.CheckBox2.IsChecked;
-    FDTable4.Post;
+    DB := Form1.SpeedButton2.IsPressed;
+    tp := Form1.CheckBox2.IsChecked;
+    FDTable2.AppendRecord([id, nm, fn, jpg, DB, 1, tp]);
   finally
     jpg.Free;
   end;
@@ -239,8 +228,6 @@ begin
 end;
 
 procedure TDataModule4.selected(fname: string);
-var
-  bool: Boolean;
 begin
   if FDTable2.Locate('name', fname) then
   begin
@@ -248,12 +235,9 @@ begin
     FDConnection1.Params.Database := FDTable2.FieldByName('file').AsString;
     FDConnection1.Open;
     FDTable1.Open;
-    FDTable4.Open;
     FDTable1.Prepare;
-    FDTable1.Locate('page', FDTable4.FieldByName('page').AsInteger);
-    bool := FDTable4.FieldByName('toppage').AsBoolean;
-    map(bool);
-    Form1.CheckBox2.IsChecked := bool;
+    FDTable1.Locate('page', FDTable2.FieldByName('page').AsInteger);
+    map(FDTable2.FieldByName('toppage').AsBoolean);
   end;
 end;
 
