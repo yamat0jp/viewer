@@ -252,11 +252,7 @@ begin
     FDTable1.TableName := FDTable2.FieldByName('file').AsString;
     FDTable1.Open;
     FDTable1.Prepare;
-    if not FDTable1.Locate('page', FDTable2.FieldByName('page').AsInteger) then
-      FDTable1.First;
-    bool := FDTable2.FieldByName('toppage').AsBoolean;
-    map(bool);
-    Form1.CheckBox2.IsChecked := bool;
+    map(FDTable2.FieldByName('toppage').AsBoolean);
   end;
 end;
 

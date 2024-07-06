@@ -274,6 +274,12 @@ begin
   try
     Application.ProcessMessages;
     DataModule4.selected(PChar(Sender));
+    with DataModule4.FDTable2 do
+    begin
+      CheckBox2.IsChecked := FieldByName('toppage').AsBoolean;
+      SpeedButton2.IsPressed := FieldByName('double').AsBoolean;
+      TrackBar1.Value := FieldByName('page').AsInteger;
+    end;
   finally
     Form3.Hide;
   end;
@@ -282,17 +288,18 @@ end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
 var
-  ch: Integer;
+  s: string;
 begin
-  ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
+  s := DataModule4.FDTable1.TableName;
   with DataModule4.FDTable2 do
-  begin
-    Edit;
-    FieldByName('page').AsInteger := ch;
-    FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
-    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
-    Post;
-  end;
+    if Locate('file', s) then
+    begin
+      Edit;
+      FieldByName('page').AsInteger := Round(TrackBar1.Value);
+      FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
+      FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
+      Post;
+    end;
 end;
 
 procedure TForm1.Action6Execute(Sender: TObject);
@@ -364,12 +371,6 @@ var
   cnt: Integer;
   bool: Boolean;
 begin
-  with DataModule4.FDTable2 do
-  begin
-    Edit;
-    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
-    Post;
-  end;
   DataModule4.map(CheckBox2.IsChecked);
   if SpeedButton2.IsPressed then
   begin
@@ -575,12 +576,6 @@ procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
   ch: Integer;
 begin
-  with DataModule4.FDTable2 do
-  begin
-    Edit;
-    FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
-    Post;
-  end;
   Panel1.Visible := SpeedButton2.IsPressed;
   Image3.Visible := not Panel1.Visible;
   ch := Round(TrackBar1.Value);
