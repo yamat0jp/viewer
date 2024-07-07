@@ -299,14 +299,13 @@ end;
 procedure TForm1.Action5Execute(Sender: TObject);
 begin
   with DataModule4.FDTable2 do
-    if Locate('file', DataModule4.FDConnection1.Params.Database) then
-    begin
-      Edit;
-      FieldByName('page').AsInteger := Round(TrackBar1.Value);
-      FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
-      FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
-      Post;
-    end;
+  begin
+    Edit;
+    FieldByName('page').AsInteger := Round(TrackBar1.Value);
+    FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
+    FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
+    Post;
+  end;
 end;
 
 procedure TForm1.Action6Execute(Sender: TObject);
