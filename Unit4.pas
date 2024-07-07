@@ -73,25 +73,17 @@ begin
   if Assigned(Form1) then
   begin
     Form1.ScrollBox1.Repaint;
-    Form1.CheckBox1.IsChecked := FDTable2.FieldByName('stay').AsBoolean;
-    Form1.Timer1.Interval := 1000 * FDTable2.FieldByName('interval').AsInteger;
+    Form1.CheckBox1.IsChecked := FDTable2.FieldByName('double').AsBoolean;
+    Form1.Timer1.Interval := 1000 * FDTable2.FieldByName('page').AsInteger;
     Form1.SpinBox1.Value := Form1.SpinBox1.Value;
-    Form1.RadioButton2.IsChecked := FDTable2.FieldByName('reverse').AsBoolean;
+    Form1.RadioButton2.IsChecked := FDTable2.FieldByName('toppage').AsBoolean;
   end;
 end;
 
 procedure TDataModule4.DataModuleDestroy(Sender: TObject);
-
 begin
   mapList.Free;
   image.Free;
-  if Assigned(Form1) then
-  begin
-    FDTable2.Edit;
-    FDTable2.FieldByName('stay').AsBoolean := Form1.CheckBox1.IsChecked;
-    FDTable2.FieldByName('reverse').AsBoolean := Form1.RadioButton2.IsChecked;
-    FDTable2.Post;
-  end;
 end;
 
 function TDataModule4.doublePage(index: integer): integer;
@@ -127,7 +119,6 @@ var
   id: integer;
   fn, nm: string;
   jpg: TBitmap;
-  DB, tp: Boolean;
 begin
   result := Form5.ListBox1.Count > 0;
   if not result then
@@ -139,8 +130,6 @@ begin
   FDConnection1.Params.Database := fn;
   FDConnection1.Open;
   FDQuery1.ExecSQL('CREATE TABLE MAIN("PAGE" INTEGER,IMAGE BLOB,SUB BOOLEAN);');
-  FDQuery1.ExecSQL
-    ('CREATE TABLE INFO("DOUBLE" BOOLEAN,"PAGE" INTEGER, TOPPAGE BOOLEAN);');
   FDTable1.Open;
   FDQuery1.SQL.Text :=
     'insert into main("PAGE", image, sub) values(:page_id, :image, :subimage)';
@@ -164,9 +153,7 @@ begin
     jpg.LoadThumbnailFromFile(Form5.ListBox1.Items[0], 100, 100, false);
     nm := Form5.Edit1.Text;
     FDTable1.First;
-    DB := Form1.SpeedButton2.IsPressed;
-    tp := Form1.CheckBox2.IsChecked;
-    FDTable2.AppendRecord([id, nm, fn, jpg, DB, 1, tp]);
+    FDTable2.AppendRecord([id, nm, fn, jpg, false, 1, false]);
   finally
     jpg.Free;
   end;
@@ -236,7 +223,6 @@ begin
     FDConnection1.Open;
     FDTable1.Open;
     FDTable1.Prepare;
-    FDTable1.Locate('page', FDTable2.FieldByName('page').AsInteger);
     map(FDTable2.FieldByName('toppage').AsBoolean);
   end;
 end;

@@ -93,7 +93,7 @@ Visible=False
 Coordinates=282,427,52,33
 
 [CheckBox1]
-Coordinates=333,10,70,51
+Coordinates=220,100,70,69
 Visible=True
 
 [Timer1]
@@ -129,12 +129,8 @@ Visible=True
 Coordinates=402,216,49,51
 
 []
-Coordinates=850,30,115,123
+Coordinates=138,11,92,51
 ExplicitSubNodes=IsChecked
-Visible=True
-
-[BindSourceDB1]
-Coordinates=138,11,115,177
 Visible=True
 
 [BindingsList1]
@@ -151,7 +147,7 @@ Coordinates=766,55,49,51
 Visible=True
 
 [BindSourceDB4]
-Coordinates=571,10,115,141
+Coordinates=571,10,115,195
 Visible=True
 
 [DataModule4.]
@@ -215,4 +211,10 @@ Coordinates=133,230,130,51
 
 [Action10]
 Coordinates=64,249,57,33
+
+[MenuItem7]
+Coordinates=446,461,68,33
+
+[Action11]
+Coordinates=819,1,57,33
 

@@ -53,15 +53,12 @@ type
     ActionList1: TActionList;
     Action1: TAction;
     Action2: TAction;
-    BindSourceDB1: TBindSourceDB;
     BindingsList1: TBindingsList;
     Action3: TAction;
     Button1: TButton;
-    LinkControlToField2: TLinkControlToField;
     Image4: TImage;
     BindSourceDB4: TBindSourceDB;
     LinkControlToField5: TLinkControlToField;
-    LinkPropertyToFieldEnabled: TLinkPropertyToField;
     ToolBar2: TToolBar;
     SpeedButton2: TSpeedButton;
     Label1: TLabel;
@@ -71,8 +68,6 @@ type
     Action6: TAction;
     ImageList1: TImageList;
     SpeedButton1: TSpeedButton;
-    LinkControlToField1: TLinkControlToField;
-    LinkPropertyToFieldEnabled2: TLinkPropertyToField;
     Label4: TLabel;
     Action7: TAction;
     Action8: TAction;
@@ -83,6 +78,8 @@ type
     Action10: TAction;
     Action11: TAction;
     MenuItem7: TMenuItem;
+    LinkControlToPropertyEnabled: TLinkControlToProperty;
+    LinkControlToPropertyEnabled2: TLinkControlToProperty;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -163,6 +160,8 @@ begin
   begin
     DataModule4.FDTable1.Locate('page', cnt);
     Image3.Bitmap.Assign(DataModule4.image);
+    Panel1.Visible := false;
+    Image3.Visible := true;
   end
   else
   begin
@@ -274,6 +273,8 @@ begin
 end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
+var
+  ch: Integer;
 begin
   Form3.Show;
   try
@@ -284,23 +285,24 @@ begin
   end;
   with DataModule4.FDTable2 do
   begin
-    SpeedButton2.IsPressed:=FieldByName('double').AsBoolean;
-    TrackBar1.Value:=FieldByName('page').AsInteger;
-    CheckBox2.IsChecked:=FieldByName('toppage').AsBoolean;
+    SpeedButton2.IsPressed := FieldByName('double').AsBoolean;
+    ch := FieldByName('page').AsInteger;
+    CheckBox2.IsChecked := FieldByName('toppage').AsBoolean;
   end;
+  if ch = TrackBar1.Value then
+    TrackBar1Change(TrackBar1)
+  else
+    TrackBar1.Value := ch;
   TabControl1.TabIndex := 1;
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
-var
-  ch: Integer;
 begin
-  ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
   with DataModule4.FDTable2 do
-    if Locate('page',ch) then
+    if Locate('file', DataModule4.FDConnection1.Params.Database) then
     begin
       Edit;
-      FieldByName('page').AsInteger := ch;
+      FieldByName('page').AsInteger := Round(TrackBar1.Value);
       FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
       FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
       Post;
@@ -355,7 +357,7 @@ begin
   if RadioButton2.IsChecked then
     ch := max - ch + 1;
   if TrackBar1.Value = ch then
-    TrackBar1Change(nil)
+    TrackBar1Change(TrackBar1)
   else
     TrackBar1.Value := ch;
 end;
@@ -603,7 +605,7 @@ end;
 
 procedure TForm1.ScrollBox1Resize(Sender: TObject);
 begin
-  if Assigned(DataModule4.FDTable2) then
+  if Assigned(DataModule4) then
     Action3Execute(nil);
 end;
 
@@ -642,7 +644,7 @@ begin
       TabControl1.TabIndex := 0;
       Exit;
     end;
-    Action9Execute(Pointer(DataModule4.FDTable1.RecNo));
+    Action9Execute(Pointer(DataModule4.FDTable2.FieldByName('page').AsInteger));
     TrackBar1.SetFocus;
   end
   else
@@ -651,6 +653,8 @@ begin
     Timer1.Enabled := false;
     Action5Execute(nil);
   end;
+  if TabControl1.TabIndex <> 2 then
+    Timer1.Interval := 1000 * Round(SpinBox1.Value);
 end;
 
 procedure TForm1.TabItem2Resize(Sender: TObject);
