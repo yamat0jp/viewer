@@ -9,7 +9,8 @@ uses
   FireDAC.Phys.IBLiteDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, FMX.Graphics, System.ZLib, System.Types, FMX.Objects,
-  System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef, System.Win.Registry;
+  System.Generics.Collections, System.Threading, FireDAC.Phys.IBDef,
+  System.Win.Registry;
 
 type
   TMap = record
@@ -43,7 +44,7 @@ type
     mapList: TList<TMap>;
     pwd: string;
     procedure map(toppage: Boolean);
-    procedure selected(fname: string);
+    function selected(fname: string): integer;
     function LoadAllFile: Boolean;
     function doublePage(index: integer): integer;
     function singlePage(index: integer; Left: Boolean = true): integer;
@@ -242,9 +243,7 @@ begin
   result := 'tb' + result;
 end;
 
-procedure TDataModule4.selected(fname: string);
-var
-  bool: Boolean;
+function TDataModule4.selected(fname: string): integer;
 begin
   if FDTable2.Locate('name', fname) then
   begin
@@ -253,7 +252,10 @@ begin
     FDTable1.Open;
     FDTable1.Prepare;
     map(FDTable2.FieldByName('toppage').AsBoolean);
-  end;
+    result := FDTable2.FieldByName('id').AsInteger;
+  end
+  else
+    result := 0;
 end;
 
 function TDataModule4.singlePage(index: integer; Left: Boolean): integer;

@@ -53,15 +53,12 @@ type
     ActionList1: TActionList;
     Action1: TAction;
     Action2: TAction;
-    BindSourceDB1: TBindSourceDB;
     BindingsList1: TBindingsList;
     Action3: TAction;
     Button1: TButton;
-    LinkControlToField2: TLinkControlToField;
     Image4: TImage;
     BindSourceDB4: TBindSourceDB;
     LinkControlToField5: TLinkControlToField;
-    LinkPropertyToFieldEnabled: TLinkPropertyToField;
     ToolBar2: TToolBar;
     SpeedButton2: TSpeedButton;
     Label1: TLabel;
@@ -71,18 +68,18 @@ type
     Action6: TAction;
     ImageList1: TImageList;
     SpeedButton1: TSpeedButton;
-    LinkControlToField1: TLinkControlToField;
-    LinkPropertyToFieldEnabled2: TLinkPropertyToField;
     Label4: TLabel;
     Action7: TAction;
     Action8: TAction;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     CheckBox2: TCheckBox;
-    Action9: TAction;
     Action10: TAction;
     Action11: TAction;
     MenuItem7: TMenuItem;
+    LinkControlToPropertyEnabled: TLinkControlToProperty;
+    LinkControlToPropertyEnabled2: TLinkControlToProperty;
+    Action9: TAction;
     procedure TabControl1Change(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -118,7 +115,6 @@ type
     procedure Action7Execute(Sender: TObject);
     procedure Action8Execute(Sender: TObject);
     procedure TabItem2Resize(Sender: TObject);
-    procedure Action9Execute(Sender: TObject);
     procedure Image1MouseMove(Sender: TObject; Shift: TShiftState;
       X, Y: Single);
     procedure Image2MouseMove(Sender: TObject; Shift: TShiftState;
@@ -130,6 +126,7 @@ type
     procedure PopupMenu1Popup(Sender: TObject);
     procedure Action5Execute(Sender: TObject);
     procedure ScrollBox1Resized(Sender: TObject);
+    procedure Action9Execute(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -137,6 +134,9 @@ type
     grab: Boolean;
     posCur: TPointF;
     process: Boolean;
+    tbname: string;
+    reverseCount: Integer;
+    function checkReverse(num: Integer): Integer;
   public
     { public êÈåæ }
   end;
@@ -160,12 +160,17 @@ begin
   cnt := Integer(Sender);
   if not SpeedButton2.IsPressed then
   begin
+    TrackBar1.Max := DataModule4.FDTable1.RecordCount;
     DataModule4.FDTable1.Locate('page', cnt);
     Image3.Bitmap.Assign(DataModule4.image);
+    Panel1.Visible := false;
+    Image3.Visible := true;
+    Label3.Text := cnt.ToString;
   end
   else
   begin
     rec := DataModule4.mapList[cnt - 1];
+    TrackBar1.Max := DataModule4.mapList.Count;
     DataModule4.FDTable1.Locate('page', rec.Left);
     if rec.Right = 0 then
     begin
@@ -182,6 +187,7 @@ begin
       Action6Execute(nil);
     end;
   end;
+  Label4.Text := ' / ' + TrackBar1.Max.ToString;
 end;
 
 procedure TForm1.Action11Execute(Sender: TObject);
@@ -225,12 +231,12 @@ end;
 procedure TForm1.Action3Execute(Sender: TObject);
 var
   s: string;
-  max: Single;
+  Max: Single;
   src, dst: TRectF;
   item: TCustomSourceItem;
   layer: TLayer;
 begin
-  max := 0.0;
+  Max := 0.0;
   ListBox1.Items.Clear;
   ImageList1.Source.Clear;
   ImageList1.Destination.Clear;
@@ -253,11 +259,11 @@ begin
       dst.Left := dst.Right + 50;
       dst.Right := dst.Left + src.Width;
       dst.Bottom := dst.Top + src.Height;
-      if max < dst.Bottom then
-        max := dst.Bottom;
+      if Max < dst.Bottom then
+        Max := dst.Bottom;
       if dst.Right + 50 > ScrollBox1.Width then
       begin
-        dst.TopLeft := PointF(50, max + 50);
+        dst.TopLeft := PointF(50, Max + 50);
         dst.Width := 100;
         dst.Height := 100;
       end;
@@ -269,17 +275,20 @@ begin
 end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
+var
+  ch: Integer;
 begin
+  tbname := PChar(Sender);
   Form3.Show;
   try
     Application.ProcessMessages;
-    DataModule4.selected(PChar(Sender));
     with DataModule4.FDTable2 do
-    begin
-      CheckBox2.IsChecked := FieldByName('toppage').AsBoolean;
-      SpeedButton2.IsPressed := FieldByName('double').AsBoolean;
-      TrackBar1.Value := FieldByName('page').AsInteger;
-    end;
+      if Locate('id', DataModule4.selected(tbname)) then
+      begin
+        CheckBox2.IsChecked := FieldByName('toppage').AsBoolean;
+        SpeedButton2.IsPressed := FieldByName('double').AsBoolean;
+        TrackBar1.Value := FieldByName('page').AsInteger;
+      end;
   finally
     Form3.Hide;
   end;
@@ -287,15 +296,13 @@ begin
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
-var
-  s: string;
 begin
-  s := DataModule4.FDTable1.TableName;
   with DataModule4.FDTable2 do
-    if Locate('file', s) then
+    if Locate('name', tbname) then
     begin
       Edit;
-      FieldByName('page').AsInteger := Round(TrackBar1.Value);
+      FieldByName('page').AsInteger := DataModule4.FDTable1.FieldByName('page')
+        .AsInteger;
       FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
       FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
       Post;
@@ -337,20 +344,11 @@ end;
 
 procedure TForm1.Action9Execute(Sender: TObject);
 var
-  ch, max: Integer;
+  ch: integer;
 begin
-  ch := Integer(Sender);
-  if SpeedButton2.IsPressed then
-  begin
-    ch := DataModule4.doublePage(ch);
-    max := DataModule4.mapList.Count;
-  end
-  else
-    max := DataModule4.FDTable1.RecordCount;
-  if RadioButton2.IsChecked then
-    ch := max - ch + 1;
+  ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
   if ch = TrackBar1.Value then
-    TrackBar1Change(TrackBar1)
+    TrackBar1Change(nil)
   else
     TrackBar1.Value := ch;
 end;
@@ -375,11 +373,29 @@ begin
   if SpeedButton2.IsPressed then
   begin
     bool := RadioButton1.IsChecked;
-    TrackBar1.max := DataModule4.mapList.Count;
+    TrackBar1.Max := DataModule4.mapList.Count;
     cnt := DataModule4.singlePage(Round(TrackBar1.Value), bool);
     if not bool then
       cnt := DataModule4.FDTable1.RecordCount - cnt;
     Action10Execute(Pointer(DataModule4.doublePage(cnt)));
+  end;
+end;
+
+function TForm1.checkReverse(num: Integer): Integer;
+begin
+  if not SpeedButton2.IsPressed then
+  begin
+    if RadioButton1.IsChecked then
+      result := num
+    else
+      result := DataModule4.FDTable1.RecordCount - num + 1;
+  end
+  else
+  begin
+    if RadioButton1.IsChecked then
+      result := num
+    else
+      result := DataModule4.mapList.Count - num + 1;
   end;
 end;
 
@@ -581,12 +597,12 @@ begin
   ch := Round(TrackBar1.Value);
   if SpeedButton2.IsPressed then
   begin
-    TrackBar1.max := DataModule4.mapList.Count;
+    TrackBar1.Max := DataModule4.mapList.Count;
     TrackBar1.Value := DataModule4.doublePage(ch);
   end
   else
   begin
-    TrackBar1.max := DataModule4.FDTable1.RecordCount;
+    TrackBar1.Max := DataModule4.FDTable1.RecordCount;
     TrackBar1.Value := DataModule4.singlePage(ch, RadioButton1.IsChecked);
   end;
   if ch = TrackBar1.Value then
@@ -602,7 +618,7 @@ begin
       TabControl1.TabIndex := 0;
       Exit;
     end;
-    Action9Execute(Pointer(DataModule4.FDTable1.RecNo));
+    Action9Execute(nil);
     TrackBar1.SetFocus;
   end
   else
@@ -611,6 +627,8 @@ begin
     Timer1.Enabled := false;
     Action5Execute(nil);
   end;
+  if TabControl1.TabIndex < 2 then
+    Timer1.Interval := 1000 * Round(SpinBox1.Value);
 end;
 
 procedure TForm1.TabItem2Resize(Sender: TObject);
@@ -627,36 +645,15 @@ end;
 
 procedure TForm1.TrackBar1Change(Sender: TObject);
 var
-  num, cnt: Integer;
+  ch: Integer;
 begin
   if process then
     Exit;
-  if Sender = TrackBar1 then
-    cnt := Round(TrackBar1.Value)
-  else
-    cnt := DataModule4.FDTable1.RecNo;
-  if not SpeedButton2.IsPressed then
-  begin
-    if RadioButton1.IsChecked then
-      num := cnt
-    else
-      num := DataModule4.FDTable1.RecordCount - cnt + 1;
-    Label3.Text := num.ToString;
-    TrackBar1.max := DataModule4.FDTable1.RecordCount;
-  end
-  else
-  begin
-    if RadioButton1.IsChecked then
-      num := cnt
-    else
-      num := DataModule4.mapList.Count - cnt + 1;
-    TrackBar1.max := DataModule4.mapList.Count;
-  end;
-  Action10Execute(Pointer(num));
-  Label4.Text := ' / ' + DataModule4.FDTable1.RecordCount.ToString;
+  ch := Round(TrackBar1.Value);
+  Action10Execute(Pointer(ch));
   process := true;
   try
-    TrackBar1.Value := cnt;
+    TrackBar1.Value := checkReverse(ch);
   finally
     process := false;
   end;

@@ -7,6 +7,8 @@ object DataModule4: TDataModule4
     AfterScroll = FDTable1AfterScroll
     IndexFieldNames = 'PAGE'
     Connection = FDConnection2
+    FetchOptions.AssignedValues = [evRowsetSize]
+    FetchOptions.RowsetSize = 5
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     Left = 152
     Top = 104

@@ -1,82 +1,82 @@
 ﻿[MenuItem12]
-Coordinates=229,442,73,33
+Coordinates=465,462,73,33
 
 [ToolBar1]
-Coordinates=714,442,58,33
+Coordinates=202,462,58,33
 
 [TabControl1]
-Coordinates=328,442,74,33
+Coordinates=578,403,74,33
 Visible=True
 
 [MenuItem5]
-Coordinates=292,519,68,33
+Coordinates=772,403,68,33
 
 [TrackBar1]
-Coordinates=397,365,64,51
+Coordinates=303,326,64,51
 Visible=True
 
 [TabItem4]
-Coordinates=629,442,59,33
+Coordinates=380,462,59,33
 Visible=True
 
 [TabItem1]
-Coordinates=663,519,59,33
+Coordinates=10,462,59,33
 Visible=True
 
 [Memo1]
-Coordinates=82,442,49,51
+Coordinates=698,231,49,51
 Visible=True
 
 [MenuItem3]
-Coordinates=386,519,68,33
+Coordinates=484,403,68,33
 
 [TabItem2]
-Coordinates=104,578,59,33
+Coordinates=10,403,59,33
 
 [MenuItem9]
-Coordinates=10,578,68,33
+Coordinates=286,462,68,33
 
 [ListBox1]
-Coordinates=429,10,116,177
+Coordinates=280,10,116,177
 Visible=True
 
 [PopupMenu1]
 Coordinates=94,305,79,33
 
 [MenuItem2]
-Coordinates=10,519,68,33
+Coordinates=390,403,68,33
 
 [MenuItem4]
-Coordinates=748,519,68,33
+Coordinates=678,403,68,33
 
 [ScrollBox1]
-Coordinates=104,519,68,33
+Coordinates=648,462,68,33
 Visible=True
 
 [MenuItem6]
-Coordinates=198,519,68,33
+Coordinates=849,326,68,33
 
 [MenuItem1]
-Coordinates=535,442,68,33
+Coordinates=189,403,68,33
 
 [MainMenu1]
 Coordinates=380,379,70,33
 
 [PassWord]
-Coordinates=10,365,64,51
+Coordinates=536,231,64,51
 
 [Label2]
-Coordinates=616,216,46,51
+Coordinates=612,326,46,51
 
 [Panel1]
-Coordinates=477,216,47,51
+Coordinates=230,326,47,51
 ExplicitSubNodes=Visible
 
 [DataModule4.FDTable1]
-Coordinates=961,170,127,105
+Coordinates=422,10,127,105
 
 [MenuItem15]
-Coordinates=480,519,73,33
+Coordinates=750,326,73,33
 
 [ActionList1]
 Coordinates=588,155,70,33
@@ -89,11 +89,11 @@ Visible=False
 Coordinates=282,427,52,33
 
 [CheckBox1]
-Coordinates=333,10,70,51
+Coordinates=703,10,70,69
 Visible=True
 
 [Timer1]
-Coordinates=10,74,48,51
+Coordinates=575,19,48,51
 Visible=True
 ExplicitSubNodes=Enabled
 
@@ -101,36 +101,32 @@ ExplicitSubNodes=Enabled
 Coordinates=588,265,52,33
 
 [Edit1]
-Coordinates=331,365,40,51
+Coordinates=10,326,40,51
 
 [Edit2]
-Coordinates=550,216,40,51
+Coordinates=684,326,40,51
 
 [SpinBox1]
-Coordinates=338,121,61,69
+Coordinates=853,10,61,69
 Visible=True
 ExplicitSubNodes=Enabled
 
 [Image1]
-Coordinates=688,216,49,51
+Coordinates=461,231,49,51
 
 [Image2]
-Coordinates=100,365,49,51
+Coordinates=386,231,49,51
 
 [Image3]
-Coordinates=487,365,49,51
+Coordinates=465,326,49,51
 Visible=True
 
 [Memo2]
-Coordinates=402,216,49,51
+Coordinates=155,326,49,51
 
 []
-Coordinates=850,30,115,123
+Coordinates=0,134,52,33
 ExplicitSubNodes=IsChecked
-Visible=True
-
-[BindSourceDB1]
-Coordinates=138,11,115,177
 Visible=True
 
 [BindingsList1]
@@ -140,14 +136,14 @@ Coordinates=168,175,82,33
 Coordinates=145,171,52,33
 
 [Button1]
-Coordinates=562,365,53,51
+Coordinates=76,326,53,51
 
 [Image4]
-Coordinates=766,55,49,51
+Coordinates=205,82,49,51
 Visible=True
 
 [BindSourceDB4]
-Coordinates=571,10,115,141
+Coordinates=10,10,115,195
 Visible=True
 
 [DataModule4.]
@@ -155,18 +151,18 @@ Coordinates=175,365,130,51
 Visible=False
 
 [SpeedButton2]
-Coordinates=292,216,84,69
+Coordinates=10,231,84,69
 Visible=True
 ExplicitSubNodes=IsPressed
 
 [ToolBar2]
-Coordinates=579,519,58,33
+Coordinates=564,462,58,33
 
 [Label1]
-Coordinates=157,442,46,51
+Coordinates=626,231,46,51
 
 [Label3]
-Coordinates=10,442,46,51
+Coordinates=540,326,46,51
 
 [Action4]
 Coordinates=37,206,52,33
@@ -181,10 +177,10 @@ Coordinates=218,553,52,33
 Coordinates=740,56,68,33
 
 [SpeedButton1]
-Coordinates=641,365,84,51
+Coordinates=276,231,84,51
 
 [Label4]
-Coordinates=0,0,46,51
+Coordinates=393,326,46,51
 
 [Action7]
 Coordinates=65,1,52,33
@@ -193,20 +189,23 @@ Coordinates=65,1,52,33
 Coordinates=65,53,52,33
 
 [RadioButton1]
-Coordinates=497,320,81,33
+Coordinates=283,403,81,33
 
 [RadioButton2]
-Coordinates=747,215,81,33
+Coordinates=95,462,81,33
 
 [CheckBox2]
-Coordinates=681,293,70,51
-
-[Action9]
-Coordinates=0,134,52,33
+Coordinates=773,231,70,51
 
 [DataModule4.FDQuery2]
-Coordinates=133,230,130,51
+Coordinates=120,231,130,51
 
 [Action10]
 Coordinates=64,249,57,33
+
+[MenuItem7]
+Coordinates=95,403,68,33
+
+[Action11]
+Coordinates=86,163,57,33
 
