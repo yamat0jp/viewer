@@ -127,6 +127,7 @@ type
     procedure Action5Execute(Sender: TObject);
     procedure ScrollBox1Resized(Sender: TObject);
     procedure Action9Execute(Sender: TObject);
+    procedure RadioButton1Change(Sender: TObject);
   private
     { private êÈåæ }
     rects: TArray<TRectF>;
@@ -135,7 +136,6 @@ type
     posCur: TPointF;
     process: Boolean;
     tbname: string;
-    reverseCount: Integer;
     function checkReverse(num: Integer): Integer;
   public
     { public êÈåæ }
@@ -187,7 +187,7 @@ begin
       Action6Execute(nil);
     end;
   end;
-  Label4.Text := ' / ' + TrackBar1.Max.ToString;
+  Label4.Text := ' / ' + DataModule4.FDTable1.RecordCount.ToString;
 end;
 
 procedure TForm1.Action11Execute(Sender: TObject);
@@ -275,8 +275,6 @@ begin
 end;
 
 procedure TForm1.Action4Execute(Sender: TObject);
-var
-  ch: Integer;
 begin
   tbname := PChar(Sender);
   Form3.Show;
@@ -287,7 +285,7 @@ begin
       begin
         CheckBox2.IsChecked := FieldByName('toppage').AsBoolean;
         SpeedButton2.IsPressed := FieldByName('double').AsBoolean;
-        TrackBar1.Value := FieldByName('page').AsInteger;
+        Action9Execute(Pointer(FieldByName('page').AsInteger));
       end;
   finally
     Form3.Hide;
@@ -344,9 +342,12 @@ end;
 
 procedure TForm1.Action9Execute(Sender: TObject);
 var
-  ch: integer;
+  ch: Integer;
 begin
-  ch := DataModule4.FDTable1.FieldByName('page').AsInteger;
+  if SpeedButton2.IsPressed then
+    ch := checkReverse(DataModule4.doublePage(Integer(Sender)))
+  else
+    ch := checkReverse(Integer(Sender));
   if ch = TrackBar1.Value then
     TrackBar1Change(nil)
   else
@@ -534,6 +535,16 @@ begin
   MenuItem15.Enabled := ListBox1.ItemIndex > -1;
 end;
 
+procedure TForm1.RadioButton1Change(Sender: TObject);
+begin
+  process := true;
+  try
+    TrackBar1.Value := checkReverse(Round(TrackBar1.Value));
+  finally
+    process := false;
+  end;
+end;
+
 procedure TForm1.ScrollBox1Click(Sender: TObject);
 var
   s: string;
@@ -618,7 +629,6 @@ begin
       TabControl1.TabIndex := 0;
       Exit;
     end;
-    Action9Execute(nil);
     TrackBar1.SetFocus;
   end
   else
@@ -650,10 +660,10 @@ begin
   if process then
     Exit;
   ch := Round(TrackBar1.Value);
-  Action10Execute(Pointer(ch));
+  Action10Execute(Pointer(checkReverse(ch)));
   process := true;
   try
-    TrackBar1.Value := checkReverse(ch);
+    TrackBar1.Value := ch;
   finally
     process := false;
   end;

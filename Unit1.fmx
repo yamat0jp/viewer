@@ -676,7 +676,7 @@ object Form1: TForm1
           Anchors = [akTop, akRight]
           Enabled = True
           ImageIndex = -1
-          Position.X = 39730.000000000000000000
+          Position.X = 40444.000000000000000000
           Position.Y = 32.000000000000000000
         end
       end
@@ -938,6 +938,7 @@ object Form1: TForm1
         Position.Y = 176.000000000000000000
         TabOrder = 5
         Text = #24038#12363#12425#12402#12425#12367
+        OnChange = RadioButton1Change
       end
       object RadioButton2: TRadioButton
         Position.X = 336.000000000000000000
