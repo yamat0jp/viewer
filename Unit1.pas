@@ -302,6 +302,8 @@ begin
     num := DataModule4.singlePage(tmp, CheckBox2.IsChecked)
   else
     num := tmp;
+  if RadioButton2.IsChecked then
+    num := DataModule4.FDTable1.RecordCount - num + 1;
   with DataModule4.FDTable2 do
     if Locate('name', tbname) then
     begin
