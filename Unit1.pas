@@ -294,13 +294,19 @@ begin
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
+var
+  num, tmp: Integer;
 begin
+  tmp := Round(TrackBar1.Value);
+  if SpeedButton2.IsPressed then
+    num := DataModule4.singlePage(tmp, CheckBox2.IsChecked)
+  else
+    num := tmp;
   with DataModule4.FDTable2 do
     if Locate('name', tbname) then
     begin
       Edit;
-      FieldByName('page').AsInteger := DataModule4.FDTable1.FieldByName('page')
-        .AsInteger;
+      FieldByName('page').AsInteger := num;
       FieldByName('double').AsBoolean := SpeedButton2.IsPressed;
       FieldByName('toppage').AsBoolean := CheckBox2.IsChecked;
       Post;
@@ -536,12 +542,13 @@ begin
 end;
 
 procedure TForm1.RadioButton1Change(Sender: TObject);
+var
+  num: Integer;
 begin
-  process := true;
-  try
-    TrackBar1.Value := checkReverse(Round(TrackBar1.Value));
-  finally
-    process := false;
+  if DataModule4.FDTable1.Active then
+  begin
+    num := Round(TrackBar1.Value);
+    TrackBar1.Value := TrackBar1.Max - num + 1;
   end;
 end;
 

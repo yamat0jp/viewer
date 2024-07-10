@@ -1,8 +1,8 @@
 object DataModule4: TDataModule4
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Height = 279
-  Width = 287
+  Height = 230
+  Width = 251
   object FDTable1: TFDTable
     AfterScroll = FDTable1AfterScroll
     IndexFieldNames = 'PAGE'
@@ -10,8 +10,8 @@ object DataModule4: TDataModule4
     FetchOptions.AssignedValues = [evRowsetSize]
     FetchOptions.RowsetSize = 5
     ResourceOptions.AssignedValues = [rvEscapeExpand]
-    Left = 152
-    Top = 104
+    Left = 160
+    Top = 32
     object FDTable1PAGE: TIntegerField
       FieldName = 'PAGE'
       Origin = '"PAGE"'
@@ -30,8 +30,8 @@ object DataModule4: TDataModule4
     Connection = FDConnection2
     ResourceOptions.AssignedValues = [rvEscapeExpand]
     TableName = '"TABLE"'
-    Left = 152
-    Top = 192
+    Left = 160
+    Top = 120
     object FDTable2ID: TIntegerField
       FieldName = 'ID'
       Origin = 'ID'
@@ -66,8 +66,6 @@ object DataModule4: TDataModule4
       'Password=masterkey'
       'CharacterSet=UTF8'
       'OpenMode=OpenOrCreate'
-      'Port=3050'
-      'Protocol=TCPIP'
       'DriverID=IB')
     LoginPrompt = False
     Left = 72
@@ -75,7 +73,7 @@ object DataModule4: TDataModule4
   end
   object FDQuery2: TFDQuery
     Connection = FDConnection2
-    Left = 64
-    Top = 192
+    Left = 72
+    Top = 120
   end
 end
